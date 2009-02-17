@@ -25,9 +25,10 @@ import org.jgap.util.*;
 public class Tupel
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Class[] m_types;
+
   private Object[] m_values;
 
   public Tupel(final GPConfiguration a_conf, Class[] a_types)
@@ -36,7 +37,7 @@ public class Tupel
   }
 
   public Tupel(final GPConfiguration a_conf, Class[] a_types,
-                      Class a_returnType)
+               Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, a_types.length, a_returnType, 0);
     m_types = a_types;
@@ -59,7 +60,7 @@ public class Tupel
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     int size = m_types.length;
     m_values = new Object[size];
-    for(int i=0;i<size;i++) {
+    for (int i = 0; i < size; i++) {
       Object o = c.execute_object(n, i, args);
       m_values[i] = o;
     }
@@ -98,8 +99,9 @@ public class Tupel
   public boolean equals(Object a_other) {
     try {
       Tupel other = (Tupel) a_other;
-      return super.equals(a_other) && new EqualsBuilder()
-          .append(m_alphabet, other.m_alphabet)
+      return super.equals(a_other)
+          && new EqualsBuilder()
+          .append(m_types, other.m_types)
           .isEquals();
     } catch (ClassCastException cex) {
       return false;
@@ -116,8 +118,7 @@ public class Tupel
    */
   public Object clone() {
     try {
-      Tupel result = new Tupel(getGPConfiguration(),
-          getReturnType(), m_alphabet, getSubReturnType());
+      Tupel result = new Tupel(getGPConfiguration(), m_types, getReturnType());
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
