@@ -1,9 +1,13 @@
 3.4.3
 -----------------------------------------------------------
+* GPConfiguration: added support for matrices
+* Added matrix-centric GP commands: WriteToMatrix,
+  ReadFromMatrix, CountMatrix, ReplaceInMatrix, ResetMatrix
+* Added GP commands: Tupel, CharacterProvider
+* Added constante CharacterClass to CommandGene
 * Added deleteDirectory to FileKit
 * Added a second deleteFile method to FileKit
-* Fixed bug in SbWhile, made guard-variable name "more"
-  unique
+* Fixed bug in IfElse.clone, thanx to szabolcs
 
 3.4.2
 -----------------------------------------------------------
