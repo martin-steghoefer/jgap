@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class IfElse
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private Class m_type;
 
@@ -109,7 +109,7 @@ public class IfElse
    */
   public Object clone() {
     try {
-      IfElse result = new IfElse(getGPConfiguration(), getReturnType(),
+      IfElse result = new IfElse(getGPConfiguration(), m_type,
                                  getSubReturnType(), getSubChildTypes());
       return result;
     } catch (Exception ex) {
