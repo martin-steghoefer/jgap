@@ -28,7 +28,7 @@ public class CountMatrix
         extends CommandGene implements ICloneable, IMutateable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -228,7 +228,8 @@ public class CountMatrix
   public boolean equals(Object a_other) {
     try {
       CountMatrix other = (CountMatrix) a_other;
-      return super.equals(a_other) && new EqualsBuilder().append(m_matrixName, other.m_matrixName).
+      return super.equals(a_other)
+          && new EqualsBuilder().append(m_matrixName, other.m_matrixName).
               append(m_countType, other.m_countType).
               append(m_countMode, other.m_countMode).
               append(m_emptyCharacter, other.m_emptyCharacter).
