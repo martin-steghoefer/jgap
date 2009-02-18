@@ -357,14 +357,14 @@ For your information, it might be useful to know that there is a corresponding
 GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html"><i>examples.monalisa.GeneticDrawingApp</i></a>.<h3 class="subheader">FAQ</h3>
 <table border="0" cellspacing="1" width="95%">
   <tr>
-    <td width="34" class="text" align="center"><span width="100px">&nbsp;</span>Q</td>
+    <td width="34" class="text" align="center"><b>Q</b></td>
     <td width="1242" class="text">
 <span width="40"/><b>Crossing Over: </b>Are (custom)
 functions and terminals crossed over automatically or do I have to develop
 something?</span></td>
   </tr>
   <tr>
-    <td width="34" class="text" align="center"><span width="100px">&nbsp;</span>A</td>
+    <td width="34" class="text" align="center"><b>A</b></td>
     <td width="1242" class="text"><span width="40"/> They are crossed
 over <b>automatically</b>, because this is a tree operation which replaces one node
 with another. The replaced node has the same interface (return type) as the
@@ -376,17 +376,59 @@ which is the standard operator for crossing over.</span></td>
     <td width="1242" class="text"></td>
   </tr>
   <tr>
-    <td width="34" class="text" align="center"><span width="40"/> Q</span></td>
+    <td width="34" class="text" align="center"><span width="40"/> <b> Q</b></span></td>
     <td width="1242" class="text"><span width="40"/> <b>Mutation</b>: Are ( custom)
 functions and terminals crossed over automatically or do I have to develop
 something?</span></td>
   </tr>
   <tr>
-    <td width="34" class="text" align="center"><span width="40"/> A</span></td>
+    <td width="34" class="text" align="center"><span width="40"/> <b> A</b></span></td>
     <td width="1242" class="text"><span width="40"/> In opposite the crossing
       over, <b>mutation must be programmed</b> and can only happen if a function
       or terminal implements interface org.jgap.gp.IMutateable, <a href="#mutation">see
       below</a>.</span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"></td>
+    <td width="1242" class="text"></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> <b>Q</b></span></td>
+    <td width="1242" class="text"><span width="40"/> <b>What is the arity of a
+      command?</b></span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> <b>A</b></span></td>
+    <td width="1242" class="text"><span width="40"/> Arity is the number of
+      children a function can have. A <b>terminal</b> is a command with arity
+      zero. The add function which sums up 43 input numbers has the arity of 43.</span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"></td>
+    <td width="1242" class="text"></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> <b> Q</b></span></td>
+    <td width="1242" class="text"><span width="40"/> <b>What is strict program
+      creation?</b></span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> <b> A</b></span></td>
+    <td width="1242" class="text">This option can be set via <a href="../../javadoc/3.4/org/jgap/gp/impl/GPConfiguration.html#setStrictProgramCreation(boolean)"><i>GPConfiguration.setStrictProgramCreation(true)</i></a>.
+      <p>The meaning of &quot;strict program creation&quot; is the following:</p>
+      <p>A GP program must comply to a specification. The latter is given by the
+      configuration of available functions and terminals (commands).</p>
+      <p>Each command allows 0..n children of specific input types. Each command
+      has a single return type. A command is only valid if there is a possible
+      combination of commands regarding their accepted input types and the
+      return types given by other commands.</p>
+      <p>In strict program creation, there must be both a function and a
+      terminal for each input type specified by the set of given commands.</p>
+      <p>If we are not in strict program creation, then it is sufficient to have
+      at least a function _or_ a terminal that corresponds to a specific input
+      type. Besides, in strict program creation, it is only tried once to
+      randomly create a correct GP program. In the non-strict mode, it is tries
+      several times (which can be configured).</td>
   </tr>
 </table>
 <h3 class="subheader">Advanced techniques</h3>
@@ -498,24 +540,20 @@ program flow in JGAP when creating a GP Program</h3>
 <table>
   <tbody>
     <tr>
-      <td colSpan="12" class="text"><b><font face="Courier New">GPGenotype.
-        randomInitialGenotype, line 219</font></b></td>
+      <td colSpan="12" class="text"><b><font face="Courier New">GPGenotype.randomInitialGenotype, line 219</font></b></td>
     </tr>
     <tr>
       <td class="text"></td>
-      <td colSpan="11" class="text"><b><font face="Courier New">GPGenotype.
-        randomInitialGenotype, line 263</font></b></td>
+      <td colSpan="11" class="text"><b><font face="Courier New">GPGenotype.randomInitialGenotype, line 263</font></b></td>
     <tr>
       <td class="text"></td>
       <td class="text"></td>
-      <td colSpan="10" class="text"><b><font face="Courier New">GPGenotype.
-        randomInitialGenotype, line 314</font></b></td>
+      <td colSpan="10" class="text"><b><font face="Courier New">GPGenotype.randomInitialGenotype, line 314</font></b></td>
     <tr>
       <td class="text"></td>
       <td class="text"></td>
       <td class="text"></td>
-      <td colSpan="9" class="text"><b><font face="Courier New">GPGenotype.
-        randomInitialGenotype, line 359</font></b></td>
+      <td colSpan="9" class="text"><b><font face="Courier New">GPGenotype.randomInitialGenotype, line 359</font></b></td>
     <tr>
       <td class="text"></td>
       <td class="text"></td>
@@ -691,19 +729,20 @@ program flow in JGAP when creating a GP Program</h3>
 	<td class="text"><b><i>Notes</i></b></td>
   </tr>
   <tr>
-	<td class="text"><b>0: GPGenotype.evolve</b></td>
+	<td class="text"><b>0: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPGenotype.html#evolve()"> GPGenotype.evolve</a></b></td>
 	<td class="text"><b>Overall: Evolve the population by one generation</b></td>
 	<td class="text">&nbsp;</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">Step 1: Select two GP programs to be crossed over</td>
-	<td class="text">See TournamentSelector, FitnessProportionateSelection</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/TournamentSelector.html">TournamentSelector</a>,
+      <a href="../../javadoc/3.4.2/org/jgap/gp/impl/FitnessProportionateSelection.html"> FitnessProportionateSelection</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">Step 2: Cross over two GP programs</td>
-	<td class="text">See BranchTypingCross</td>
+	<td class="text">See <a href="../../javadoc/3.4/org/jgap/gp/impl/BranchTypingCross.html"> BranchTypingCross</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
@@ -713,46 +752,46 @@ program flow in JGAP when creating a GP Program</h3>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">Step 4: Randomly add new GP programs</td>
-	<td class="text">See GPPopulation, DefaultProgramCreator</td>
+	<td class="text">See GPPopulation, <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
-	<td class="text"><b>1: GPPopulation.create</b></td>
+	<td class="text"><b>1: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPPopulation.html#create(int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, boolean, int, boolean[], int, org.jgap.gp.IProgramCreator)"> GPPopulation.create</a></b></td>
 	<td class="text"><b>Create a single GP program calling IProgramCreator</b></td>
-	<td class="text">See DefaultProgramCreator</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
-	<td class="text"><b>2: DefaultProgramCreator.create</b></td>
+	<td class="text"><b>2: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html#create(org.jgap.gp.impl.GPConfiguration, int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, int, boolean, int, boolean[])"> DefaultProgramCreator.create</a></b></td>
 	<td class="text"><b>Create a single GP program</b></td>
 	<td class="text">Implements IProgramCreator</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
-	<td class="text">1: Instantiates program</td>
+	<td class="text">1: Instantiates the GP program</td>
 	<td class="text">See constructor of GPProgram</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
-	<td class="text">2: Fills program with nodes</td>
+	<td class="text">2: Fills the GP program with nodes</td>
 	<td class="text">See GPProgram.growOrFull</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
-	<td class="text"><b>3: GPProgram.growOrFull</b></td>
+	<td class="text"><b>3: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPProgram.html#growOrFull(int,%20boolean,%20int,%20boolean[],%20int)"> GPProgram.growOrFull</a></b></td>
 	<td class="text"><b>Initializes a GP program with nodes</b></td>
 	<td class="text">&nbsp;</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">1: Construct as many nodes (=chromosomes) as needed</td>
-	<td class="text">See ProgramChromosome</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html"> ProgramChromosome</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
@@ -778,14 +817,14 @@ program flow in JGAP when creating a GP Program</h3>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
-	<td class="text"><b>4: ProgramChromosome.growOrFull</b></td>
+	<td class="text"><b>4: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFull(int,%20int,%20java.lang.Class,%20java.lang.Class[],%20org.jgap.gp.CommandGene[],%20boolean,%20int)"> ProgramChromosome.growOrFull</a></b></td>
 	<td class="text"><b>Initializes a node within a program</b></td>
 	<td class="text">&nbsp;</td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">1: If custom initialization strategy is registered, use it to preset the first node</td>
-	<td class="text">See IGPInitStrategy</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IGPInitStrategy.html"> IGPInitStrategy</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
@@ -801,7 +840,7 @@ program flow in JGAP when creating a GP Program</h3>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
-	<td class="text"><b>5: ProgramChromosome.growOrFullNode</b></td>
+	<td class="text"><b>5: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFullNode(int,%20int,%20java.lang.Class,%20int,%20org.jgap.gp.CommandGene[],%20org.jgap.gp.CommandGene,%20int,%20boolean,%20int,%20boolean)"> ProgramChromosome.growOrFullNode</a></b></td>
 	<td class="text"><b>Create a tree of nodes</b></td>
 	<td class="text">&nbsp;</td>
   </tr>
@@ -813,17 +852,17 @@ program flow in JGAP when creating a GP Program</h3>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">2: Validate node, if validator registered</td>
-	<td class="text">See INodeValidator</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/INodeValidator.html"> INodeValidator</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">3: Randomly mutate node if node supports this</td>
-	<td class="text">See IMutateable</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IMutateable.html"> IMutateable</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">4: If node is marked as unique, remove type of node from list of available functions</td>
-	<td class="text">See IUniqueCommand</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IUniqueCommand.html"> IUniqueCommand</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
@@ -846,7 +885,7 @@ program flow in JGAP when creating a GP Program</h3>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">6: Fire event GPGENOTYPE_EVOLVED_EVENT</td>
-	<td class="text">See GeneticEvent</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/event/GeneticEvent.html"> GeneticEvent</a></td>
   </tr>
 </table>
 
