@@ -25,8 +25,8 @@ structure</b> (GA = known structure). Each
 command is assigned a number of parameters. That way, programs can be
 constructed. They are represented internally as a tree. But you do not have to
 cope with the internal representation. For you it is only important to know that
-you can write sort of programs. Each program contains only those commands and
-terminals (such as numbers or boolean values) that you define to be used! It is
+you can write sort of programs. Each program contains only those commands and <a href="../../javadoc/3.4.2/org/jgap/gp/terminal/package-summary.html">
+terminals</a> (such as numbers or boolean values) that you define to be used! It is
 even possible evolving full-blown Java programs (see the <a href="http://jgap.sourceforge.net/doc/robocode/robocode.html">Robocode
 example</a>). </p>
 
@@ -201,7 +201,7 @@ number: </p>
 <p class="text">The fitness function can be found in the JGAP code base in the
 example class MathProblem.
 <p class="text"><b>2. Create initial Genotype</b></p>
-<p class="text">The Genotype initialization and creation is done in method
+<p class="text"><a name="GPProgramReturnType"></a>The Genotype initialization and creation is done in method
 create, which is called from the main method. At first follows the
 initialization, divided into chunks, starting with:</p>
 <p class="Listing">
@@ -214,8 +214,8 @@ initialization, divided into chunks, starting with:</p>
 </tt> &nbsp;</p>
 <p class="text">As you can see there are two array, both having one dimension
 and the same length, namely one. This is a must!
-<p class="text">The first array, types, defines the return type of the sub
-programs (which will be outlined soon). In our example, we only have one sub
+<p class="text">The first array, types, defines the return type of the <a href="#subProgram"> sub
+programs</a>. In our example, we only have one sub
 program, thus the length of the arrays is one. The parameter
 CommandGene.FloatClass expresses that the return type is Float.Class. This is
 because CommandGene.FloatClass is just a convenient, speaking definition of
@@ -232,7 +232,7 @@ CommandGene.FloatClass). This is comparable&nbsp; to the declaration in array
 types, above in this step.
 <p class="Listing">
 <tt>
-&nbsp; // Define the commands and terminals the GP is allowed to use.<br>
+&nbsp; <a name="commands"></a>// Define the commands and terminals the GP is allowed to use.<br>
 &nbsp; // -----------------------------------------------------------<br>
 &nbsp; CommandGene[][] nodeSets = {<br>
   &nbsp;&nbsp;&nbsp; {<br>
@@ -330,7 +330,7 @@ a bit.
 <p class="text">This is easy, see the code in step 3 at the beginning. It is
 self-explanatory.
 <p class="text"><b>4. Implement your own functions and terminals</b>
-<p class="text">For now, please see the functions and terminals in packages <i>org.jgap.gp.function</i>
+<p class="text">For a good start, please see the functions and terminals in packages <i>org.jgap.gp.function</i>
 and&nbsp;<i>org.jgap.gp.terminal.</i>
 <p class="text">Take care of:
 <ul>
@@ -352,9 +352,148 @@ and&nbsp;<i>org.jgap.gp.terminal.</i>
 important for matching parents and children (see <a href="#declarationType">above</a>).
 It is best to take an existing function or terminal as a template.</p>
 <p class="text">A further, quite
-complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4/examples/gp/monalisa/gui/GeneticDrawingApp.html">examples.gp.monalisa.GeneticDrawingApp</a>.
+complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4/examples/gp/monalisa/gui/GeneticDrawingApp.html"><i>examples.gp.monalisa.GeneticDrawingApp</i></a>.
 For your information, it might be useful to know that there is a corresponding
-GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html">examples.monalisa.GeneticDrawingApp</a>.<h3 class="subheader">The
+GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html"><i>examples.monalisa.GeneticDrawingApp</i></a>.<h3 class="subheader">FAQ</h3>
+<table border="0" cellspacing="1" width="95%">
+  <tr>
+    <td width="34" class="text" align="center"><span width="100px">&nbsp;</span>Q</td>
+    <td width="1242" class="text">
+<span width="40"/><b>Crossing Over: </b>Are (custom)
+functions and terminals crossed over automatically or do I have to develop
+something?</span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="100px">&nbsp;</span>A</td>
+    <td width="1242" class="text"><span width="40"/> They are crossed
+over <b>automatically</b>, because this is a tree operation which replaces one node
+with another. The replaced node has the same interface (return type) as the
+replacing node, so there is no problem. See class <i><a href="../../javadoc/3.4/org/jgap/gp/impl/BranchTypingCross.html">org.jgap.gp.impl.BranchTypingCross</a></i>,
+which is the standard operator for crossing over.</span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"></td>
+    <td width="1242" class="text"></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> Q</span></td>
+    <td width="1242" class="text"><span width="40"/> <b>Mutation</b>: Are ( custom)
+functions and terminals crossed over automatically or do I have to develop
+something?</span></td>
+  </tr>
+  <tr>
+    <td width="34" class="text" align="center"><span width="40"/> A</span></td>
+    <td width="1242" class="text"><span width="40"/> In opposite the crossing
+      over, <b>mutation must be programmed</b> and can only happen if a function
+      or terminal implements interface org.jgap.gp.IMutateable, <a href="#mutation">see
+      below</a>.</span></td>
+  </tr>
+</table>
+<h3 class="subheader">Advanced techniques</h3>
+<p class="subheader"><b><a name="subProgram"></a>Sub programs</b></p>
+<p class="subheader">The number of nodes (i.e. functions and terminals) ina GP
+program depends on the arity the parent elements have. The topmost parent
+element is the root node. Consider as an example the following set of commands
+to use:</p>
+<ul>
+  <li>
+    <p class="subheader"><a href="../../javadoc/3.4/org/jgap/gp/terminal/Terminal.html">Terminal</a> of type Integer, range [1..3] --&gt; As this
+    node is a terminal is has arity zero</li>
+  <li>
+    <p class="subheader">Function Add, accepting two children of type
+    Integer and returning an Integer --&gt; Two children means arity of two</li>
+  <li>
+    <p class="subheader">Variable X of type Integer --&gt; arity zero</li>
+</ul>
+<p class="subheader">With this set of commands and the requirement that the root
+node should return an Integer, one of the following GP programs could be evolved
+(besides many others, depending on the maximum depth you allow and the range of
+the terminal you specify):</p>
+<ul>
+  <li>
+    <p class="subheader">Add(2, 3)</li>
+  <li>
+    <p class="subheader">Add(3,1)</li>
+  <li>
+    <p class="subheader">Add(Add(1,1),3)</li>
+  <li>
+    <p class="subheader">Add(Add(2,3),2),1)</li>
+</ul>
+<p class="subheader">The following programs would not be possible:</p>
+<ul>
+  <li>
+    <p class="subheader">X = Add(2, 3)</li>
+  <li>
+    <p class="subheader">X = 3;Add(X, 2)</li>
+</ul>
+<p class="subheader">The first example is not possible as the return type of the
+root node (and thus of the whole GP Program is said to be Integer). The second
+program is not possible as the root node is variable X here, which does not
+allow any other command to follow (denoted by the semicolon as delimiter between
+commands).</p>
+<p class="subheader">To realize the first program (X=Add(2,3)) you have to
+declare the return type for the GP Program equivalent to the return type <a href="#GPProgramReturnType">you
+specify</a> when constructing the variable X<a href="#commands"> in your GP
+configuration</a>.</p>
+<p class="subheader">To get something like the second program (X = 3;Add(X, 2))
+you need a construct that allows chaining of commands, sort of a container for
+commands. Such container is nothing else than the invisible logical container in
+any Java function that returns a value. Each command in this function, except
+the return statement, has a return type of, say, void. Meaning: the statement x
+= 2 does not return something. It may (or ma not, like NOP - No Operation, the
+semicolon without statement in Java) only change the internal state of the
+program. Only the return statement in a function returns something. Thus, a
+container for GP commands allows a specific number of commands with void-type
+and a single command at the end return something. The number of commands allowed
+is controlled by the arity of the container. Say, if the container has arity
+four, then three commands with non-returning character can be included, followed
+by a single command tha returns something.</p>
+<p class="subheader">The name for such a logical container in JGAP is <b>sub
+program</b>, see class <i><a href="../../javadoc/3.4/org/jgap/gp/function/SubProgram.html">org.jgap.gp.function.SubProgram</a></i>.
+The type of the commands that are expected in the sub program, are specified
+when constructing it, with the last type given being the return type of the sub
+program. The sub program does nothing than sequentially executing all contained
+commands.</p>
+<p class="subheader">Consider the following configuration of GP commands:</p>
+<ul>
+  <li>
+    <p class="subheader">SubProgram with child types [Void, Integer] and arity
+    of two</li>
+  <li>
+    <p class="subheader">Terminal with range [1..3] and return type Integer</li>
+  <li>
+    <p class="subheader">Variable X with return type Void</li>
+  <li>
+    <p class="subheader">Function Add with child types [Integer, Integer] and
+    return type [Integer]</li>
+</ul>
+<p class="subheader">Then, the following GP programs may arise (only considered
+those that are possible now by using SubProgram):</p>
+<ul>
+  <li>
+    <p class="subheader">SubProgram[X=3;Add(X,4)]</li>
+  <li>
+    <p class="subheader">SubProgram[X=5;Add(4,Add(X,2))]</li>
+  <li>
+    <p class="subheader">...</li>
+</ul>
+<p class="subheader">The semicolon used above is the delimiter between the
+children of the sub program.</p>
+<p class="subheader"><b><a name="mutation"></a>Mutation</b></p>
+<p class="subheader">To make a function or terminal mutateable, you have to
+implement interface <i><a href="../../javadoc/3.4/org/jgap/gp/IMutateable.html">org.jgap.gp.IMutateable</a></i>.
+For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/Add.html">org.jgap.gp.function.Add</a></i>.</p>
+<p class="subheader"><b>Cloning</b></p>
+<p class="subheader">Cloning is fundamental in GP evolution. A mutated function
+or terminal at a specific place in the GP program should not influence other
+functions or terminals of the same class (e.g. <i>org.jgap.gp.function.Add</i>).
+If cloning is not possible, then we are talking about many references to a
+single instance of a function or terminal. If cloning is possible, then each
+mutated instance is independent from the original.</p>
+<p class="subheader">To make a function or terminal cloneable, you should best
+implement interface <i><a href="../../javadoc/3.4/org/jgap/util/ICloneable.html">org.jgap.util.ICloneable</a></i>.
+For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/Add.html">org.jgap.gp.function.Add</a></i>.</p>
+<h3 class="subheader">The
 program flow in JGAP when creating a GP Program</h3>
 <table>
   <tbody>
