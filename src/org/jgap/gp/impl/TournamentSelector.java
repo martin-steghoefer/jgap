@@ -16,7 +16,8 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * A GP tournament selector.
+ * A GP tournament selector. The winner is determined by letting fight a number
+ * of opponents against each other. The best of all wins.
  *
  * @author Javier Meseguer
  * @author Enrique D. Martí
@@ -26,7 +27,7 @@ import org.jgap.gp.*;
 public class TournamentSelector
     implements INaturalGPSelector, Serializable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private int m_tournament_size;
 
