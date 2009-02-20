@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   /**@todo introduce lock for configuration*/
   /**
@@ -168,7 +168,6 @@ public class GPConfiguration
    *
    * @author Klaus Meffert
    * @since 2.6
-   *
    */
   private IGPInitStrategy m_initStrategy;
 
@@ -177,6 +176,15 @@ public class GPConfiguration
    * GPGenotype.
    */
   private boolean m_verify;
+
+  /**
+   * TRUE: Do not clone command genes when creating a new GP program in
+   * ProgramChromosome.
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  private boolean m_noCommandGeneCloning;
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -1131,4 +1139,29 @@ public class GPConfiguration
   public boolean isVerifyPrograms() {
     return m_verify;
   }
+
+  /**
+   * Decide whether to clone command genes when creating a new GP program in
+   * ProgramChromosome.
+   *
+   * @param a_noCommandGeneCloning boolean
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public void setNoCommandGeneCloning(boolean a_noCommandGeneCloning) {
+    m_noCommandGeneCloning = a_noCommandGeneCloning;
+  }
+
+  /**
+   * @return true: do not clone command genes when creating a new GP program in
+   * ProgramChromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public boolean isNoCommandGeneCloning() {
+    return m_noCommandGeneCloning;
+  }
+
 }

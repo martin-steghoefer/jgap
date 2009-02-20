@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -635,7 +635,8 @@ public class ProgramChromosome
     }
     // Clone node if possible and not already done via mutation.
     // ---------------------------------------------------------
-    if (uncloned && a_rootNode instanceof ICloneable) {
+    if (uncloned && !conf.isNoCommandGeneCloning()
+        && a_rootNode instanceof ICloneable) {
         /**@todo we could optionally use the clone handler*/
       a_rootNode = (CommandGene) ( (ICloneable) a_rootNode).clone();
       m_genes[m_index++] = a_rootNode;
