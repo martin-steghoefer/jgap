@@ -39,13 +39,30 @@ GP was to reach the goal by adding parts to GA to get GP. Thus: GA + x =GP, with
 x being the added parts.
  </p>
 
-<h3 class="subheader">A first start</h3>
+<h3 class="subheader">About GP Programs: A head start</h3>
+
+<p class="subheader">A GP Program is represented as a tree with one root node.
+The root node has child nodes and each child node could potentially have
+additional child nodes. The following picture denotes this situation:</p>
+
+<p class="subheader"><img border="0" src="GP_Entities.png" width="960" height="720">&nbsp;&nbsp;</p>
+
+<p class="subheader">In the picture you can identify&nbsp; the two functions Add
+and Abs. Add has two children of type integer and returns a value of type
+integer. Abs has one child of type integer and returns a value of type integer.
+Please note that the return type of the root node is equal to the return type of
+the whole program!</p>
+
+<p class="subheader">The picture additionally shows different possible
+arrangements of some functions and terminals.</p>
+
+<h3 class="subheader">Getting your hands on it</h3>
 
 <p class="text">To get a feeling of how to implement your GP-Program with JGAP,
 please have a look at the example located in class&nbsp;<i>examples.gp.MathProblem</i>.
 This example tries to find a formula for a given truth table (X/Y value pairs)
 and a given set of operators (such as +, -, * etc). The mentioned example class
-also contains a fitness function named <i>FormulaFitnessFunction</i>. Mmore
+also contains a fitness function named <i>FormulaFitnessFunction</i>. More
 complex examples can be found in classes <i><a href="../javadoc/3.4/examples/gp/Fibonacci.html">examples.gp.Fibonacci</a> </i>and in <i><a href="../javadoc/3.4/examples/gp/anttrail/AntTrailProblem.html">examples.gp.anttrail.AntTrailProblem</a></i>.
  </p>
 
@@ -535,6 +552,174 @@ mutated instance is independent from the original.</p>
 <p class="subheader">To make a function or terminal cloneable, you should best
 implement interface <i><a href="../../javadoc/3.4/org/jgap/util/ICloneable.html">org.jgap.util.ICloneable</a></i>.
 For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/Add.html">org.jgap.gp.function.Add</a></i>.</p>
+<h3 class="subheader"><a name="overviewClasses"></a>Overview of entities involved in the evolution process </h3>
+<table border="1" cellspacing=0 cellpadding=0>
+  <tr>
+    <td class="text"><b><i>Level: Class.Method</i></b></td>
+	<td class="text"><b><i>Description</i></b></td>
+	<td class="text"><b><i>Notes</i></b></td>
+  </tr>
+  <tr>
+	<td class="text"><b>0: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPGenotype.html#evolve()"> GPGenotype.evolve</a></b></td>
+	<td class="text"><b>Overall: Evolve the population by one generation</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 1: Select two GP programs to be crossed over</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/TournamentSelector.html">TournamentSelector</a>,
+      <a href="../../javadoc/3.4.2/org/jgap/gp/impl/FitnessProportionateSelection.html"> FitnessProportionateSelection</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 2: Cross over two GP programs</td>
+	<td class="text">See <a href="../../javadoc/3.4/org/jgap/gp/impl/BranchTypingCross.html"> BranchTypingCross</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 3: Randomly (instead of crossing over) do reproduction of GP programs</td>
+	<td class="text">Uses selection from step 1</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 4: Randomly add new GP programs</td>
+	<td class="text">See GPPopulation, <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>1: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPPopulation.html#create(int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, boolean, int, boolean[], int, org.jgap.gp.IProgramCreator)"> GPPopulation.create</a></b></td>
+	<td class="text"><b>Create a single GP program calling IProgramCreator</b></td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>2: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html#create(org.jgap.gp.impl.GPConfiguration, int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, int, boolean, int, boolean[])"> DefaultProgramCreator.create</a></b></td>
+	<td class="text"><b>Create a single GP program</b></td>
+	<td class="text">Implements IProgramCreator</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Instantiates the GP program</td>
+	<td class="text">See constructor of GPProgram</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Fills the GP program with nodes</td>
+	<td class="text">See GPProgram.growOrFull</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>3: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPProgram.html#growOrFull(int,%20boolean,%20int,%20boolean[],%20int)"> GPProgram.growOrFull</a></b></td>
+	<td class="text"><b>Initializes a GP program with nodes</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Construct as many nodes (=chromosomes) as needed</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html"> ProgramChromosome</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1a: Instantiate a single ProgramChromosome</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: For all nodes</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2a: Grow the node by populating it with sub nodes</td>
+	<td class="text">See next section</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: If cache enabled and program found in cache: read fitness; otherwise: calculate fitness of program</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>4: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFull(int,%20int,%20java.lang.Class,%20java.lang.Class[],%20org.jgap.gp.CommandGene[],%20boolean,%20int)"> ProgramChromosome.growOrFull</a></b></td>
+	<td class="text"><b>Initializes a node within a program</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: If custom initialization strategy is registered, use it to preset the first node</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IGPInitStrategy.html"> IGPInitStrategy</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Recursively build the node and its subtrees</td>
+	<td class="text">See next section</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: Recalculate the depths of the nodes in the tree</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>5: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFullNode(int,%20int,%20java.lang.Class,%20int,%20org.jgap.gp.CommandGene[],%20org.jgap.gp.CommandGene,%20int,%20boolean,%20int,%20boolean)"> ProgramChromosome.growOrFullNode</a></b></td>
+	<td class="text"><b>Create a tree of nodes</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Select an appropriate node</td>
+	<td class="text">See same class, method <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#selectNode(int,%20java.lang.Class,%20int,%20org.jgap.gp.CommandGene[],%20boolean,%20boolean)"> selectNode</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Validate node, if validator registered</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/INodeValidator.html"> INodeValidator</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: Randomly mutate node if node supports this</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IMutateable.html"> IMutateable</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">4: If node is marked as unique, remove type of node from list of available functions</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IUniqueCommand.html"> IUniqueCommand</a></td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">5: Clone node and add it to the tree of nodes</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">6: Call self recursively (goto step 1 in this section) if nodes are missing</td>
+	<td class="text">End is reached if required depth of node tree is met</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">0: Back in evolve</td>
+	<td class="text">5: Set evolved population as current</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">6: Fire event GPGENOTYPE_EVOLVED_EVENT</td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/event/GeneticEvent.html"> GeneticEvent</a></td>
+  </tr>
+</table>
+
 <h3 class="subheader">The
 program flow in JGAP when creating a GP Program</h3>
 <table>
@@ -720,173 +905,6 @@ program flow in JGAP when creating a GP Program</h3>
       </td>
     </tr>
   </tbody>
-</table>
-<h3 class="subheader"><a name="overviewClasses"></a>Overview of entities involved in the evolution process </h3>
-<table border="1" cellspacing=0 cellpadding=0>
-  <tr>
-    <td class="text"><b><i>Level: Class.Method</i></b></td>
-	<td class="text"><b><i>Description</i></b></td>
-	<td class="text"><b><i>Notes</i></b></td>
-  </tr>
-  <tr>
-	<td class="text"><b>0: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPGenotype.html#evolve()"> GPGenotype.evolve</a></b></td>
-	<td class="text"><b>Overall: Evolve the population by one generation</b></td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">Step 1: Select two GP programs to be crossed over</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/TournamentSelector.html">TournamentSelector</a>,
-      <a href="../../javadoc/3.4.2/org/jgap/gp/impl/FitnessProportionateSelection.html"> FitnessProportionateSelection</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">Step 2: Cross over two GP programs</td>
-	<td class="text">See <a href="../../javadoc/3.4/org/jgap/gp/impl/BranchTypingCross.html"> BranchTypingCross</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">Step 3: Randomly (instead of crossing over) do reproduction of GP programs</td>
-	<td class="text">Uses selection from step 1</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">Step 4: Randomly add new GP programs</td>
-	<td class="text">See GPPopulation, <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text"><b>1: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPPopulation.html#create(int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, boolean, int, boolean[], int, org.jgap.gp.IProgramCreator)"> GPPopulation.create</a></b></td>
-	<td class="text"><b>Create a single GP program calling IProgramCreator</b></td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text"><b>2: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html#create(org.jgap.gp.impl.GPConfiguration, int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, int, boolean, int, boolean[])"> DefaultProgramCreator.create</a></b></td>
-	<td class="text"><b>Create a single GP program</b></td>
-	<td class="text">Implements IProgramCreator</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">1: Instantiates the GP program</td>
-	<td class="text">See constructor of GPProgram</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">2: Fills the GP program with nodes</td>
-	<td class="text">See GPProgram.growOrFull</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text"><b>3: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPProgram.html#growOrFull(int,%20boolean,%20int,%20boolean[],%20int)"> GPProgram.growOrFull</a></b></td>
-	<td class="text"><b>Initializes a GP program with nodes</b></td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">1: Construct as many nodes (=chromosomes) as needed</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html"> ProgramChromosome</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">1a: Instantiate a single ProgramChromosome</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">2: For all nodes</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">2a: Grow the node by populating it with sub nodes</td>
-	<td class="text">See next section</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">3: If cache enabled and program found in cache: read fitness; otherwise: calculate fitness of program</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text"><b>4: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFull(int,%20int,%20java.lang.Class,%20java.lang.Class[],%20org.jgap.gp.CommandGene[],%20boolean,%20int)"> ProgramChromosome.growOrFull</a></b></td>
-	<td class="text"><b>Initializes a node within a program</b></td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">1: If custom initialization strategy is registered, use it to preset the first node</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IGPInitStrategy.html"> IGPInitStrategy</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">2: Recursively build the node and its subtrees</td>
-	<td class="text">See next section</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">3: Recalculate the depths of the nodes in the tree</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text"><b>5: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#growOrFullNode(int,%20int,%20java.lang.Class,%20int,%20org.jgap.gp.CommandGene[],%20org.jgap.gp.CommandGene,%20int,%20boolean,%20int,%20boolean)"> ProgramChromosome.growOrFullNode</a></b></td>
-	<td class="text"><b>Create a tree of nodes</b></td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">1: Select an appropriate node</td>
-	<td class="text">See same class, method selectNode</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">2: Validate node, if validator registered</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/INodeValidator.html"> INodeValidator</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">3: Randomly mutate node if node supports this</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IMutateable.html"> IMutateable</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">4: If node is marked as unique, remove type of node from list of available functions</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/IUniqueCommand.html"> IUniqueCommand</a></td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">5: Clone node and add it to the tree of nodes</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">6: Call self recursively (goto step 1 in this section) if nodes are missing</td>
-	<td class="text">End is reached if required depth of node tree is met</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">0: Back in evolve</td>
-	<td class="text">5: Set evolved population as current</td>
-	<td class="text">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="text">&nbsp;</td>
-	<td class="text">6: Fire event GPGENOTYPE_EVOLVED_EVENT</td>
-	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/event/GeneticEvent.html"> GeneticEvent</a></td>
-  </tr>
 </table>
 
 <p class="copyright">Copyright © 2006-2009 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
