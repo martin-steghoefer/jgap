@@ -346,8 +346,7 @@ color="#000000">)</font>
         <font color="#000000">Integer</font> <font
 color="#000000">numCoins</font> <font color="#000000">=</font>
           <font
-color="#000000">(Integer)</font> <font color="#000000">a_potentialSolution.getAllele(</font> <font
-color="#000000">a_position</font> <font color="#000000">).getValue();</font>
+color="#000000">(Integer)</font> <font color="#000000">a_potentialSolution.getGene(a_position).getAllele().getValue();</font>
 
         <b><font
 color="#000080">return</font></b> <font color="#000000">numCoins.intValue();</font>
@@ -529,7 +528,7 @@ color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">3</
 color="#000000">);</font>  <i><font color="#808080">// Quarters</font></i>
 <font
 color="#000000">sampleGenes[</font><font color="#0000FF">1</font><font color="#000000">]</font> <font
-color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(conf.</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(conf,</font> <font
 color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">2</font> <font
 color="#000000">);</font>  <i><font color="#808080">// Dimes</font></i>
 <font
