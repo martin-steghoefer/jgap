@@ -31,7 +31,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -67,7 +67,9 @@ public abstract class CommandGene
     COMMAND_TYPE_OPERATION(32),
     COMMAND_TYPE_MATH_OPERATION(33),
     COMMAND_TYPE_DECLARATION(64),
-    COMMAND_TYPE_ASSIGNMENT(128);
+    COMMAND_TYPE_ASSIGNMENT(128),
+    COMMAND_TYPE_ANALYSIS(256),
+    COMMAND_TYPE_EXECUTION(512);
 
     private int m_value;
 
@@ -848,7 +850,8 @@ public abstract class CommandGene
   }
 
   /**
-   * Ensures that the calling command is unique within the program.
+   * Ensures that the calling command is unique within the program. Throws an
+   * exception if uniqueness is violated.
    * Call it on first place from the execute method.
    *
    * @param a_program the program to validate
@@ -868,7 +871,8 @@ public abstract class CommandGene
   }
 
   /**
-   * Ensures that the calling command is unique within the program.
+   * Ensures that the calling command is unique within the program. Returns
+   * false if uniqueness is violated.
    * Call it on first place from the execute method.
    *
    * @param a_program the program to validate
@@ -884,6 +888,25 @@ public abstract class CommandGene
       return false;
     }
     return true;
+  }
+
+  /**
+   * The type of the command this gene represents. Overwrite in sub classes.
+   * This is optional and allows fine-tuning of GP program creating. For
+   * example, you could have a function as a part of a desired GP program that
+   * only does some analysis stuff and not any execution. E.g. take a game like
+   * Noughts and Crosses (Tic Tac Toe). There, a first part could be analysing
+   * the current state of the board and a second part could cope with exploiting
+   * the analysis results to execute a command (like put stone onto board at
+   * specific position).
+   *
+   * @return type of the command this gene represents
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  protected CommandGene.COMMAND_TYPE getCommandType() {
+    return COMMAND_TYPE.COMMAND_TYPE_UNDEFINED;
   }
 
   /**
