@@ -1,9 +1,12 @@
 3.4.3
 -----------------------------------------------------------
 * GPConfiguration: added support for matrices
+* Introduced option for disabling cloning of command genes
+  during creation of GP programs in Programchromosome
 * Added matrix-centric GP commands: WriteToMatrix,
   ReadFromMatrix, CountMatrix, ReplaceInMatrix, ResetMatrix
 * Added GP commands: Tupel, CharacterProvider
+* Intruduced getCommandType for CommandGenes
 * Added constante CharacterClass to CommandGene
 * Added deleteDirectory to FileKit
 * Added a second deleteFile method to FileKit
