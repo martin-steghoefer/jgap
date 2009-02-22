@@ -189,7 +189,7 @@ color="#808080">     *         Chromosome.</font></i>
 <i><font color="#808080">     */</font></i>
     <b><font
 color="#000080">public</font></b> <b><font color="#000080">double</font></b> <font
-color="#000000">evaluate(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">evaluate(</font> I<font color="#000000">Chromosome</font> <font
 color="#000000">a_subject</font> <font color="#000000">)</font>
     <font color="#000000">{</font>
         <i><font
@@ -286,7 +286,7 @@ color="#808080">     *         given solution.</font></i>
 <i><font color="#808080">     */</font></i>
     <b><font
 color="#000080">public</font></b> <b><font color="#000080">static</font></b> <b><font
-color="#000080">int</font></b> <font color="#000000">amountOfChange(</font> <font
+color="#000080">int</font></b> <font color="#000000">amountOfChange(</font> I<font
 color="#000000">Chromosome</font> <font color="#000000">a_potentialSolution</font> <font
 color="#000000">)</font>
     <font color="#000000">{</font>
@@ -337,7 +337,7 @@ color="#808080">     *         at the given gene position.</font></i>
 color="#808080">     */</font></i>
     <b><font color="#000080">public</font></b> <b><font
 color="#000080">static</font></b> <b><font color="#000080">int</font></b> <font
-color="#000000">getNumberOfCoinsAtGene(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">getNumberOfCoinsAtGene(</font> I<font color="#000000">Chromosome</font> <font
 color="#000000">a_potentialSolution,</font>
                                               <b><font
 color="#000080">int</font></b> <font color="#000000">a_position</font> <font
@@ -346,7 +346,7 @@ color="#000000">)</font>
         <font color="#000000">Integer</font> <font
 color="#000000">numCoins</font> <font color="#000000">=</font>
           <font
-color="#000000">(Integer)</font> <font color="#000000">a_potentialSolution.getGene(a_position).getAllele().getValue();</font>
+color="#000000">(Integer)</font> <font color="#000000">a_potentialSolution.getGene(a_position).getAllele();</font>
 
         <b><font
 color="#000080">return</font></b> <font color="#000000">numCoins.intValue();</font>
@@ -368,7 +368,7 @@ color="#808080">     * @return The total number of coins represented by the give
 color="#808080">     */</font></i>
     <b><font color="#000080">public</font></b> <b><font
 color="#000080">static</font></b> <b><font color="#000080">int</font></b> <font
-color="#000000">getTotalNumberOfCoins(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">getTotalNumberOfCoins(</font> I<font color="#000000">Chromosome</font> <font
 color="#000000">a_potentialsolution</font> <font color="#000000">)</font>
     <font
 color="#000000">{</font>
@@ -467,105 +467,112 @@ want to use the stock components, and so we include a DefaultConfiguration class
 comes already setup with the most common settings. You just need to provide three extra
 pieces of information: what fitness function you want to use, how you want your
 Chromosomes to be setup, and how many Chromosomes you want in your population. Let's look
-at some sample code. </p>
+at some sample code that you might want to include in the same class as the
+above snippets. </p>
 
-<pre class="Listing"><tt><i><font color="#808080">// Start with a DefaultConfiguration, which comes setup with the</font></i>
-<i><font
-color="#808080">// most common settings.</font></i>
-<i><font color="#808080">// -------------------------------------------------------------</font></i>
-<font
+<pre class="Listing"><tt><a name="step2"><b><font
+color="#000080">public</font></b> <b><font color="#000080">static</font></b> </a></tt></a><tt><a name="step2">void main<font color="#000000">(</font>String[] args<font
+color="#000000">) throws Exception {</font>
+</a>  </tt><a name="step3"><tt><i><font color="#808080">// Start with a DefaultConfiguration, which comes setup with the</font></i>
+  <font
+color="#808080"><i>// most common settings.</i></font>
+  <font color="#808080"><i>// -------------------------------------------------------------</i></font>
+  <font
 color="#000000">Configuration</font> <font color="#000000">conf</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">DefaultConfiguration();</font>
 
-<i><font
-color="#808080">// Set the fitness function we want to use, which is our</font></i>
-<i><font
-color="#808080">// MinimizingMakeChangeFitnessFunction that we created earlier.</font></i>
-<i><font
-color="#808080">// We construct it with the target amount of change provided</font></i>
-<i><font
-color="#808080">// by the user.</font></i>
-<i><font color="#808080">// ------------------------------------------------------------</font></i>
-<font
-color="#000000">FitnessFunction</font> <font color="#000000">myFunc</font> <font
+  <font
+color="#808080"><i>// Set the fitness function we want to use, which is our</i></font>
+  <font
+color="#808080"><i>// MinimizingMakeChangeFitnessFunction that we created earlier.</i></font>
+  <font
+color="#808080"><i>// We construct it with the target amount of change provided</i></font>
+  <font
+color="#808080"><i>// by the user.</i></font>
+  <font color="#808080"><i>// ------------------------------------------------------------</i></font>
+  int targetAmount = Integer.parseInt(args[0])<font color="#000000">;
+  FitnessFunction</font> <font color="#000000">myFunc</font> <font
 color="#000000">=</font>
     <b><font color="#000080">new</font></b> <font color="#000000">MinimizingMakeChangeFitnessFunction(</font> <font
 color="#000000">targetAmount</font> <font color="#000000">);</font>
 
-<font color="#000000">conf.setFitnessFunction(</font> <font
+  <font color="#000000">conf.setFitnessFunction(</font> <font
 color="#000000">myFunc</font> <font color="#000000">);</font>
 
-<i><font color="#808080">// Now we need to tell the Configuration object how we want our</font></i>
-<i><font
-color="#808080">// Chromosomes to be setup. We do that by actually creating a</font></i>
-<i><font
-color="#808080">// sample Chromosome and then setting it on the Configuration</font></i>
-<i><font
-color="#808080">// object. As mentioned earlier, we want our Chromosomes to</font></i>
-<i><font
-color="#808080">// each have four genes, one for each of the coin types. We</font></i>
-<i><font
-color="#808080">// want the values of those genes to be integers, which represent</font></i>
-<i><font
-color="#808080">// how many coins of that type we have. We therefore use the</font></i>
-<i><font
-color="#808080">// IntegerGene class to represent each of the genes. That class</font></i>
-<i><font
-color="#808080">// also lets us specify a lower and upper bound, which we set</font></i>
-<i><font
-color="#808080">// to sensible values for each coin type.</font></i>
-<i><font
-color="#808080">// --------------------------------------------------------------</font></i>
-<font
+  <font color="#808080"><i>// Now we need to tell the Configuration object how we want our</i></font>
+  <font
+color="#808080"><i>// Chromosomes to be setup. We do that by actually creating a</i></font>
+  <font
+color="#808080"><i>// sample Chromosome and then setting it on the Configuration</i></font>
+  <font
+color="#808080"><i>// object. As mentioned earlier, we want our Chromosomes to</i></font>
+  <font
+color="#808080"><i>// each have four genes, one for each of the coin types. We</i></font>
+  <font
+color="#808080"><i>// want the values of those genes to be integers, which represent</i></font>
+  <font
+color="#808080"><i>// how many coins of that type we have. We therefore use the</i></font>
+  <font
+color="#808080"><i>// IntegerGene class to represent each of the genes. That class</i></font>
+  <font
+color="#808080"><i>// also lets us specify a lower and upper bound, which we set</i></font>
+  <font
+color="#808080"><i>// to sensible values for each coin type.</i></font>
+  <font
+color="#808080"><i>// --------------------------------------------------------------</i></font>
+  <font
 color="#000000">Gene[]</font> <font color="#000000">sampleGenes</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">Gene[</font> <font
 color="#0000FF">4</font> <font color="#000000">];</font>
 
-<font color="#000000">sampleGenes[</font><font
+  <font color="#000000">sampleGenes[</font><font
 color="#0000FF">0</font><font color="#000000">]</font> <font color="#000000">=</font> <b><font
 color="#000080">new</font></b> <font color="#000000">IntegerGene(conf,</font> <font
 color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">3</font> <font
 color="#000000">);</font>  <i><font color="#808080">// Quarters</font></i>
-<font
+  <font
 color="#000000">sampleGenes[</font><font color="#0000FF">1</font><font color="#000000">]</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(conf,</font> <font
 color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">2</font> <font
 color="#000000">);</font>  <i><font color="#808080">// Dimes</font></i>
-<font
+  <font
 color="#000000">sampleGenes[</font><font color="#0000FF">2</font><font color="#000000">]</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(conf,</font> <font
 color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">1</font> <font
 color="#000000">);</font>  <i><font color="#808080">// Nickels</font></i>
-<font
+  <font
 color="#000000">sampleGenes[</font><font color="#0000FF">3</font><font color="#000000">]</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(conf,</font> <font
 color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">4</font> <font
 color="#000000">);</font>  <i><font color="#808080">// Pennies</font></i>
 
-<font
+  <font
 color="#000000">Chromosome</font> <font color="#000000">sampleChromosome</font> <font
 color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">Chromosome(conf,</font> <font
 color="#000000">sampleGenes</font> <font color="#000000">);</font>
 
-<font color="#000000">conf.setSampleChromosome(</font> <font
+  <font color="#000000">conf.setSampleChromosome(</font> <font
 color="#000000">sampleChromosome</font> <font color="#000000">);</font>
 
-<i><font
-color="#808080">// Finally, we need to tell the Configuration object how many</font></i>
-<i><font
-color="#808080">// Chromosomes we want in our population. The more Chromosomes,</font></i>
-<i><font
-color="#808080">// the larger the number of potential solutions (which is good</font></i>
-<i><font
-color="#808080">// for finding the answer), but the longer it will take to evolve</font></i>
-<i><font
-color="#808080">// the population each round. We'll set the population size to</font></i>
-<i><font
-color="#808080">// 500 here.</font></i>
-<i><font color="#808080">// --------------------------------------------------------------</font></i>
-<font
+  <font
+color="#808080"><i>// Finally, we need to tell the Configuration object how many</i></font>
+  <font
+color="#808080"><i>// Chromosomes we want in our population. The more Chromosomes,</i></font>
+  <font
+color="#808080"><i>// the larger the number of potential solutions (which is good</i></font>
+  <font
+color="#808080"><i>// for finding the answer), but the longer it will take to evolve</i></font>
+  <font
+color="#808080"><i>// the population each round. We'll set the population size to</i></font>
+  <font
+color="#808080"><i>// 500 here.</i></font>
+  <font color="#808080"><i>// --------------------------------------------------------------</i></font>
+  <font
 color="#000000">conf.setPopulationSize(</font> <font color="#0000FF">500</font> <font
-color="#000000">);</font></tt></pre>
+color="#000000">);
+
+  // TODO: Add the code following below in this example here
+}</font></tt></pre>
 
 <p class="text">Hopefully most of the above code is pretty self-explanatory, with maybe the exception
 of setting up the sample Chromosome. Let's look at that bit in a little more detail. </p>
@@ -616,7 +623,10 @@ Chromosomes is called a Genotype, and that is the class we need to construct to 
 population. If you want, you can construct each Chromosome individually and then pass them
 all into a new Genotype (much like we constructed each Gene and passed them into the
 sample Chromosome in step 3), but JGAP provides a much quicker and easier way of creating
-a random population. In fact, it only takes one line of code! </p>
+a random population. In fact, it only takes one line of code <a name="step5">(append
+all following code lines to the above code in method main)</a></a>: </p>
+
+<a name="step4">
 
 <pre class="Listing"><tt><font color="#000000">Genotype</font> <font color="#000000">population</font> <font
 color="#000000">=</font> <font color="#000000">Genotype.randomInitialGenotype(</font> <font
@@ -641,7 +651,7 @@ the population one cycle is another one-liner: </p>
 any satisfactory solutions. The easiest way to do this is to invoke the
 getFittestChromosome() method on the population: </p>
 
-<pre class="Listing"><tt><font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar</font> <font
+<pre class="Listing"><tt><font color="#000000">IChromosome</font> <font color="#000000">bestSolutionSoFar</font> <font
 color="#000000">=</font> <font color="#000000">population.getFittestChromosome();</font></tt></pre>
 
 <p class="text">If the best solution so far is good enough for you, then you're done. If not, then you
@@ -650,7 +660,7 @@ population a set number of times and then see what the best solution is that was
 at the end (or a combination thereof). For our example problem, we'll take this latter
 approach. </p>
 
-<pre class="Listing"><tt><font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar;</font>
+<pre class="Listing"><tt><font color="#000000">IChromosome</font> <font color="#000000">bestSolutionSoFar;</font>
 
 <b><font
 color="#000080">for</font></b><font color="#000000">(</font> <b><font color="#000080">int</font></b> <font
@@ -715,8 +725,18 @@ color="#000000">);</font></tt></pre>
 
 <p class="text">Now we've got ourselves a full-fledged genetic application! To view all of the code for
 this example, see the MinimizingMakeChange.java and
-MinimizingMakeChangeFitnessFunction.java files in the src/examples/ directory of the JGAP
+MinimizingMakeChangeFitnessFunction.java files in the examples/src directory of the JGAP
 distribution. </p>
+
+</a><h3 class="subheader"><a name="step1">Further resources</a> </h3>
+
+<ul>
+  <li>
+    <p class="subheader">See the examples under package <i>examples</i>. They
+    are located in subdirectory <i>examples/src</i> of the JGAP source
+    distribution.</li>
+</ul>
+<a name="step5">
 
 <p class="copyright">Copyright © 2002-2009&nbsp; </a><a href="http://www.klaus-meffert.com">Klaus Meffert</a>
 / <a name="step5">
