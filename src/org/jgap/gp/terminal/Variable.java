@@ -16,7 +16,8 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
- * A terminal represented by a variable (x,y,z...).
+ * A terminal represented by a variable (x, y, z...). A variable has one single
+ * value with can be influenced from outside.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -24,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -33,11 +34,14 @@ public class Variable
    */
   private String m_name;
 
+  /**
+   * Current value of the variable.
+   */
   private Object m_value;
 
-  public Variable(final GPConfiguration a_conf, String a_varName, Class type)
+  public Variable(final GPConfiguration a_conf, String a_varName, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 0, type);
+    super(a_conf, 0, a_type);
     m_name = a_varName;
     vars.put(a_varName, this);
   }
