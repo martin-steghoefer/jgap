@@ -63,7 +63,7 @@ please have a look at the example located in class&nbsp;<i>examples.gp.MathProbl
 This example tries to find a formula for a given truth table (X/Y value pairs)
 and a given set of operators (such as +, -, * etc). The mentioned example class
 also contains a fitness function named <i>FormulaFitnessFunction</i>. More
-complex examples can be found in classes <i><a href="../javadoc/3.4/examples/gp/Fibonacci.html">examples.gp.Fibonacci</a> </i>and in <i><a href="../javadoc/3.4/examples/gp/anttrail/AntTrailProblem.html">examples.gp.anttrail.AntTrailProblem</a></i>.
+complex examples can be found in classes <i><a href="../javadoc/3.4.2/examples/gp/Fibonacci.html">examples.gp.Fibonacci</a> </i>and in <i><a href="../javadoc/3.4.2/examples/gp/anttrail/AntTrailProblem.html">examples.gp.anttrail.AntTrailProblem</a></i>.
  </p>
 
 <p class="text">The math example at a glance (after that the steps are explained
@@ -369,9 +369,9 @@ and&nbsp;<i>org.jgap.gp.terminal.</i>
 important for matching parents and children (see <a href="#declarationType">above</a>).
 It is best to take an existing function or terminal as a template.</p>
 <p class="text">A further, quite
-complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4/examples/gp/monalisa/gui/GeneticDrawingApp.html"><i>examples.gp.monalisa.GeneticDrawingApp</i></a>.
+complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4.2/examples/gp/monalisa/gui/GeneticDrawingApp.html"><i>examples.gp.monalisa.GeneticDrawingApp</i></a>.
 For your information, it might be useful to know that there is a corresponding
-GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html"><i>examples.monalisa.GeneticDrawingApp</i></a>.<h3 class="subheader">FAQ</h3>
+GA example, which can be started with class <a href="../../javadoc/3.4.2/examples/monalisa/gui/GeneticDrawingApp.html"><i>examples.monalisa.GeneticDrawingApp</i></a>.<h3 class="subheader">FAQ</h3>
 <table border="0" cellspacing="1" width="95%">
   <tr>
     <td width="34" class="text" align="center"><b>Q</b></td>
@@ -583,14 +583,14 @@ For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">Step 4: Randomly add new GP programs</td>
-	<td class="text">See GPPopulation, <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
+	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPPopulation.html">GPPopulation</a>, <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
   </tr>
   <tr>
 	<td class="text"><b>1: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPPopulation.html#create(int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, boolean, int, boolean[], int, org.jgap.gp.IProgramCreator)"> GPPopulation.create</a></b></td>
-	<td class="text"><b>Create a single GP program calling IProgramCreator</b></td>
+	<td class="text"><b>Create a single GP program calling <a href="../../javadoc/3.4.2/org/jgap/gp/IProgramCreator.html"> IProgramCreator</a></b></td>
 	<td class="text">See <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html"> DefaultProgramCreator</a></td>
   </tr>
   <tr>
@@ -599,12 +599,12 @@ For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/
   <tr>
 	<td class="text"><b>2: <a href="../../javadoc/3.4.2/org/jgap/gp/impl/DefaultProgramCreator.html#create(org.jgap.gp.impl.GPConfiguration, int, java.lang.Class[], java.lang.Class[][], org.jgap.gp.CommandGene[][], int[], int[], int, int, boolean, int, boolean[])"> DefaultProgramCreator.create</a></b></td>
 	<td class="text"><b>Create a single GP program</b></td>
-	<td class="text">Implements IProgramCreator</td>
+	<td class="text">Implements <a href="../../javadoc/3.4.2/org/jgap/gp/IProgramCreator.html"> IProgramCreator</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
 	<td class="text">1: Instantiates the GP program</td>
-	<td class="text">See constructor of GPProgram</td>
+	<td class="text">See constructor of <a href="../../javadoc/3.4.2/org/jgap/gp/impl/GPProgram.html"> GPProgram</a></td>
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
@@ -626,7 +626,7 @@ For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
-	<td class="text">1a: Instantiate a single ProgramChromosome</td>
+	<td class="text">1a: Instantiate a single <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html"> ProgramChromosome</a></td>
 	<td class="text">&nbsp;</td>
   </tr>
   <tr>
@@ -677,7 +677,7 @@ For an example, see function <i><a href="../../javadoc/3.4/org/jgap/gp/function/
   </tr>
   <tr>
 	<td class="text">&nbsp;</td>
-	<td class="text">1: Select an appropriate node</td>
+	<td class="text">1: Select an appropriate node (<a href="../../javadoc/3.4.2/org/jgap/gp/CommandGene.html">CommandGene</a>)</td>
 	<td class="text">See same class, method <a href="../../javadoc/3.4.2/org/jgap/gp/impl/ProgramChromosome.html#selectNode(int,%20java.lang.Class,%20int,%20org.jgap.gp.CommandGene[],%20boolean,%20boolean)"> selectNode</a></td>
   </tr>
   <tr>
@@ -906,6 +906,18 @@ program flow in JGAP when creating a GP Program</h3>
     </tr>
   </tbody>
 </table>
+
+<h3 class="subheader">External Resources</h3>
+<ul>
+  <li>
+    <p class="subheader">About <a href="http://www.genetic-programming.org/" target="_blank">Genetic
+    Programming</a> by John Koza</li>
+  <li>
+    <p class="subheader"><a href="http://www.klaus-meffert.de/doc/monalisa.html" target="_blank">The
+    Mona Lisa Problem</a> for Genetic Programming (in German)</li>
+</ul>
+
+<p class="copyright">&nbsp; </p>
 
 <p class="copyright">Copyright © 2006-2009 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
 Meffert</a>. All rights reserved. </p>
