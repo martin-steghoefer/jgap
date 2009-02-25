@@ -20,7 +20,7 @@ import org.jgap.impl.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
- * Here, a strategy for playing Tic Tac Toe is evolved.<p>
+ * Here, a strategy for playing Noughts and Crosses (Tic Tac Toe) is evolved.<p>
  * THIS PROGRAM IS STILL UNDER DEVELOPMENT AND IS NOT FINISHED YET! ANY COMMENTS
  * AND EXTENSIONS ARE VERY WELCOME!
  *
@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private static Variable vb;
 
@@ -50,14 +50,19 @@ public class TicTacToeMain
    * Sets up the functions to use and other parameters. Then creates the
    * initial genotype.
    *
+   * @param a_conf the configuration to use
    * @param a_color the color to create a program for
+   * @param a_other an optional opponent, may be null
+   * @param a_otherColor color of the opponent
+   *
    * @return the genotype created
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public GPGenotype create(GPConfiguration conf, int a_color,
+  public GPGenotype create(GPConfiguration a_conf, int a_color,
                            GPGenotype a_other, int a_otherColor)
       throws InvalidConfigurationException {
     Class[] types = {CommandGene.VoidClass, CommandGene.VoidClass,
@@ -69,92 +74,97 @@ public class TicTacToeMain
     int[] maxDepths = new int[] {0, 2, 6, 2};
 //    GPConfiguration conf = getGPConfiguration();
     int color = a_color;
-    ForLoop forLoop1 = new ForLoop(conf, SubProgram.VoidClass, 1, Board.WIDTH,
+    ForLoop forLoop1 = new ForLoop(a_conf, SubProgram.VoidClass, 1, Board.WIDTH,
                                    1, "x", 0, 0);
-    ForLoop forLoop2 = new ForLoop(conf, SubProgram.VoidClass, 1, Board.HEIGHT,
+    ForLoop forLoop2 = new ForLoop(a_conf, SubProgram.VoidClass, 1, Board.HEIGHT,
                                    1, "y", 0, 0);
-    Variable vx = new Variable(conf, "move", CommandGene.IntegerClass);
-    Variable vb = new Variable(conf, "firstmove", CommandGene.BooleanClass);
+    Variable vx = new Variable(a_conf, "move", CommandGene.IntegerClass);
+    Variable vb = new Variable(a_conf, "firstmove", CommandGene.BooleanClass);
+    //
+    final String MATRIX1 = "MATRIX1";
+    a_conf.createMatrix(MATRIX1, 3, 3);
+    //
     CommandGene[][] nodeSets = { {
         // Transfer board to evolution memory.
         // -----------------------------------
-        new TransferBoardToMemory(conf, m_board, 0, 0),
+        new TransferBoardToMemory(a_conf, m_board, 0, 0),
     }, {
         // Create strategy data.
         // ---------------------
-        new Loop(conf, CommandGene.IntegerClass,
+        new Loop(a_conf, CommandGene.IntegerClass,
                  Board.WIDTH * Board.HEIGHT),
-        new EvaluateBoard(conf, m_board, CommandGene.IntegerClass),
-        new IncrementMemory(conf, CommandGene.IntegerClass, "counter", 10),
+        new EvaluateBoard(a_conf, m_board, CommandGene.IntegerClass),
+        new IncrementMemory(a_conf, CommandGene.IntegerClass, "counter", 10),
+        /**@todo evaluate board to matrix*/
     }, {
         // Evaluate.
         // ---------
         vx,
         vb,
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
-        new SubProgram(conf, new Class[] {TransferBoardToMemory.VoidClass,
+        new SubProgram(a_conf, new Class[] {TransferBoardToMemory.VoidClass,
                        CommandGene.VoidClass}),
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass,
                        CommandGene.VoidClass}),
 //        forLoop1,
 //        forLoop2,
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 0),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 1),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 2),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 3),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 10, 22),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 11, 22),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 12, 22),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 13, 22),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 14, 23),
-        new EvaluateBoard(conf, m_board, 14),
-        new Loop(conf, SubProgram.class, Board.WIDTH),
-        new Loop(conf, SubProgram.class, Board.HEIGHT),
-        new Loop(conf, SubProgram.class, Board.WIDTH * Board.HEIGHT),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(0)),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(2)),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(3)),
-        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 4),
-        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 0),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 1),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 2),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 3),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 10, 22),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 11, 22),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 12, 22),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 13, 22),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 14, 23),
+        new EvaluateBoard(a_conf, m_board, 14),
+        new Loop(a_conf, SubProgram.class, Board.WIDTH),
+        new Loop(a_conf, SubProgram.class, Board.HEIGHT),
+        new Loop(a_conf, SubProgram.class, Board.WIDTH * Board.HEIGHT),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(2)),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(3)),
+        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 4),
+        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
                      4),
-        new Equals(conf, CommandGene.IntegerClass, 0, new int[] {22, 23}),
-        new Equals(conf, CommandGene.IntegerClass, 0, new int[] {0, 8}),
-        new IfElse(conf, CommandGene.BooleanClass),
-        new ReadBoard(conf, m_board, 0, new int[] {4, 4}),
-        new ReadBoard(conf, m_board),
-        new Not(conf),
-        new Push(conf, CommandGene.IntegerClass),
-        new Pop(conf, CommandGene.IntegerClass),
-        new IfIsOccupied(conf, m_board, CommandGene.IntegerClass, 0,
+        new Equals(a_conf, CommandGene.IntegerClass, 0, new int[] {22, 23}),
+        new Equals(a_conf, CommandGene.IntegerClass, 0, new int[] {0, 8}),
+        new IfElse(a_conf, CommandGene.BooleanClass),
+        new ReadBoard(a_conf, m_board, 0, new int[] {4, 4}),
+        new ReadBoard(a_conf, m_board),
+        new Not(a_conf),
+        new Push(a_conf, CommandGene.IntegerClass),
+        new Pop(a_conf, CommandGene.IntegerClass),
+        new IfIsOccupied(a_conf, m_board, CommandGene.IntegerClass, 0,
                          new int[] {4, 4, 0}),
-        new IfIsFree(conf, m_board, CommandGene.IntegerClass, 0, new int[] {4,
+        new IfIsFree(a_conf, m_board, CommandGene.IntegerClass, 0, new int[] {4,
                      4, 0}),
 //        new CountStones(conf, m_board, color, "count", 2),
-        new IfColor(conf, CommandGene.IntegerClass, color),
-        new IsOwnColor(conf, color),
-        new Increment(conf, CommandGene.IntegerClass, 1),
-        new Increment(conf, CommandGene.IntegerClass, -1),
-        new StoreTerminalIndexed(conf, 0, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 1, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 2, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 3, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 10, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 11, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 12, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 13, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(conf, 14, CommandGene.IntegerClass),
-        new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
+        new IfColor(a_conf, CommandGene.IntegerClass, color),
+        new IsOwnColor(a_conf, color),
+        new Increment(a_conf, CommandGene.IntegerClass, 1),
+        new Increment(a_conf, CommandGene.IntegerClass, -1),
+        new StoreTerminalIndexed(a_conf, 0, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 1, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 2, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 3, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 10, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 11, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 12, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 13, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 14, CommandGene.IntegerClass),
+        new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
 //        new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
-        new AddAndStoreTerminal(conf, "memA", CommandGene.IntegerClass),
+        new AddAndStoreTerminal(a_conf, "memA", CommandGene.IntegerClass),
 //        new AddAndStoreTerminal(conf, "memB", CommandGene.IntegerClass),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "mem0"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "memA"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "memA"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "memB"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr0", 1),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr1", 1),
@@ -166,24 +176,32 @@ public class TicTacToeMain
 //                         forLoop1.getCounterMemoryName(), 5),
 //        new ReadTerminal(conf, CommandGene.IntegerClass,
 //                         forLoop2.getCounterMemoryName(), 6),
+        new ReadFromMatrix(a_conf, MATRIX1),
+        new WriteToMatrix(a_conf, MATRIX1),
+        new ResetMatrix(a_conf, MATRIX1, ' '),
+        new CountMatrix(a_conf, MATRIX1, CountMatrix.CountType.COLUMN,
+                        CountMatrix.CountMode.EMPTY, ' ', ' '),
+        new ReplaceInMatrix(a_conf, MATRIX1,
+                            ReplaceInMatrix.ReplacementMode.COLUMN, "ABC",
+                            'R'),
     }, {
         // Make a move.
         // ------------
         vb,
 //        vx,
-        new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(2)),
-        new Equals(conf, CommandGene.IntegerClass),
-        new PutStone(conf, m_board, color),
-        new PutStone1(conf, m_board, color, 0, 33),
-        new IfIsFree(conf, m_board, CommandGene.IntegerClass),
-        new IfElse(conf, CommandGene.BooleanClass),
-        new Increment(conf, CommandGene.IntegerClass, 1),
-        new Increment(conf, CommandGene.IntegerClass, -1),
-        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 15, 33),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "mem0"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "memA"),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(2)),
+        new Equals(a_conf, CommandGene.IntegerClass),
+        new PutStone(a_conf, m_board, color),
+        new PutStone1(a_conf, m_board, color, 0, 33),
+        new IfIsFree(a_conf, m_board, CommandGene.IntegerClass),
+        new IfElse(a_conf, CommandGene.BooleanClass),
+        new Increment(a_conf, CommandGene.IntegerClass, 1),
+        new Increment(a_conf, CommandGene.IntegerClass, -1),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 15, 33),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "memA"),
 //        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
 //                       CommandGene.VoidClass}),
 
@@ -192,13 +210,13 @@ public class TicTacToeMain
 //        new IfIsOccupied(conf, m_board, CommandGene.IntegerClass),
     }
     };
-    conf.setFitnessFunction(new TicTacToeMain.
+    a_conf.setFitnessFunction(new TicTacToeMain.
                             GameFitnessFunction(getBoard(), a_color, a_other,
         a_otherColor));
 //    }
     // Create genotype with initial population.
     // ----------------------------------------
-    GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes,
+    GPGenotype result = GPGenotype.randomInitialGenotype(a_conf, types, argTypes,
         nodeSets, minDepths, maxDepths, 600, new boolean[] {!true, !true, !true, !true}, true);
     // Register variables to later have access to them.
     // ------------------------------------------------
