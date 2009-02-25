@@ -24,6 +24,18 @@ on the JGAP mailing lists. If you have suggestions for additional questions, ple
 free to post them to the jgap-users mailing list! 
 
 <ol>
+  <li><p class="text">After running an example, the following error appears
+    (parts of the output omitted here for brevity):<br>
+    <i>Exception in thread &quot;main&quot;
+    java.lang.UnsupportedClassVersionError: &lt;classname&gt; (Unsupported
+    major.minor version 49.0)</i><br>
+    <br>
+    It seems you have the wrong Java version installed. JGAP is currently
+    compiled with Java 6. Please install Java 6. In case you have it already
+    installed, please check that this installation is used and not a different
+    one. You could do this by typing the following on the command line: <font face="Courier New">java
+    -version</font> </p>
+  </li>
   <li><p class="text">Is there a way to create a fitness function that can evaluate all of
     the Chromosomes in a population at once? </p>
     <p class="text">Yes, a bulk fitness-function can be used. The bulk fitness function is
