@@ -31,7 +31,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -361,7 +361,8 @@ public abstract class CommandGene
   }
 
   /**
-   * The compareTo-method.
+   * The compareTo-method. Considers application data when the configuration
+   * asks for this.
    *
    * @param a_other the other object to compare
    * @return -1, 0, 1
@@ -379,16 +380,20 @@ public abstract class CommandGene
       return -1;
     }
     else {
-      return new CompareToBuilder()
-          .append(size(), other.size())
+      CompareToBuilder comparator = new CompareToBuilder();
+      comparator.append(size(), other.size())
           .append(m_subChildTypes, other.m_subChildTypes)
-          .append(m_subReturnType, other.m_subReturnType)
-          .toComparison();
+          .append(m_subReturnType, other.m_subReturnType);
+      if (m_compareAppData) {
+        comparator.append(m_applicationData, other.m_applicationData);
+      }
+      return comparator.toComparison();
     }
   }
 
   /**
-   * The equals-method.
+   * The equals-method. Considers application data when the configuration
+   * asks for this.
    *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
@@ -402,16 +407,19 @@ public abstract class CommandGene
     }
     try {
       CommandGene other = (CommandGene) a_other;
-      return new EqualsBuilder()
-          .append(size(), other.size())
+      EqualsBuilder equals = new EqualsBuilder();
+      equals.append(size(), other.size())
           .append(m_subChildTypes, other.m_subChildTypes)
           .append(m_subReturnType, other.m_subReturnType)
-          .isEquals();
+          .append(m_returnType, other.m_returnType);
+      if (m_compareAppData) {
+        equals.append(m_applicationData, other.m_applicationData);
+      }
+      return equals.isEquals();
     } catch (ClassCastException cex) {
       return false;
     }
   }
-
   /**
    * @return the string representation of the command. Especially usefull to
    * output a resulting formula in human-readable form.
