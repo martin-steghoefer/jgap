@@ -17,14 +17,17 @@ import junit.framework.*;
  * @author Klaus Meffert
  * @since 3.4
  */
-public class AllGPFunctionTests extends TestSuite {
+public class AllGPFunctionTests
+    extends TestSuite {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite("AllGPFunctionTests");
-        suite.addTest(ForLoopTest.suite());
-        return suite;
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite("AllGPFunctionTests");
+    suite.addTest(EqualsTest.suite());
+    suite.addTest(ForLoopTest.suite());
+    suite.addTest(GreaterThanTest.suite());
+    suite.addTest(LesserThanTest.suite());
+    return suite;
+  }
 }
