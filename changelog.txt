@@ -10,6 +10,7 @@
 * Added constante CharacterClass to CommandGene
 * Added deleteDirectory to FileKit
 * Added a second deleteFile method to FileKit
+* Noughts and Crosses example: added matrix commands
 * Fixed bug in IfElse.clone. Thanx to szabolcs
 * Fixed clone-bug in LesserThan, GreaterThan, Equals.
   Thanx to Frank Pape

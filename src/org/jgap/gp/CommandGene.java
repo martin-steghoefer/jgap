@@ -31,7 +31,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -115,15 +115,15 @@ public abstract class CommandGene
    * Application-specific data that is attached to the Gene. This data may
    * assist the application in labelling this Gene.
    * JGAP ignores the data, aside from allowing it to be set and
-   * retrieved and considering it in clone() and compareTo().
+   * retrieved and considering it in clone and compareTo.
    *
    * @since 3.0
    */
   private Object m_applicationData;
 
   /**
-   * Method compareTo(): Should we also consider the application data when
-   * comparing? Default is "false" as "true" means a Gene's losing its
+   * Method compareTo and equals: Should we also consider the application data
+   * when comparing? Default is "false" as "true" means a Gene's losing its
    * identity when application data is set differently!
    *
    * @since 3.0
@@ -763,6 +763,7 @@ public abstract class CommandGene
    * application data is set differently!
    *
    * @param a_doCompare true: consider application data in method compareTo
+   * and equals
    *
    * @author Klaus Meffert
    * @since 2.4
