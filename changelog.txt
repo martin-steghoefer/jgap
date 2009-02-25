@@ -10,7 +10,9 @@
 * Added constante CharacterClass to CommandGene
 * Added deleteDirectory to FileKit
 * Added a second deleteFile method to FileKit
-* Fixed bug in IfElse.clone, thanx to szabolcs
+* Fixed bug in IfElse.clone. Thanx to szabolcs
+* Fixed clone-bug in LesserThan, GreaterThan, Equals.
+  Thanx to Frank Pape
 * Enhanced Javadoc
 
 3.4.2
