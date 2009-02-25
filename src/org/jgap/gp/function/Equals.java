@@ -9,6 +9,7 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
@@ -23,7 +24,7 @@ import org.jgap.util.*;
 public class Equals
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private Class m_type;
 
@@ -92,11 +93,31 @@ public class Equals
    */
   public Object clone() {
     try {
-      Equals result = new Equals(getGPConfiguration(), getReturnType(),
+      Equals result = new Equals(getGPConfiguration(), m_type,
                                  getSubReturnType(), getSubChildTypes());
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
     }
+  }
+
+  /**
+   * The equals method.
+   *
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Frank Pape
+   * @since 3.4.3
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null || ! (a_other instanceof Equals)) {
+      return false;
+    }
+    if (!super.equals(a_other)) {
+      return false;
+    }
+    Equals other = (Equals) a_other;
+    return new EqualsBuilder().append(m_type, other.m_type).isEquals();
   }
 }

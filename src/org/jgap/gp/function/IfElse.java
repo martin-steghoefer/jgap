@@ -9,6 +9,7 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
@@ -23,7 +24,7 @@ import org.jgap.util.*;
 public class IfElse
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private Class m_type;
 
@@ -115,5 +116,25 @@ public class IfElse
     } catch (Exception ex) {
       throw new CloneException(ex);
     }
+  }
+
+  /**
+   * The equals method.
+   *
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Frank Pape
+   * @since 3.4.3
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null || ! (a_other instanceof IfElse)) {
+      return false;
+    }
+    if (!super.equals(a_other)) {
+      return false;
+    }
+    IfElse other = (IfElse) a_other;
+    return new EqualsBuilder().append(m_type, other.m_type).isEquals();
   }
 }
