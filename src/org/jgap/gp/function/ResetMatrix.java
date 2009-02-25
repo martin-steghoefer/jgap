@@ -23,30 +23,32 @@ import org.jgap.util.*;
  * @since 3.4.3
  */
 public class ResetMatrix
-        extends CommandGene implements ICloneable {
-
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
    */
   private String m_matrixName;
+
   private char m_filler;
 
   /**
    * Allows setting a sub child type.
    *
-   * @param a_conf GPConfiguration
-   * @param a_matrixName String
-   * @param a_subChildType int
+   * @param a_conf the configuration to use
+   * @param a_matrixName name of the matrix
+   * @param a_filler the character to fill the matrix with
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.4.3
    */
-  public ResetMatrix(final GPConfiguration a_conf, String a_matrixName, char a_filler)
-          throws InvalidConfigurationException {
+  public ResetMatrix(final GPConfiguration a_conf, String a_matrixName,
+                     char a_filler)
+      throws InvalidConfigurationException {
     super(a_conf, 0, CommandGene.VoidClass, 0);
     if (a_matrixName == null || a_matrixName.length() < 1) {
       throw new IllegalArgumentException("Matrix name must not be empty!");
@@ -91,8 +93,8 @@ public class ResetMatrix
       return result;
     }
     ResetMatrix other = (ResetMatrix) a_other;
-    return new CompareToBuilder().append(m_matrixName,other.m_matrixName).
-            append(m_filler, other.m_filler).toComparison();
+    return new CompareToBuilder().append(m_matrixName, other.m_matrixName).
+        append(m_filler, other.m_filler).toComparison();
   }
 
   /**
@@ -108,8 +110,8 @@ public class ResetMatrix
     try {
       ResetMatrix other = (ResetMatrix) a_other;
       return super.equals(a_other) && new EqualsBuilder().
-              append(m_matrixName,other.m_matrixName).
-              append(m_filler, other.m_filler).isEquals();
+          append(m_matrixName, other.m_matrixName).
+          append(m_filler, other.m_filler).isEquals();
     } catch (ClassCastException cex) {
       return false;
     }
@@ -126,7 +128,7 @@ public class ResetMatrix
   public Object clone() {
     try {
       ResetMatrix result = new ResetMatrix(getGPConfiguration(),
-              m_matrixName, m_filler);
+          m_matrixName, m_filler);
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);

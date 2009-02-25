@@ -23,11 +23,11 @@ import org.jgap.util.*;
 public class Pow
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
-  public Pow(final GPConfiguration a_conf, Class a_type)
+  public Pow(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 2, a_type);
+    super(a_conf, 2, a_returnType);
   }
 
   public String toString() {

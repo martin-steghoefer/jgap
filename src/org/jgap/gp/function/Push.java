@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class Push
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private Class m_type;
 
@@ -172,7 +172,7 @@ public class Push
    */
   public Object clone() {
     try {
-      Push result = new Push(getGPConfiguration(), getReturnType(),
+      Push result = new Push(getGPConfiguration(), m_type,
                              getSubReturnType(), getSubChildType(0));
       return result;
     } catch (Exception ex) {

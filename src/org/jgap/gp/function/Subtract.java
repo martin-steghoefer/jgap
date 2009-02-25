@@ -23,11 +23,11 @@ import org.jgap.util.*;
 public class Subtract
     extends MathCommand implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
-  public Subtract(final GPConfiguration a_conf, Class a_type)
+  public Subtract(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 2, a_type);
+    super(a_conf, 2, a_returnType);
   }
 
   public CommandGene applyMutation(int index, double a_percentage)

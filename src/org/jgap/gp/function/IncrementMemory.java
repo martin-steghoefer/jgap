@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class IncrementMemory
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_increment;
 
@@ -37,7 +37,7 @@ public class IncrementMemory
    * Constructor for using an increment of 1.
    *
    * @param a_conf the configuration to use
-   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_returnType the type of the terminal to increment (e.g. IntegerClass)
    * @param a_memoryName name of the memory cell
    * @param a_initialValue initial value of the memory cell
    *
@@ -46,17 +46,17 @@ public class IncrementMemory
    * @author Klaus Meffert
    * @since 3.2
    */
-  public IncrementMemory(final GPConfiguration a_conf, Class a_type,
+  public IncrementMemory(final GPConfiguration a_conf, Class a_returnType,
                          String a_memoryName, int a_initialValue)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_memoryName, a_initialValue, 1);
+    this(a_conf, a_returnType, a_memoryName, a_initialValue, 1);
   }
 
   /**
    * Constructor to freely choose increment.
    *
    * @param a_conf the configuration to use
-   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_returnType the type of the terminal to increment (e.g. IntegerClass)
    * @param a_memoryName name of the memory cell
    * @param a_initialValue initial value of the memory cell
    * @param a_increment the increment to use, may also be negative
@@ -65,11 +65,11 @@ public class IncrementMemory
    * @author Klaus Meffert
    * @since 3.2
    */
-  public IncrementMemory(final GPConfiguration a_conf, Class a_type,
+  public IncrementMemory(final GPConfiguration a_conf, Class a_returnType,
                          String a_memoryName, int a_initialValue,
                          int a_increment)
       throws InvalidConfigurationException {
-    super(a_conf, 0, a_type);
+    super(a_conf, 0, a_returnType);
     m_increment = a_increment;
     m_memoryName = a_memoryName;
     m_initialValue = a_initialValue;

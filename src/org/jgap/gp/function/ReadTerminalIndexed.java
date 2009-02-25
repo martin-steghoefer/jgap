@@ -24,23 +24,23 @@ import org.jgap.util.*;
 public class ReadTerminalIndexed
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Index of the memory cell to read.
    */
   private int m_index;
 
-  public ReadTerminalIndexed(final GPConfiguration a_conf, Class a_type,
+  public ReadTerminalIndexed(final GPConfiguration a_conf, Class a_returnType,
                              int a_index)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_index, 0);
+    this(a_conf, a_returnType, a_index, 0);
   }
 
-  public ReadTerminalIndexed(final GPConfiguration a_conf, Class a_type,
+  public ReadTerminalIndexed(final GPConfiguration a_conf, Class a_returnType,
                              int a_index, int a_subReturnType)
       throws InvalidConfigurationException {
-    super(a_conf, 0, a_type, a_subReturnType, null);
+    super(a_conf, 0, a_returnType, a_subReturnType, null);
     if (a_index < 0 || a_index > getGPConfiguration().getMemorySize()) {
       throw new IllegalArgumentException("Memory index invalid!");
     }

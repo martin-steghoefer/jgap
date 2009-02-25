@@ -15,7 +15,7 @@ import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
 /**
- * Returns the bigger of two valus.
+ * Returns the bigger of two values.
  *
  * @author Klaus Meffert
  * @since 3.3.4
@@ -23,11 +23,11 @@ import org.jgap.util.*;
 public class Max
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  public Max(final GPConfiguration a_conf, Class type)
+  public Max(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 2, type);
+    super(a_conf, 2, a_returnType);
   }
 
   public String toString() {

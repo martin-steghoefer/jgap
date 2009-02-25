@@ -24,11 +24,11 @@ import org.jgap.util.*;
 public class Modulo
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
-  public Modulo(final GPConfiguration a_conf, Class a_type)
+  public Modulo(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 2, a_type);
+    super(a_conf, 2, a_returnType);
   }
 
   public String toString() {

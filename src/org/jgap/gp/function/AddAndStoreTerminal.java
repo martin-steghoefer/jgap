@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class AddAndStoreTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -68,8 +68,7 @@ public class AddAndStoreTerminal
    */
   public AddAndStoreTerminal(final GPConfiguration a_conf, String a_storageName,
                              Class a_childType, int a_subReturnType,
-                             int a_subChildType
-      )
+                             int a_subChildType)
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass, a_subReturnType,
           new int[] {a_subChildType});
@@ -213,8 +212,7 @@ public class AddAndStoreTerminal
   public Object clone() {
     try {
       AddAndStoreTerminal result = new AddAndStoreTerminal(getGPConfiguration(),
-          m_storageName, m_type,
-          getSubReturnType(), getSubChildType(0));
+          m_storageName, m_type, getSubReturnType(), getSubChildType(0));
       return result;
     } catch (Throwable t) {
       throw new CloneException(t);

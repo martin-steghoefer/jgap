@@ -26,23 +26,23 @@ import org.jgap.util.*;
 public class CharacterProvider
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Alphabet of valid characters.
    */
   private String m_alphabet;
 
-  public CharacterProvider(final GPConfiguration a_conf, Class a_type,
+  public CharacterProvider(final GPConfiguration a_conf, Class a_returnType,
                       String a_alphabet)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_alphabet, 0);
+    this(a_conf, a_returnType, a_alphabet, 0);
   }
 
-  public CharacterProvider(final GPConfiguration a_conf, Class a_type,
+  public CharacterProvider(final GPConfiguration a_conf, Class a_returnType,
                       String a_alphabet, int a_subReturnType)
       throws InvalidConfigurationException {
-    super(a_conf, 1, a_type, a_subReturnType, null);
+    super(a_conf, 1, a_returnType, a_subReturnType, null);
     if (a_alphabet == null || a_alphabet.length() < 1) {
       throw new IllegalArgumentException("Alphabet must not be empty!");
     }

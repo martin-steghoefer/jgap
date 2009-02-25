@@ -23,11 +23,11 @@ import org.jgap.util.*;
 public class Multiply3
     extends MathCommand implements ICloneable{
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
-  public Multiply3(final GPConfiguration a_conf, Class a_type)
+  public Multiply3(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 3, a_type);
+    super(a_conf, 3, a_returnType);
   }
 
   public String toString() {

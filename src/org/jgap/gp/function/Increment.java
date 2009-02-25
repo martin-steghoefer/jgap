@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class Increment
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   private int m_increment;
 
@@ -33,37 +33,38 @@ public class Increment
    * Constructor for using an increment of 1.
    *
    * @param a_conf the configuration to use
-   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_returnType the type of the terminal to increment (e.g. IntegerClass)
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Increment(final GPConfiguration a_conf, Class a_type)
+  public Increment(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, 1);
+    this(a_conf, a_returnType, 1);
   }
 
   /**
    * Constructor to freely choose increment.
    *
    * @param a_conf the configuration to use
-   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_returnType the type of the terminal to increment (e.g. IntegerClass)
    * @param a_increment the increment to use, may also be negative
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Increment(final GPConfiguration a_conf, Class a_type, int a_increment)
+  public Increment(final GPConfiguration a_conf, Class a_returnType,
+                   int a_increment)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_increment, 0, 0);
+    this(a_conf, a_returnType, a_increment, 0, 0);
   }
 
-  public Increment(final GPConfiguration a_conf, Class a_type, int a_increment,
-                   int a_subReturnType, int a_subChildType)
+  public Increment(final GPConfiguration a_conf, Class a_returnType,
+                   int a_increment, int a_subReturnType, int a_subChildType)
       throws InvalidConfigurationException {
-    super(a_conf, 1, a_type, a_subReturnType, a_subChildType);
+    super(a_conf, 1, a_returnType, a_subReturnType, a_subChildType);
     m_increment = a_increment;
   }
 

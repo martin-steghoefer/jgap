@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ReadTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -32,16 +32,16 @@ public class ReadTerminal
    */
   private String m_storageName;
 
-  public ReadTerminal(final GPConfiguration a_conf, Class a_type,
+  public ReadTerminal(final GPConfiguration a_conf, Class a_returnType,
                       String a_storageName)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_storageName, 0);
+    this(a_conf, a_returnType, a_storageName, 0);
   }
 
-  public ReadTerminal(final GPConfiguration a_conf, Class a_type,
+  public ReadTerminal(final GPConfiguration a_conf, Class a_returnType,
                       String a_storageName, int a_subReturnType)
       throws InvalidConfigurationException {
-    super(a_conf, 0, a_type, a_subReturnType, null);
+    super(a_conf, 0, a_returnType, a_subReturnType, null);
     if (a_storageName == null || a_storageName.length() < 1) {
       throw new IllegalArgumentException("Memory name must not be empty!");
     }

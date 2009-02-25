@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class ForXLoop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private Class m_type;
 
@@ -144,7 +144,7 @@ public class ForXLoop
    */
   public Object clone() {
     try {
-      ForXLoop result = new ForXLoop(getGPConfiguration(), getReturnType());
+      ForXLoop result = new ForXLoop(getGPConfiguration(), m_type);
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
