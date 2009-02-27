@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class CommandGeneTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
@@ -128,6 +128,7 @@ public class CommandGeneTest
 
   /**
    * Compare application data.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -135,7 +136,6 @@ public class CommandGeneTest
    */
   public void testEquals_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTesting();
     CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     gene.setApplicationData(new AppDataForTesting());
     CommandGeneImpl gene2 = new CommandGeneImpl(m_gpconf);
@@ -286,6 +286,10 @@ public class CommandGeneTest
       return 0;
     }
 
+
+    public boolean equals(Object o2) {
+      return true;
+    }
     public Object clone()
         throws CloneNotSupportedException {
       return null;
