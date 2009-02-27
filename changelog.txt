@@ -12,8 +12,8 @@
 * Added a second deleteFile method to FileKit
 * Noughts and Crosses example: added matrix commands
 * Fixed bug in IfElse.clone. Thanx to szabolcs
-* Fixed clone-bug in LesserThan, GreaterThan, Equals.
-  Thanx to Frank Pape
+* Fixed clone-bug in LesserThan, GreaterThan, Equals,
+  Push. Thanx to Frank Pape
 * Enhanced Javadoc
 
 3.4.2
