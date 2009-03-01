@@ -21,7 +21,7 @@ import com.eteks.parser.*;
 public class Repository
     extends Term {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static List constants;
 
@@ -120,10 +120,9 @@ public class Repository
 
   /**
    * Makes sure to only apply functions being valid for the given input values.
-   * @param truthTable Wertetabelle
+   * @param truthTable table of input/output tuples
    */
   public static void apply(Map truthTable) {
-    MatchAgainstTruthTable.Tupel tupel;
     int j = 0;
     String formula;
     String s;
@@ -154,11 +153,15 @@ public class Repository
   }
 
   /**
-   * Calculates the output of a formula for a given oinput value
-   * @param formula Formel
-   * @param inputValue EIngabewert
-   * @throws CompilationException
-   * @return respond of formula to input value
+   * Calculates the output of a formula for a given input value.
+   *
+   * @param formula the formula to evaluate
+   * @param inputValue the input value to use
+   * @throws CompilationException in case of invalid input values regarding
+   * the formula
+   *
+   * @return result of formula for input value
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
