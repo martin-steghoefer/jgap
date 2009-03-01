@@ -18,10 +18,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.4.4
  */
-public abstract class TimedMonitor
+public class TimedMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private long m_startMillis;
 
