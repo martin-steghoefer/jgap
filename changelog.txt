@@ -1,3 +1,12 @@
+3.4.4
+-----------------------------------------------------------
+* Introduced evolve(IEvolutionMonitor) into Genotype
+* Added interface IEvolutionMonitor
+* Added monitor implementations: ChainedMonitors,
+  TimedMonitor, FitnessImprovementMonitor
+* Enhanced MinimizingMakeChange audit example
+* Enhanced Javadoc
+
 3.4.3
 -----------------------------------------------------------
 * GPConfiguration: added support for matrices
@@ -7,7 +16,7 @@
   ReadFromMatrix, CountMatrix, ReplaceInMatrix, ResetMatrix
 * Added GP commands: Tupel, CharacterProvider
 * Intruduced getCommandType for CommandGenes
-* Added constante CharacterClass to CommandGene
+* Added constant CharacterClass to CommandGene
 * Added deleteDirectory to FileKit
 * Added a second deleteFile method to FileKit
 * Noughts and Crosses example: added matrix commands
