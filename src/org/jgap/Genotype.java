@@ -12,6 +12,7 @@ package org.jgap;
 import java.io.*;
 import java.util.*;
 
+import org.jgap.audit.*;
 import org.jgap.distr.*;
 import org.jgap.impl.job.*;
 
@@ -32,7 +33,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.104 $";
+  private final static String CVS_REVISION = "$Revision: 1.105 $";
 
   /**
    * The current Configuration instance.
@@ -248,8 +249,35 @@ public class Genotype
   }
 
   /**
+   * Evolves this genotype until the given monitor asks to quit the evolution
+   * cycle.
+   *
+   * @param a_monitor the monitor used to decide when to stop evolution
+   *
+   * @return messages of the registered evolution monitor. May indicate why the
+   * evolution was asked to be stopped. May be empty, depending on the
+   * implementation of the used monitor
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public List<String> evolve(IEvolutionMonitor a_monitor) {
+    a_monitor.start(getConfiguration());
+    List<String> messages = new Vector();
+    do {
+      getConfiguration();
+      evolve();
+      boolean goon = a_monitor.nextCycle(getPopulation(), messages);
+      if (!goon) {
+        break;
+      }
+    } while (true);
+    return messages;
+  }
+
+  /**
    * @return string representation of this Genotype instance, useful for display
-   * purposes
+   * or debug purposes
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -595,7 +623,16 @@ public class Genotype
     }
   }
 
-  public List getEvolves(IPopulationSplitter a_splitter)
+  /**
+   * Splits a population into pieces that can be evolved independently.
+   *
+   * @param a_splitter splits the population
+   * @return list of IEvolveJob objects
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
+  public List<IEvolveJob> getEvolves(IPopulationSplitter a_splitter)
       throws Exception {
     // We return a list of IEvolveJob instances.
     // -----------------------------------------
