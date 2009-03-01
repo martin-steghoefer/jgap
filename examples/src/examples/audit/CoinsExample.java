@@ -9,13 +9,11 @@
  */
 package examples.audit;
 
-//Uncomment imports and code below to use JFreeChart functionality
-//import java.io.*;
-//import java.awt.image.*;
-
-//import org.jfree.chart.*;
-//import org.jfree.chart.plot.*;
-//import org.jfree.data.category.*;
+import java.io.*;
+import java.awt.image.*;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.*;
+import org.jfree.data.category.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.audit.*;
@@ -29,7 +27,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -129,7 +127,8 @@ public class CoinsExample {
         // ---------------------------------------------------------------
         for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
           population.evolve();
-          // add current best fitness to chart
+          // Add current best fitness to chart.
+          // ----------------------------------
           double fitness = population.getFittestChromosome().getFitnessValue();
           if (i % 3 == 0) {
             String s = String.valueOf(i);
@@ -157,53 +156,53 @@ public class CoinsExample {
       System.out.println("\t" +
                          CoinsExampleFitnessFunction.
                          getNumberOfCoinsAtGene(
-          bestSolutionSoFar, 0) + " quarters.");
+                             bestSolutionSoFar, 0) + " quarters.");
       System.out.println("\t" +
                          CoinsExampleFitnessFunction.
                          getNumberOfCoinsAtGene(
-          bestSolutionSoFar, 1) + " dimes.");
+                             bestSolutionSoFar, 1) + " dimes.");
       System.out.println("\t" +
                          CoinsExampleFitnessFunction.
                          getNumberOfCoinsAtGene(
-          bestSolutionSoFar, 2) + " nickels.");
+                             bestSolutionSoFar, 2) + " nickels.");
       System.out.println("\t" +
                          CoinsExampleFitnessFunction.
                          getNumberOfCoinsAtGene(
-          bestSolutionSoFar, 3) + " pennies.");
+                             bestSolutionSoFar, 3) + " pennies.");
       System.out.println("For a total of " +
                          CoinsExampleFitnessFunction.amountOfChange(
-          bestSolutionSoFar) + " cents in " +
+                             bestSolutionSoFar) + " cents in " +
                          CoinsExampleFitnessFunction.
                          getTotalNumberOfCoins(
-          bestSolutionSoFar) + " coins.");
+                             bestSolutionSoFar) + " coins.");
       permutation++;
     }
     // Create chart: fitness values average over all permutations.
     // -----------------------------------------------------------
 
-    // construct JFreeChart Dataset.
+    // Construct JFreeChart Dataset.
     // -----------------------------
-//    DefaultKeyedValues2D myDataset = eval.calcAvgFitness(-1);//eval.getData();
-//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
-//      for (int jj=0;jj<myDataset.getRowCount();jj++) {
-//        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
-//                                            myDataset.getColumnKey(ii)),
-//                         "Perm "+myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
-//      }
-//    }
-
-//    PlotOrientation or = PlotOrientation.VERTICAL;
-//    JFreeChart chart = ChartFactory.createLineChart(
-//        "JGAP: Evolution progress",
-//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
-//        true
-//        /*tooltips*/
-//        , false /*urls*/);
-//    BufferedImage image = chart.createBufferedImage(640, 480);
-//    FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
-//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
-
+    KeyedValues2D myDataset = eval.calcAvgFitness( -1); //eval.getData();
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    for (int ii = 0; ii < myDataset.getColumnCount(); ii++) {
+      for (int jj = 0; jj < myDataset.getRowCount(); jj++) {
+        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+            myDataset.getColumnKey(ii)),
+                         "Perm " + myDataset.getRowKey(jj),
+                         myDataset.getColumnKey(ii));
+      }
+    }
+    PlotOrientation or = PlotOrientation.VERTICAL;
+    JFreeChart chart = ChartFactory.createLineChart(
+        "JGAP: Evolution progress",
+        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+        true
+        /*tooltips*/
+        , false /*urls*/);
+    BufferedImage image = chart.createBufferedImage(640, 480);
+    FileOutputStream fo = new FileOutputStream(
+        "c:\\JGAP_chart_fitness_values.jpg");
+    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
     // Performance metrics for each single permutation.
     // ------------------------------------------------
     int maxPerm = permutation - 1;
@@ -220,7 +219,8 @@ public class CoinsExample {
       System.err.println("Best Fitness " + dataAvg.bestFitnessValue);
       System.err.println(" Generation  " + dataAvg.bestFitnessValueGeneration);
       System.err.println(" BestFit/Gen " +
-                         dataAvg.bestFitnessValue / dataAvg.bestFitnessValueGeneration);
+                         dataAvg.bestFitnessValue /
+                         dataAvg.bestFitnessValueGeneration);
       System.err.println("Avg. Fitness " + dataAvg.avgFitnessValue);
       System.err.println("Avg. Div.    " + dataAvg.avgDiversityFitnessValue);
       System.err.println("Avg. BestD   " + dataAvg.avgBestDeltaFitnessValue);
@@ -241,25 +241,23 @@ public class CoinsExample {
     System.err.println("Avg. Avg. BestD       " + avgAvgBestD / maxPerm);
     // Create chart: performance metrics for all permutations.
     // -----------------------------------------------------------
-
-//    dataset = new DefaultCategoryDataset();
-//    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
-//      for (int jj=0;jj<myDataset.getRowCount();jj++) {
-//        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
-//                                            myDataset.getColumnKey(ii)),
-//                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
-//      }
-//    }
-//
-//    chart = ChartFactory.createLineChart(
-//        "JGAP: Evolution progress",
-//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
-//        true
-//        /*tooltips*/
-//        , false /*urls*/);
-//    image = chart.createBufferedImage(640, 480);
-//    fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
-//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
+    dataset = new DefaultCategoryDataset();
+    for (int ii = 0; ii < myDataset.getColumnCount(); ii++) {
+      for (int jj = 0; jj < myDataset.getRowCount(); jj++) {
+        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+            myDataset.getColumnKey(ii)),
+                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+      }
+    }
+    chart = ChartFactory.createLineChart(
+        "JGAP: Evolution progress",
+        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+        true
+        /*tooltips*/
+        , false /*urls*/);
+    image = chart.createBufferedImage(640, 480);
+    fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
+    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
   }
 
   public static void main(String[] args) {
@@ -279,13 +277,11 @@ public class CoinsExample {
         else {
           try {
             makeChangeForAmount(amount);
-          }
-          catch (Exception e) {
+          } catch (Exception e) {
             e.printStackTrace();
           }
         }
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         System.out.println(
             "The <amount> argument must be a valid integer value");
       }
