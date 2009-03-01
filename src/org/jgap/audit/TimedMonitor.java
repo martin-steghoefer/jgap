@@ -9,6 +9,7 @@
  */
 package org.jgap.audit;
 
+import java.util.*;
 import org.jgap.*;
 
 /**
@@ -20,7 +21,7 @@ import org.jgap.*;
 public abstract class TimedMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private long m_startMillis;
 
@@ -42,14 +43,17 @@ public abstract class TimedMonitor
    * Called after another evolution cycle has been executed.
    *
    * @param a_pop the currently evolved population
+   * @param a_messages the monitor can append messages here to indicate why
+   * it asks evolution to stop
    * @return true: continue with the evolution; false: stop evolution
    *
    * @author Klaus Meffert
    * @since 3.4.4
    */
-  public boolean nextCycle(Population a_pop) {
+  public boolean nextCycle(Population a_pop, List<String> a_messages) {
     long currentMillis = System.currentTimeMillis();
     if (currentMillis - m_startMillis >= m_seconds * 1000) {
+      a_messages.add(m_seconds + " seconds maximum runtime were reached.");
       return false;
     }
     else {
