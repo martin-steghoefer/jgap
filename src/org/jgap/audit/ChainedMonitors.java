@@ -1,0 +1,101 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licensing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+package org.jgap.audit;
+
+import java.util.*;
+import org.jgap.*;
+
+/**
+ * A meta monitor that chains together given monitors and executes them
+ * subsequently.
+ *
+ * @author Klaus Meffert
+ * @since 3.4.4
+ */
+public abstract class ChainedMonitors
+    implements IEvolutionMonitor {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
+
+  private List<IEvolutionMonitor> m_monitors;
+
+  private int m_positiveMonitorsRequired;
+
+  /**
+   *
+   * @param a_monitors sequence of monitors to use
+   * @param a_positiveMonitorsRequired number of monitors that must return true
+   * in nextCycle in order to let the evolution continue. If this parameter
+   * equals one, it means we have an or-operation, if it equals the number of
+   * monitors, we have an and-operation.
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public ChainedMonitors(List<IEvolutionMonitor> a_monitors,
+      int a_positiveMonitorsRequired) {
+    if (a_monitors == null || a_monitors.size() < 1) {
+      throw new IllegalArgumentException(
+          "Number of monitors must be one or greater!");
+    }
+    if (a_positiveMonitorsRequired < 1) {
+      throw new IllegalArgumentException(
+          "Number of positive monitors must be one or greater!");
+    }
+    if (a_positiveMonitorsRequired > a_monitors.size()) {
+      throw new IllegalArgumentException("Number of positive monitors must not"
+          + " be bigger than number of available monitors!");
+    }
+    m_monitors = a_monitors;
+    m_positiveMonitorsRequired = a_positiveMonitorsRequired;
+  }
+
+  /**
+   * Called after another evolution cycle has been executed.
+   *
+   * @param a_pop the currently evolved population
+   * @return true: continue with the evolution; false: stop evolution
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public boolean nextCycle(Population a_pop) {
+    int size = m_monitors.size();
+    int positive = 0;
+    for (IEvolutionMonitor monitor : m_monitors) {
+      if (monitor.nextCycle(a_pop)) {
+        positive++;
+        if (positive >= m_positiveMonitorsRequired) {
+          return true;
+        }
+      }
+      else {
+        // Check for early fail.
+        // ---------------------
+        size--;
+        if (size + positive < m_positiveMonitorsRequired) {
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Called just before the evolution starts.
+   *
+   * @param a_config the configuration used
+   */
+  public void start(Configuration a_config) {
+    for (IEvolutionMonitor monitor : m_monitors) {
+      monitor.start(a_config);
+    }
+  }
+}
