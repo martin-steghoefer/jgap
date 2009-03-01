@@ -16,8 +16,8 @@ import java.util.*;
 import org.jgap.util.*;
 
 /**
- * List of chromosomes held in the Genotype (or possibly later in the
- * Configuration object).
+ * Makes up the population of a generation during evolution. Represented by a
+ * list of chromosomes held in the Genotype.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.63 $";
+  private static final String CVS_REVISION = "$Revision: 1.64 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
