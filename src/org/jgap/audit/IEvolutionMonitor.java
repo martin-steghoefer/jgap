@@ -9,6 +9,8 @@
  */
 package org.jgap.audit;
 
+import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -19,7 +21,7 @@ import org.jgap.*;
  */
 public interface IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Called just before the evolution starts. Setup your monitor here.
@@ -35,10 +37,12 @@ public interface IEvolutionMonitor {
    * Called after another evolution cycle has been executed.
    *
    * @param a_pop the currently evolved population
+   * @param a_messages the monitor can append messages here to indicate why
+   * it asks evolution to stop
    * @return true: continue with the evolution; false: stop evolution
    *
    * @author Klaus Meffert
    * @since 3.4.4
    */
-  boolean nextCycle(Population a_pop);
+  boolean nextCycle(Population a_pop, List<String> a_messages);
 }
