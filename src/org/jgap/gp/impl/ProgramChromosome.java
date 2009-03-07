@@ -11,6 +11,7 @@ package org.jgap.gp.impl;
 
 import java.lang.reflect.*;
 import java.util.*;
+
 import org.apache.log4j.*;
 import org.jgap.*;
 import org.jgap.gp.*;
@@ -26,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -471,8 +472,25 @@ public class ProgramChromosome
                                    int a_subReturnType,
                                    CommandGene[] a_functionSet,
                                    boolean a_function, boolean a_growing) {
-    if (!isPossible(a_returnType, a_subReturnType, a_functionSet, a_function,
-                    a_growing)) {
+    // Determine possible functions.
+    // -----------------------------
+    Vector<CommandGene> possibleFunctions=new Vector<CommandGene>(0);
+    IGPProgram ind = getIndividual();
+    for (int i = 0; i < a_functionSet.length; i++) {
+      if (a_functionSet[i].getReturnType() == a_returnType
+          && (a_subReturnType == 0
+              || a_subReturnType == a_functionSet[i].getSubReturnType())) {
+        if (a_functionSet[i].getArity(ind) == 0 && (!a_function || a_growing)) {
+          possibleFunctions.add(a_functionSet[i]);
+        }
+        if (a_functionSet[i].getArity(ind) != 0 && a_function) {
+          possibleFunctions.add(a_functionSet[i]);
+        }
+      }
+    }
+    // Error handing in case no valid function found.
+    // ----------------------------------------------
+    if (possibleFunctions.isEmpty()) {
       if (a_growing && (a_returnType == CommandGene.VoidClass
                         || a_returnType == Void.class)) {
         // We simply return a NOP, it does nothing :-)
@@ -506,29 +524,11 @@ public class ProgramChromosome
         throw new RuntimeException(errormsg);
       }
     }
-    CommandGene n = null;
-    int lindex;
-    // Following is analog to isPossible except with the random generator.
-    // -------------------------------------------------------------------
-    IGPProgram ind = getIndividual();
-    UniqueRandomGenerator randGen = new UniqueRandomGenerator(a_functionSet.
-        length, getGPConfiguration().getRandomGenerator());
-    do {
-      lindex = randGen.nextInt();
-      // Consider return type AND sub return type (latter only if != 0).
-      // ---------------------------------------------------------------
-      if (a_functionSet[lindex].getReturnType() == a_returnType
-          && (a_subReturnType == 0
-              || a_functionSet[lindex].getSubReturnType() == a_subReturnType)) {
-        if (a_functionSet[lindex].getArity(ind) == 0 &&
-            (!a_function || a_growing)) {
-          n = a_functionSet[lindex];
-        }
-        if (a_functionSet[lindex].getArity(ind) != 0 && a_function) {
-          n = a_functionSet[lindex];
-        }
-      }
-    } while (n == null);
+    // Select a function randomly.
+    // ---------------------------
+    int index = getGPConfiguration().getRandomGenerator().nextInt(
+        possibleFunctions.size());
+    CommandGene n = possibleFunctions.elementAt(index);
     return n;
   }
 
