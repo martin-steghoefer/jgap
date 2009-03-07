@@ -1,5 +1,7 @@
 3.4.4
 -----------------------------------------------------------
+* Optimized GP program creation runtime (see method
+  ProgramChromosome.selectNode), thanx to beck_sz
 * Introduced evolve(IEvolutionMonitor) into Genotype
 * Added interface IEvolutionMonitor
 * Added monitor implementations: ChainedMonitors,
