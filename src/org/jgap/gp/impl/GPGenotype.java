@@ -27,35 +27,34 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.54 $";
+  private final static String CVS_REVISION = "$Revision: 1.55 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
   /**
-   * The array of GPProgram's that makeup the GPGenotype's population.
+   * The array of GPProgram's that makeup the GPGenotype's population
    */
   private GPPopulation m_population;
 
   /**
-   * The current configuration instance.
+   * The current configuration instance
    */
-  private
-      /*transient*/GPConfiguration m_configuration;
+  private GPConfiguration m_configuration;
 
   private transient static GPConfiguration m_staticConfiguration;
 
   /**
-   * Fitness value of the best solution.
+   * Fitness value of the best solution
    */
   private double m_bestFitness;
 
   /**
-   * Sum of fitness values over all chromosomes.
+   * Sum of fitness values over all chromosomes
    */
   private double m_totalFitness;
 
   /**
-   * Best solution found.
+   * Best solution found
    */
   private IGPProgram m_allTimeBest;
 
@@ -67,7 +66,7 @@ public class GPGenotype
   private boolean m_fullModeAllowed[];
 
   /**
-   * Return type per chromosome.
+   * Return type per chromosome
    */
   private Class[] m_types;
 
@@ -777,7 +776,7 @@ public class GPGenotype
             checkErroneousProg(program,
                                " when adding a program, evolution (index " + i +
                                ")", true);
-            LOGGER.debug("Added new GP program (depth "
+            LOGGER.debug("Added new GP program (depth parameter: "
                          + depth
                          + ", "
                          + tries
