@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   private int m_index;
 
@@ -44,6 +44,10 @@ public class Argument
    */
   public String getName() {
     return "ADF Argument";
+  }
+
+  public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
+    return ( (Boolean) args[m_index]).booleanValue();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
