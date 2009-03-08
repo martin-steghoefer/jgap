@@ -6,6 +6,7 @@
 * Added interface IEvolutionMonitor
 * Added monitor implementations: ChainedMonitors,
   TimedMonitor, FitnessImprovementMonitor
+* Added method execute_boolean to GP terminal Argument
 * Enhanced MinimizingMakeChange audit example
 * Enhanced Javadoc
 
