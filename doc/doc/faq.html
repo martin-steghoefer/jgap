@@ -45,7 +45,7 @@ free to post them to the jgap-users mailing list!
     (rather than in isolation of each other), or if you want to make use of an external
     service to actually perform the evaluation. </p>
     <p class="text">For more information on bulk fitness-functions, please see the javadocs
-    for the </a><a href="../javadoc/2.6/org/jgap/BulkFitnessFunction.html">org.jgap.BulkFitnessFunction</a>
+    for the </a><a href="../javadoc/3.4.3/org/jgap/BulkFitnessFunction.html">org.jgap.BulkFitnessFunction</a>
     class. </p>
   </li>
   <li><p class="text">Does JGAP support real-valued fitness values or alleles? </p>
@@ -59,9 +59,30 @@ free to post them to the jgap-users mailing list!
     an example.</p>
     <p class="text">To select the top n performers after evolution, you could
     use <font face="Courier New">Genotype.getPopulation.toChromosomes()</font>.
-    After that, sort the returned array of Chromosomes via <font face="Courier New">Arrays.sort(chromosomesArrayFromPopulation,
+    After that, sort the returned array of chromosomes via <font face="Courier New">Arrays.sort(chromosomesArrayFromPopulation,
     yourComparator)</font>. <font face="Courier New">yourComparator</font> sorts
-    the array of chromosomes by the fitness value of each Chromosome.</p>
+    the array of chromosomes by the fitness value of each chromosome.</p>
+  </li>
+  <li><p class="text">How do I know when my GA application is
+    'finished'?
+    </p>
+    <p class="text">There are many possible criteria for stopping an algorithm
+    from continued evolution, including
+    </p>
+    <ul><li><p class="text">number of evolutions
+    </p></li>
+    <li><p class="text">time duration</p></li>
+    <li><p class="text">whether fitness is continuing to improve</p></li></ul>
+    <p class="text">The first criteria is easy, just write: <font face="Courier New">Genotype</font><font face="Courier New">.evolve(numEvolutions);<br>
+    </font>Please notice: You can also use the evolve method without any
+    parameter. In that case, only one evolution is executed. This makes sense if
+    you build a loop around this statement and check for any criteria to exit
+    evolution yourself.</p>
+    <p class="text">For the other two, check out the <a href="../javadoc/3.4.4/org/jgap/audit/IEvolutionMonitor.html"> IEvolutionMonitor</a>
+    implementations <a href="../javadoc/3.4.4/org/jgap/audit/FitnessImprovementMonitor.html">FitnessImprovementMonitor</a>,
+    <a href="../javadoc/3.4.4/org/jgap/audit/TimedMonitor.html"> TimedMonitor</a> and
+    <a href="../javadoc/3.4.4/org/jgap/audit/ChainedMonitors.html"> ChainedMonitors</a>
+    to use with a call like <font face="Courier New">Genotype</font><font face="Courier New">.evolve(monitor);</font></p>
   </li>
   <li><p class="text">Does JGAP support multiple threads? </p>
     <p class="text">JGAP does support multi-threaded computation, see the
@@ -108,8 +129,8 @@ free to post them to the jgap-users mailing list!
     <br>
     Instead of giving a complex answer, we advice you to check out the Mona Lisa
     Painting Problem. It is implemented with GA as well as with GP. The GA
-    version is in package <a href="../../javadoc/3.3.4/examples/monalisa/package-summary.html">examples.monalisa</a>,
-    the GP version in package <a href="../../javadoc/3.3.4/examples/gp/monalisa/package-summary.html">examples.gp.monalisa</a>. </p>
+    version is in package <a href="../../javadoc/3.4.3/examples/monalisa/package-summary.html">examples.monalisa</a>,
+    the GP version in package <a href="../../javadoc/3.4.3/examples/gp/monalisa/package-summary.html">examples.gp.monalisa</a>. </p>
   </li>
 
 </ol>
