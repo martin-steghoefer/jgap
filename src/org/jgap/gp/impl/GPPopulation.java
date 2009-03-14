@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -317,16 +317,14 @@ public class GPPopulation
                            a_maxNodes, a_fullModeAllowed, tries,
                            a_programCreator);
           if (program != null && getGPConfiguration().getPrototypeProgram() == null) {
-            // Remember a prototyp of a valid program in case generation
+            // Remember a prototype of a valid program in case generation
             // cannot find a valid program within some few tries
             // --> then clone the prototype.
-            // Necessary if the maxNodes parameter is chosen small
-            // or a validator is used which is quite restrictive.
-            // ---------------------------------------------------
+            // Necessary if the maxNodes parameter is chosen small or a
+            // validator is used which is quite restrictive.
+            // ----------------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
-            /**@todo output depth of all chromosomes*/
-            LOGGER.info("Prototype program set (depth " +
-                        program.getChromosome(0).getDepth(0) + ")");
+            LOGGER.info("Prototype program set");
           }
           else if (genNr % 5 == 0 && genNr > 0 && i == genI) {
               /**@todo 5: make configurable*/
