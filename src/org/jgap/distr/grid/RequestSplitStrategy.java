@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class RequestSplitStrategy {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Configuration m_config;
 
@@ -53,7 +53,6 @@ public class RequestSplitStrategy {
       config.setEventManager(new EventManager());
       config.setPopulationSize(getConfiguration().getPopulationSize());
       config.setFitnessFunction(getConfiguration().getFitnessFunction());
-//      IChromosome sample = new Chromosome(config, new BooleanGene(config), 16);
       IChromosome sample = (IChromosome)getConfiguration().getSampleChromosome().clone();
       config.setSampleChromosome(sample);
       result[i] = (JGAPRequest)a_request.newInstance("JGAP-Grid Request " + i,i);
