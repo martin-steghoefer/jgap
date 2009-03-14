@@ -34,7 +34,7 @@ public class ADF
 //    implements ICloneable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private int m_chromosomeNum;
 
@@ -67,7 +67,16 @@ public class ADF
   }
 
   public String toString() {
-    return "ADF" + m_chromosomeNum + "(&1,&2,&3)";
+    String res = "ADF" + m_chromosomeNum + "(";
+    int size = size();
+    for (int i = 1; i <= size; i++) {
+      res += "&" + i;
+      if (i == 1 && size > 1) {
+        res += ",";
+      }
+    }
+    res += ")";
+    return res;
   }
 
   public int getArity(IGPProgram a_individual) {
