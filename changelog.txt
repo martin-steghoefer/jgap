@@ -1,5 +1,7 @@
 3.4.4
 -----------------------------------------------------------
+* Better support for custom Chromosome classes:
+  replaced new Chromosome(..) statement where appropriate
 * Optimized GP program creation runtime (see method
   ProgramChromosome.selectNode), thanx to beck_sz
 * Introduced evolve(IEvolutionMonitor) into Genotype
