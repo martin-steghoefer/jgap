@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class StandardPostSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -84,7 +84,8 @@ public class StandardPostSelector
    * @since 3.2
    */
   protected void add(final IChromosome a_chromosomeToAdd) {
-    // New chromosome, insert it into the sorted collection of chromosomes
+    // New chromosome, insert it into the sorted collection of chromosomes.
+    // --------------------------------------------------------------------
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
     m_chromosomes.addChromosome(a_chromosomeToAdd);
     // Indicate that the list of chromosomes to add needs sorting.

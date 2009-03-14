@@ -25,7 +25,7 @@ import org.jgap.distr.*;
 public class SimpleJobConsumer {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private List m_jobs = new Vector();
   private List m_results = new Vector();
@@ -33,6 +33,7 @@ public class SimpleJobConsumer {
   public void pushJobToGrid(IJob a_job) {
     m_jobs.add(a_job);
     // Execute the job asynchronously.
+    // -------------------------------
     new Thread(a_job).start();
   }
 
@@ -96,7 +97,8 @@ public class SimpleJobConsumer {
         IEvolveJob evolve = (IEvolveJob) it.next();
         gridClient.pushJobToGrid(evolve);
       }
-      // Wait for the jobs
+      // Wait for the jobs.
+      // ------------------
       gridClient.waitForAllJobs();
       // Update genotype with all entities, ready for new run
       IPopulationMerger popMerger = new FittestPopulationMerger();
