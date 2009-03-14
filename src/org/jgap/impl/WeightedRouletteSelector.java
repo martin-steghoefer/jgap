@@ -33,7 +33,7 @@ import gnu.trove.*;
 public class WeightedRouletteSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -171,7 +171,7 @@ public class WeightedRouletteSelector
     int numberOfEntries = entries.size();
     double[] fitnessValues = new double[numberOfEntries];
     double[] counterValues = new double[numberOfEntries];
-    IChromosome[] chromosomes = new Chromosome[numberOfEntries];
+    IChromosome[] chromosomes = new IChromosome[numberOfEntries];
     m_totalNumberOfUsedSlots = 0.0d;
     Iterator entryIterator = entries.iterator();
     for (int i = 0; i < numberOfEntries; i++) {
