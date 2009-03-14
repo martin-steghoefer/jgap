@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.96 $";
+  private final static String CVS_REVISION = "$Revision: 1.97 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -384,16 +384,29 @@ public class Chromosome
             copyOfGenes[i].setAllele(allele);
           }
           // Now construct a new Chromosome with the copies of the genes and
-          // return it. Also clone the IApplicationData object.
+          // return it. Also clone the IApplicationData object later on.
           // ---------------------------------------------------------------
           /**@todo clone Config!*/
-          copy = new Chromosome(getConfiguration(), copyOfGenes);
+          if (getClass() == Chromosome.class) {
+            copy = new Chromosome(getConfiguration(), copyOfGenes);
+          }
+          else {
+            copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
+//            copy.setConfiguration(getConfiguration());
+            copy.setGenes(copyOfGenes);
+          }
         }
         else {
-          copy = new Chromosome(getConfiguration());
+          if (getClass() == Chromosome.class) {
+            copy = new Chromosome(getConfiguration());
+          }
+          else {
+            copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
+//            copy.setConfiguration(getConfiguration());
+          }
         }
-        copy.setFitnessValue(m_fitnessValue);
       }
+      copy.setFitnessValue(m_fitnessValue);
       // Clone constraint checker.
       // -------------------------
       copy.setConstraintChecker(getConstraintChecker());
@@ -647,7 +660,7 @@ public class Chromosome
     // Finally, construct the new chromosome with the new random
     // genes values and return it.
     // ---------------------------------------------------------
-    return new Chromosome(a_configuration, newGenes);
+      return new Chromosome(a_configuration, newGenes);
   }
 
   /**
