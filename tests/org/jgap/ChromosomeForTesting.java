@@ -109,7 +109,7 @@ public class ChromosomeForTesting
   public synchronized Object clone() {
     try {
       ChromosomeForTesting chrom = new ChromosomeForTesting(getConfiguration(),
-          ( (Chromosome)super.clone()).getGenes());
+          super.getGenes().clone());
       chrom.m_isCloned = true;
       return chrom;
     }
