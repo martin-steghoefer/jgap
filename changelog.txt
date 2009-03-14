@@ -2,14 +2,16 @@
 -----------------------------------------------------------
 * Better support for custom Chromosome classes:
   replaced new Chromosome(..) statement where appropriate
+* Fixed bug 2562266: cloning now considers fitness value
 * Optimized GP program creation runtime (see method
   ProgramChromosome.selectNode), thanx to beck_sz
-* Introduced evolve(IEvolutionMonitor) into Genotype
+* Introduced evolve(IEvolutionMonitor) to Genotype
 * Added interface IEvolutionMonitor
 * Added monitor implementations: ChainedMonitors,
   TimedMonitor, FitnessImprovementMonitor
 * Added method execute_boolean to GP terminal Argument
 * Enhanced MinimizingMakeChange audit example
+* Enhanced ADF.toString()
 * Enhanced Javadoc
 
 3.4.3
