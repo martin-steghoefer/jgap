@@ -18,7 +18,11 @@ import org.apache.commons.cli.*;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
- * Use this class as base class for your grid client implementations.
+ * Use this class to get an idea for your grid client implementation
+ * or see the samples under package examples.grid to have templates for
+ * a) fitness computation and
+ * b) evolution
+ * on the worker side.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -26,7 +30,7 @@ import org.apache.commons.cli.*;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -54,7 +58,7 @@ public class JGAPClient
     req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
     req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
     req.setEvolveStrategy(m_gridConfig.getWorkerEvolveStrategy());
-    // Evolution takes place on client only!
+    // Evolution takes place on client here!
     // -------------------------------------
     req.setEvolveStrategy(null);
     setWorkRequest(req);
