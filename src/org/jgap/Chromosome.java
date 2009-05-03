@@ -18,8 +18,8 @@
  * the specific language governing rights and limitations under the License.
  *
  * The Original Code is 'JGAP - Java Genetic Algorithms Package'.
- * The Initial Developer of the Original Code is Neil Rotstan. Portions created
- * by the Initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
+ * The initial Developer of the Original Code is Neil Rotstan. Portions created
+ * by the initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
  * All Rights Reserved.
  * Co-developer of the code is Klaus Meffert. Portions created by the co-
  * developer are Copyright (C) 2003-2006 by Klaus Meffert. All Rights Reserved.
@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.97 $";
+  private final static String CVS_REVISION = "$Revision: 1.98 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
