@@ -38,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -391,11 +391,12 @@ public class CrossoverOperator
     for (int j = locus; j < firstGenes.length; j++) {
       // Make a distinction for ICompositeGene for the first gene.
       // ---------------------------------------------------------
+      int index = 0;
       if (firstGenes[j] instanceof ICompositeGene) {
         // Randomly determine gene to be considered.
         // -----------------------------------------
-        int index1 = generator.nextInt(firstGenes[j].size());
-        gene1 = ( (ICompositeGene) firstGenes[j]).geneAt(index1);
+        index = generator.nextInt(firstGenes[j].size());
+        gene1 = ( (ICompositeGene) firstGenes[j]).geneAt(index);
       }
       else {
         gene1 = firstGenes[j];
@@ -403,10 +404,7 @@ public class CrossoverOperator
       // Make a distinction for the second gene if CompositeGene.
       // --------------------------------------------------------
       if (secondGenes[j] instanceof ICompositeGene) {
-        // Randomly determine gene to be considered.
-        // -----------------------------------------
-        int index2 = generator.nextInt(secondGenes[j].size());
-        gene2 = ( (ICompositeGene) secondGenes[j]).geneAt(index2);
+        gene2 = ( (ICompositeGene) secondGenes[j]).geneAt(index);
       }
       else {
         gene2 = secondGenes[j];
