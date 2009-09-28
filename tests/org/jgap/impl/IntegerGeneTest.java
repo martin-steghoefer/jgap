@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -706,11 +706,13 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_3()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(15);
+    rn.setNextDouble(0.5d);
+    conf.setRandomGenerator(rn);
     IntegerGene gene = new IntegerGene(conf, 33, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 1.9d);
-    assertEquals(Math.round(33 + 15), gene.intValue());
+    assertEquals(Math.round((100-33)*0.5d + 33), gene.intValue());
   }
 
   /**
@@ -721,11 +723,13 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_4()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(15);
+    rn.setNextDouble(0.3d);
+    conf.setRandomGenerator(rn);
     IntegerGene gene = new IntegerGene(conf, 2, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, 1.9d);
-    assertEquals(Math.round(2 + 15), gene.intValue());
+    assertEquals(Math.round( (100 - 2) * 0.3d + 2), gene.intValue());
   }
 
   /**
@@ -736,11 +740,13 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_5()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(15);
+    rn.setNextDouble(0.25d);
+    conf.setRandomGenerator(rn);
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -1.0d);
-    assertEquals(Math.round(0 + 15), gene.intValue());
+    assertEquals(Math.round( (100 - 0) * 0.25d + 0), gene.intValue());
   }
 
   /**
@@ -781,9 +787,11 @@ public class IntegerGeneTest
       throws Exception {
     IntegerGene gene = new IntegerGene(conf, 5, 100);
     gene.setAllele(null);
-    conf.setRandomGenerator(new RandomGeneratorForTesting(10));
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(10);
+    rn.setNextDouble(0.8d);
+    conf.setRandomGenerator(rn);
     gene.applyMutation(0, -0.4d);
-    assertEquals(Math.round(10 + 5), gene.intValue());
+    assertEquals(Math.round( (100 - 5) * 0.8d + 5), gene.intValue());
   }
 
   /**
@@ -950,4 +958,57 @@ public class IntegerGeneTest
     assertEquals(2, gene.getLowerBounds());
     assertEquals(5, gene.getUpperBounds());
   }
-}
+
+  /**
+   * @throws Exception
+   *
+   * @author David Kemp
+   * @since 3.4.4
+   */
+  public void testIntegerGeneSupportsFullIntegerRange() throws Exception {
+        Gene gene = new IntegerGene(conf, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        gene.setAllele(new Integer(5));
+        gene.setToRandomValue(new RandomGeneratorForTesting(0.2d));
+        int expectedValue = (int) (Integer.MIN_VALUE +
+                Math.round((0.2d *
+                    ((long) Integer.MAX_VALUE - (long) Integer.MIN_VALUE))));
+        assertEquals(new Integer(expectedValue), gene.getAllele());
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @author David Kemp
+     * @since 3.4.4
+     */
+    public void testMapValueToWithinBoundsSupportsFullIntegerRange()
+        throws Exception {
+      conf.setRandomGenerator(new RandomGeneratorForTesting(0.2d));
+      int lower = Integer.MIN_VALUE + 1;
+      int upper = Integer.MAX_VALUE;
+      IntegerGene gene = new IntegerGene(conf, lower, upper);
+      gene.setAllele(Integer.MIN_VALUE);
+      int expectedValue = (int) (lower +
+                                 Math.round( (0.2d *
+          ( (long) upper - (long) lower))));
+      assertEquals(new Integer(expectedValue), gene.getAllele());
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @author David Kemp
+     * @since 3.4.4
+     */
+    public void testApplyMutationSupportsFullIntegerRange()
+        throws Exception {
+      IntegerGene gene = new IntegerGene(conf, Integer.MIN_VALUE,
+                                         Integer.MAX_VALUE);
+      gene.setAllele(null);
+      gene.applyMutation(0, 0.4d);
+      double range = ( (long) Integer.MAX_VALUE - (long) Integer.MIN_VALUE) *
+          0.4d;
+      int expectedValue = (int) (range + Integer.MIN_VALUE);
+      assertEquals(expectedValue, gene.intValue());
+    }
+ }
