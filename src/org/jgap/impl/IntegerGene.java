@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.45 $";
+  private static final String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -251,10 +251,11 @@ public class IntegerGene
    *
    * @author Neil Rostan
    * @author Klaus Meffert
+   * @author David Kemp
    * @since 1.0
    */
   public void setToRandomValue(final RandomGenerator a_numberGenerator) {
-    double randomValue = (m_upperBounds - m_lowerBounds) *
+    double randomValue = ((long) m_upperBounds - (long) m_lowerBounds) *
         a_numberGenerator.nextDouble() +
         m_lowerBounds;
     setAllele(new Integer( (int) Math.round(randomValue)));
@@ -307,12 +308,11 @@ public class IntegerGene
         else {
           rn = new StockRandomGenerator();
         }
-        if (m_upperBounds - m_lowerBounds == 0) {
+        if (m_upperBounds == m_lowerBounds) {
           setAllele(new Integer(m_lowerBounds));
         }
         else {
-          setAllele(new Integer(rn.nextInt(m_upperBounds - m_lowerBounds) +
-                                m_lowerBounds));
+          setToRandomValue(rn);
         }
       }
     }
@@ -325,10 +325,11 @@ public class IntegerGene
    * than 1)
    *
    * @author Klaus Meffert
+   * @author David Kemp
    * @since 1.1
    */
   public void applyMutation(final int a_index, final double a_percentage) {
-    double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+    double range = ((long) m_upperBounds - (long) m_lowerBounds) * a_percentage;
     if (getAllele() == null) {
       setAllele(new Integer( (int) range + m_lowerBounds));
     }
