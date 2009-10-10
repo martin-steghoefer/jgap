@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -220,6 +220,13 @@ public class MutationOperator
               mutateGene(compositeGene.geneAt(k), generator);
             }
           }
+          /**@todo isValid for super genes*/
+//          else if (genes[j] instanceof org.jgap.supergenes.Supergene) {
+//            org.jgap.supergenes.Supergene superGene = (org.jgap.supergenes.Supergene) genes[j];
+//            for (int k = 0; k < superGene.size(); k++) {
+//              mutateSupergene(superGene.geneAt(k), generator);
+//            }
+//          }
           else {
             mutateGene(genes[j], generator);
           }
