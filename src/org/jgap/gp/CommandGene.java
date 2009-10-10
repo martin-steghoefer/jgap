@@ -31,7 +31,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -215,9 +215,9 @@ public abstract class CommandGene
               "Length of child sub types must equal"
               + " the given arity (or set the former to null)");
         }
-      }
-      else {
-        m_subChildTypes = a_childSubTypes;
+        else {
+          m_subChildTypes = a_childSubTypes;
+        }
       }
     }
     else {
