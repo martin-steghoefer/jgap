@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -364,9 +364,8 @@ public class GPGenotype
         || (a_minDepths != null && a_argTypes.length != a_minDepths.length)
         || (a_maxDepths != null && a_argTypes.length != a_maxDepths.length)
         || a_argTypes.length != a_types.length) {
-      throw new IllegalArgumentException("a_argTypes must have same length"
-          +
-          " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
+      throw new IllegalArgumentException("a_argTypes must have same length as"
+          + " a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
     }
     if (a_conf.getPopulationSize() < 1) {
       throw new IllegalArgumentException("Set the population size in the"
@@ -375,6 +374,18 @@ public class GPGenotype
     // Clean up memory.
     // ----------------
     System.gc();
+    // Determine which GP functions are never used as child.
+    // -----------------------------------------------------
+//    Map<String, CommandGene> invalidNodes = verifyChildNodes(a_conf, a_types,
+//        a_nodeSets);
+//    outputWarning(invalidNodes);
+    // Determine the depths for which GP functions are not possible.
+    // -------------------------------------------------------------
+//    Map<CommandGene, int[]> invalidDepthNodes = verifyDepthsForNodes(a_conf,
+//        a_types, a_minDepths, a_maxDepths, a_maxNodes, a_nodeSets);
+//    outputDepthInfo(invalidDepthNodes);
+    /**@todo implement*/
+
     if (a_verboseOutput) {
       LOGGER.info("Creating initial population");
       LOGGER.info("Mem free: "
@@ -734,8 +745,8 @@ public class GPGenotype
                 }
               }
             }
-            } while (true)
-              ;
+          } while (true)
+          ;
         }
         else { //if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
@@ -818,8 +829,8 @@ public class GPGenotype
               }
             }
           }
-          } while (true)
-            ;
+        } while (true)
+        ;
       }
       LOGGER.debug("Did "
                    + crossover + " x-overs, "
@@ -1251,6 +1262,17 @@ public class GPGenotype
     }
   }
 
+  /**
+   * Write three GP programs being involved in crossover as a string to a file
+   * for debug purposes.
+   *
+   * @param i1 first program
+   * @param i2 second program
+   * @param inew resulting program
+   * @param header text for header text
+   *
+   * @author Klaus Meffert
+   */
   private void writeToFile(IGPProgram i1, IGPProgram i2, IGPProgram inew,
                            String header) {
     StringBuffer sb = new StringBuffer();
@@ -1273,6 +1295,14 @@ public class GPGenotype
     }
   }
 
+  /**
+   * Utility function.
+   *
+   * @param i1 program to get textual representation for
+   * @return textual representation of the given program
+   *
+   * @author Klaus Meffert
+   */
   private StringBuffer getProgramString(IGPProgram i1) {
     int size = i1.size();
     int size2;
@@ -1290,5 +1320,195 @@ public class GPGenotype
       }
     }
     return result;
+  }
+
+  /**
+   *
+   * @param a_conf GPConfiguration
+   * @param a_types Class[]
+   * @param a_nodeSets CommandGene[][]
+   * @return Map
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public static Map<String, CommandGene> verifyChildNodes(
+      GPConfiguration a_conf, Class[] a_types, CommandGene[][] a_nodeSets) {
+    List<CommandGene> triedNodes;
+    Map<String, CommandGene> invalidNodes = new Hashtable();
+    // For every chromosome in the GP program.
+    // ---------------------------------------
+    for (int i = 0; i < a_nodeSets.length; i++) {
+      triedNodes = new Vector();
+      // Determine impossible functions and terminals.
+      // ---------------------------------------------
+      for (int j = 0; j < a_nodeSets[i].length; j++) {
+        CommandGene node = a_nodeSets[i][j];
+        if (triedNodes.contains(node)) {
+          continue;
+        }
+        triedNodes.add(node);
+        // Verify if node is possible.
+        // ---------------------------
+        int arity = node.getArity(null);
+        Class[] childTypes;
+        int[] subChildTypes;
+        if (arity > 0) {
+          childTypes = new Class[arity];
+          for (int k = 0; k < arity; k++) {
+            childTypes[k] = node.getChildType(null, k);
+          }
+          if (node.getSubChildTypes() != null) {
+            subChildTypes = new int[arity];
+            for (int k = 0; k < arity; k++) {
+              subChildTypes[k] = node.getSubChildType(k);
+            }
+          }
+          else {
+            subChildTypes = new int[arity];
+          }
+        }
+        else {
+          childTypes = null;
+          subChildTypes = null;
+        }
+        if (arity > 0) {
+          // Is there any other node fitting as a child for the currently
+          // examined node?
+          // ------------------------------------------------------------
+          for (int l = 0; l < arity; l++) {
+            if (!nodeExists(a_nodeSets[i], childTypes[l], subChildTypes[l])) {
+              String s = i + "," + j;
+              invalidNodes.put(s, node);
+              break;
+            }
+          }
+        }
+      }
+    }
+    return invalidNodes;
+  }
+
+  /**
+   * Is there a node with the needed return type and sub return type within the
+   * given function set?
+   *
+   * @param a_functionSet collection of available nodes
+   * @param a_returnType needed return type
+   * @param a_subReturnType needed sub return type
+   * @return true: node found
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  protected static boolean nodeExists(CommandGene[] a_functionSet,
+                                      Class a_returnType,
+                                      int a_subReturnType) {
+    for (int i = 0; i < a_functionSet.length; i++) {
+      if (a_functionSet[i].getReturnType() == a_returnType
+          && (a_subReturnType == 0
+              || a_subReturnType == a_functionSet[i].getSubReturnType())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Outputs the nodes that are never used.
+   *
+   * @param invalidNodes never used nodes
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  protected static void outputWarning(Map<String, CommandGene> invalidNodes) {
+    if (invalidNodes != null && invalidNodes.size() > 0) {
+      LOGGER.warn("Your configuration contains commands that are not used:");
+      Iterator it = invalidNodes.values().iterator();
+      while (it.hasNext()) {
+        CommandGene node = (CommandGene) it.next();
+        LOGGER.warn(" " + node.getClass().getName());
+      }
+    }
+    else {
+      LOGGER.info("Your configuration does not contain unused commands,"
+                  + " this is good");
+    }
+  }
+
+  /**
+   * Outputs the nodes that are never used.
+   *
+   * @param a_invalidDepths impossible depths for nodes
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  protected static void outputDepthInfo(Map<CommandGene, int[]> a_invalidDepths) {
+    if (a_invalidDepths != null && a_invalidDepths.size() > 0) {
+      LOGGER.info("Your configuration contains commands that are not possible"
+                  + "for certain depths : ");
+      Iterator it = a_invalidDepths.keySet().iterator();
+      while (it.hasNext()) {
+        CommandGene node = (CommandGene) it.next();
+        LOGGER.info(" " + node.getClass().getName());
+        int[] depths = (int[]) a_invalidDepths.get(node);
+        String s = "";
+        for (int i = 0; i < depths.length; i++) {
+          if (i > 0) {
+            s += ", ";
+          }
+          s += depths[i];
+        }
+        LOGGER.info("   Impossible depths: " + s);
+      }
+    }
+  }
+
+  public static Map<CommandGene, int[]> verifyDepthsForNodes(
+      GPConfiguration a_conf, Class[] a_types, int[] a_minDepths,
+      int[] a_maxDepths, int a_maxNodes, CommandGene[][] a_nodeSets) {
+    List<CommandGene> triedNodes;
+    List<CommandGene> possibleNodes;
+    Map<CommandGene, int[]> impossibleDepths = new Hashtable();
+    for (int i = 0; i < a_nodeSets.length; i++) {
+      // Determine impossible functions and terminals.
+      // ---------------------------------------------
+      for (int j = 0; j < a_nodeSets[i].length; j++) {
+        CommandGene nodeToCheck = a_nodeSets[i][j];
+        triedNodes = new Vector();
+        // Determine all possible nodes for current node.
+        // ----------------------------------------------
+        possibleNodes = new Vector();
+        /**@todo impl*/
+        for (int k = 0; k < a_nodeSets[i].length; j++) {
+          CommandGene nodeInQuestion = a_nodeSets[i][k];
+          if (triedNodes.contains(nodeInQuestion)) {
+            continue;
+          }
+          boolean valid = false;
+          for(int l=0;l<nodeToCheck.size();l++) {
+            if (nodeInQuestion.getReturnType() == nodeToCheck.getChildType(null, l)) {
+              if (nodeInQuestion.getSubReturnType() == 0 ||
+              nodeInQuestion.getSubReturnType() == nodeToCheck.getSubChildType(l)) {
+                valid = true;
+                break;
+              }
+            }
+          }
+          if (valid) {
+            possibleNodes.add(nodeInQuestion);
+          }
+          triedNodes.add(nodeInQuestion);
+        }
+
+        // Determine possible depths for each node.
+        // Do not consider nodes already in progress.
+        // ------------------------------------------
+        /**@todo impl*/
+      }
+    }
+    return impossibleDepths;
   }
 }
