@@ -17,6 +17,8 @@ import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.util.*;
+import com.thoughtworks.xstream.*;
+import java.io.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -32,7 +34,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   private transient static Logger LOGGER = Logger.getLogger(Fibonacci.class);
 
@@ -88,7 +90,7 @@ public class Fibonacci
         new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
         new Increment(conf, CommandGene.IntegerClass),
         new NOP(conf),
-        new Terminal(conf, CommandGene.IntegerClass,0.0, 10.0),
+        new Terminal(conf, CommandGene.IntegerClass, 0.0, 10.0),
     }, {
         vx = Variable.create(conf, "X", CommandGene.IntegerClass),
         new AddAndStore(conf, CommandGene.IntegerClass, "mem2"),
@@ -215,11 +217,19 @@ public class Fibonacci
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
           double freeMem = SystemKit.getFreeMemoryMB();
+//          if (genotype.getAllTimeBest() != null) {
+//            try {
+//              writeToStream(genotype.getAllTimeBest());
+//              readFromStream();
+//            } catch (Exception ex) {
+//              ex.printStackTrace();
+//            }
+//          }
           if (evno % 50 == 0) {
             double allBestFitness = genotype.getAllTimeBest().getFitnessValue();
             LOGGER.info("Evolving generation " + evno
-                               + ", all-time-best fitness: " + allBestFitness
-                               + ", memory free: " + freeMem + " MB");
+                        + ", all-time-best fitness: " + allBestFitness
+                        + ", memory free: " + freeMem + " MB");
           }
           if (evno > 3000) {
             t.stop();
@@ -339,5 +349,24 @@ public class Fibonacci
       }
       return error;
     }
+  }
+  public static void writeToStream(IGPProgram prog)
+      throws Exception {
+    XStream xstream = new XStream();
+    PrintWriter outFile = new PrintWriter(new FileOutputStream(
+        "c:\\xstreamtest.xml", false));
+    String xml = xstream.toXML(prog.getGPConfiguration());
+    outFile.print(xml);
+    outFile.close();
+  }
+
+  public static Object readFromStream()
+      throws Exception {
+    XStream xstream = new XStream();
+    File f = new File("c:\\xstreamtest.xml");
+    InputStream oi = new FileInputStream(f);
+    GPConfiguration result = (GPConfiguration) xstream.fromXML(oi);
+    result.clearMemory();
+    return result;
   }
 }
