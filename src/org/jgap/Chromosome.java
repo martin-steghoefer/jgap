@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.98 $";
+  private final static String CVS_REVISION = "$Revision: 1.99 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -386,13 +386,11 @@ public class Chromosome
           // Now construct a new Chromosome with the copies of the genes and
           // return it. Also clone the IApplicationData object later on.
           // ---------------------------------------------------------------
-          /**@todo clone Config!*/
           if (getClass() == Chromosome.class) {
             copy = new Chromosome(getConfiguration(), copyOfGenes);
           }
           else {
             copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
-//            copy.setConfiguration(getConfiguration());
             copy.setGenes(copyOfGenes);
           }
         }
@@ -402,7 +400,6 @@ public class Chromosome
           }
           else {
             copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
-//            copy.setConfiguration(getConfiguration());
           }
         }
       }
@@ -419,6 +416,18 @@ public class Chromosome
       copy.setApplicationData(cloneObject(getApplicationData()));
     } catch (Exception ex) {
       throw new IllegalStateException(ex.getMessage());
+    }
+    // Clone multi-objective object if necessary and possible.
+    // -------------------------------------------------------
+    if (m_multiObjective != null) {
+      if (getClass() == Chromosome.class) {
+        try {
+          ( (Chromosome) copy).setMultiObjectives( (List) cloneObject(
+              m_multiObjective));
+        } catch (Exception ex) {
+          throw new IllegalStateException(ex.getMessage());
+        }
+      }
     }
     return copy;
   }
