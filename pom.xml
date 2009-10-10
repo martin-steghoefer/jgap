@@ -8,12 +8,12 @@
 	<!-- Grouping, naming, versioning and packaging -->
 	<groupId>org.jgap</groupId>
 	<artifactId>JGAP</artifactId>
-	<version>3.4</version>
+	<version>3.4.4</version>
 
 	<!-- Name and description -->
 	<name>JGAP</name>
 	<description>
-		JGAP (pronounced "jay-gap") is a Genetic Algorithms and Genetic Programming component provided as a Java framework.
+		JGAP is a Genetic Algorithms and Genetic Programming component provided as a Java framework.
 	</description>
 	<inceptionYear>2001</inceptionYear>
 
