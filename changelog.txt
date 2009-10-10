@@ -2,10 +2,15 @@
 -----------------------------------------------------------
 * Better support for custom Chromosome classes:
   replaced new Chromosome(..) statement where appropriate
+* Fixed issue in GABreeder with call of BulkFitnessFunction
+  thanx to Christoph
 * Fixed bug 2562266: cloning now considers fitness value
+* Fixed crossover bug for CompositeGenes, thanx to Seb.
 * Optimized GP program creation runtime (see method
   ProgramChromosome.selectNode), thanx to beck_sz
 * Introduced evolve(IEvolutionMonitor) to Genotype
+* Added cloning of multi-objective object in Chromosome
+* GPGenotype: added utility functions like verifyChildNodes
 * Added interface IEvolutionMonitor
 * Added monitor implementations: ChainedMonitors,
   TimedMonitor, FitnessImprovementMonitor
