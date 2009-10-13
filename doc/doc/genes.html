@@ -115,11 +115,9 @@ color="#808080">     * can be represented (other than Integer.MAX_VALUE, of cour
 <i><font
 color="#808080">     */</font></i>
     <b><font color="#000080">public</font></b> <font
-color="#000000">QuarterGene()</font>
-    <font color="#000000">{</font>
-        <font
-color="#000000">m_maxNumberOfQuarters</font> <font color="#000000">=</font> <font
-color="#000000">Integer.MAX_VALUE;</font>
+color="#000000">QuarterGene(Configuration a_conf)</font> throws InvalidConfigurationException <font color="#000000">{</font>
+        this(a_conf, <font
+color="#000000">Integer.MAX_VALUE);</font>
     <font color="#000000">}</font>
 
 
@@ -141,10 +139,10 @@ color="#808080">     *</font></i>
 <i><font
 color="#808080">     */</font></i>
     <b><font color="#000080">public</font></b> <font
-color="#000000">QuarterGene(</font> <b><font color="#000080">int</font></b> <font
-color="#000000">a_maxNumberOfQuarters</font> <font color="#000000">)</font>
-    <font
-color="#000000">{</font>
+color="#000000">QuarterGene(Configuration a_conf,</font> <b><font color="#000080">int</font></b> <font
+color="#000000">a_maxNumberOfQuarters</font> <font color="#000000">)</font> throws InvalidConfigurationException <font
+color="#000000">{
+        super(a_conf);</font>
         <i><font color="#808080">// Make sure the given maximum is non-negative.</font></i>
         <i><font
 color="#808080">// --------------------------------------------</font></i>
@@ -200,18 +198,19 @@ color="#808080">     *         setup as this concrete Gene.</font></i>
 <i><font
 color="#808080">     */</font></i>
     <b><font color="#000080">public</font></b> <font
-color="#000000">Gene</font> <font color="#000000">newGene(</font> <font color="#000000">)</font>
-    <font
-color="#000000">{</font>
+color="#000000">Gene</font> <font color="#000000">newGeneInternal(</font> <font color="#000000">)</font> <font
+color="#000000">{
+      try {</font>
         <i><font color="#808080">// We construct the new QuarterGene with the same maximum number</font></i>
         <i><font
 color="#808080">// of quarters that this Gene was constructed with.</font></i>
         <i><font
 color="#808080">// -------------------------------------------------------------</font></i>
-        <b><font
-color="#000080">return</font></b> <b><font color="#000080">new</font></b> <font
-color="#000000">QuarterGene(</font> <font color="#000000">m_maxNumberOfQuarters</font> <font
-color="#000000">);</font>
+        return new QuarterGene(getConfiguration(), m_maxNumberOfQuarters);<font
+color="#000000">
+      } catch (InvalidConfigurationException ex) {
+        throw new IllegalStateException(ex.getMessage());
+      }</font>
     <font color="#000000">}</font>
 
 
@@ -591,12 +590,13 @@ color="#000080">
 color="#000000">m_numberOfQuarter</font></font><font color="#000000">s</font><font
 color="#000080"><font
 color="#000000">;</font>
-    <font color="#000000">}</font>
-<font
-color="#000000"></font></font><font
-color="#000080"><font
-color="#000000">}</font>
-</font></tt></pre>
+    <font color="#000000">}
+
+</font></font><font color="#000000">    public void applyMutation(int a_index, double a_percentage) {
+      setAllele(getConfiguration().getRandomGenerator().nextInt(m_maxNumberOfQuarters));
+    }</font><font
+color="#000080">
+</font><font color="#000000">}</font></tt></pre>
 
 <p class="text">Hopefully most of the methods and code in the example above are pretty self-explanatory
 once the javadocs and comments are consulted. We start off with a couple of constructors,
@@ -622,7 +622,8 @@ bound. </p>
 
 <p class="text">The next two methods deal with XML marshalling and are optional. (For more information
 on XML marshalling, please see the
- </a> <a href="marshalling.html">Marshalling Populations
+ </a> <A href="return new QuarterGene(getConfiguration(), m_maxNumberOfQuarters);">return
+new QuarterGene(getConfiguration(), m_maxNumberOfQuarters);</A><a href="marshalling.html">Marshalling Populations
 to XML</a> document.) We've implemented them here to provide an example. The
 getPersistentRepresentation() method returns a String that represents not only the current
 value of our QuarterGene, but also the upper bound, so that this QuarterGene can be later
