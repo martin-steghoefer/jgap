@@ -9,6 +9,8 @@
  */
 package org.jgap.distr.grid.common;
 
+import java.io.*;
+
 /**
  * Holds information to identify the context in which a solution should be
  * evolved.
@@ -16,9 +18,9 @@ package org.jgap.distr.grid.common;
  * @author Klaus Meffert
  * @since 3.3.3
  */
-public class BasicContext {
+public class BasicContext implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_appId;
 
