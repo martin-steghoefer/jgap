@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -288,6 +288,11 @@ public class DoubleGene
   protected void mapValueToWithinBounds() {
     if (getAllele() != null) {
       Double d_value = ( (Double) getAllele());
+      if (d_value.isInfinite()) {
+        // Here we have to break to avoid a stack overflow.
+        // ------------------------------------------------
+        return;
+      }
       // If the value exceeds either the upper or lower bounds, then
       // map the value to within the legal range. To do this, we basically
       // calculate the distance between the value and the double min,
@@ -303,8 +308,10 @@ public class DoubleGene
         else {
           rn = new StockRandomGenerator();
         }
-        setAllele(new Double(rn.nextDouble()
-                             * (m_upperBound - m_lowerBound) + m_lowerBound));
+//        setAllele(new Double((rn.nextDouble()
+//                             * (0.001d*(m_upperBound - m_lowerBound)))/0.001d + m_lowerBound));
+        setAllele(new Double((rn.nextDouble()
+                             * ((m_upperBound - m_lowerBound))) + m_lowerBound));
       }
     }
   }
