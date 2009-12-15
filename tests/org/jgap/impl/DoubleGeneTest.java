@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.41 $";
+  private static final String CVS_REVISION = "$Revision: 1.42 $";
 
   public void setUp() {
     super.setUp();
@@ -932,5 +932,91 @@ public class DoubleGeneTest
                           IChromosome a_chrom, int a_index) {
       return true;
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public void testMapValueToWithinBoundsSupportsFullDoubleRange()
+      throws Exception {
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.2d));
+    double lower = Double.MIN_VALUE + 1;
+    double upper = Double.MAX_VALUE;
+    DoubleGene gene = new DoubleGene(conf, lower, upper);
+    gene.setAllele(Double.MIN_VALUE);
+    double expectedValue = (lower + (0.2d * (upper - lower)));
+    assertEquals(new Double(expectedValue), gene.getAllele());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public void testMapValueToWithinBoundsSupportsFullDoubleRange2()
+      throws Exception {
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.9999d));
+    double lower = Double.MIN_VALUE + 1.0d;
+    double upper = Double.MAX_VALUE;
+    DoubleGene gene = new DoubleGene(conf, lower, upper);
+    gene.setAllele(Double.MIN_VALUE);
+    double expectedValue = (lower + (0.9999d * (upper - lower)));
+    assertEquals(new Double(expectedValue), gene.getAllele());
+  }
+
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public void testMapValueToWithinBoundsSupportsFullDoubleRange3()
+      throws Exception {
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.9999d));
+    double lower = -Double.MAX_VALUE/2 + 2;
+    double upper = Double.MAX_VALUE;
+    DoubleGene gene = new DoubleGene(conf, lower, upper);
+    gene.setAllele(-Double.MAX_VALUE);
+    double expectedValue = (lower + (0.9999d * (upper - lower)));
+    assertEquals(new Double(expectedValue), gene.getAllele());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public void testMapValueToWithinBoundsSupportsFullDoubleRange4()
+      throws Exception {
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.9999d));
+    double lower = -Double.MAX_VALUE/1.1;
+    double upper = Double.MAX_VALUE;
+    DoubleGene gene = new DoubleGene(conf, lower, upper);
+    gene.setAllele(-Double.MAX_VALUE);
+    double expectedValue = (lower + (0.9999d * (upper - lower)));
+    assertEquals(new Double(expectedValue), gene.getAllele());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.4.4
+   */
+  public void testMapValueToWithinBoundsSupportsFullDoubleRange5()
+      throws Exception {
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.0000001d));
+    double lower = -Double.MAX_VALUE/1.1;
+    double upper = Double.MAX_VALUE;
+    DoubleGene gene = new DoubleGene(conf, lower, upper);
+    gene.setAllele(-Double.MAX_VALUE);
+    double expectedValue = (lower + (0.0000001d * (upper - lower)));
+    assertEquals(new Double(expectedValue), gene.getAllele());
   }
 }

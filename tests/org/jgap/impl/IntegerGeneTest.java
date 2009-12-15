@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -965,17 +965,18 @@ public class IntegerGeneTest
    * @author David Kemp
    * @since 3.4.4
    */
-  public void testIntegerGeneSupportsFullIntegerRange() throws Exception {
-        Gene gene = new IntegerGene(conf, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        gene.setAllele(new Integer(5));
-        gene.setToRandomValue(new RandomGeneratorForTesting(0.2d));
-        int expectedValue = (int) (Integer.MIN_VALUE +
-                Math.round((0.2d *
-                    ((long) Integer.MAX_VALUE - (long) Integer.MIN_VALUE))));
-        assertEquals(new Integer(expectedValue), gene.getAllele());
-    }
+  public void testIntegerGeneSupportsFullIntegerRange()
+      throws Exception {
+    Gene gene = new IntegerGene(conf, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    gene.setAllele(new Integer(5));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.2d));
+    int expectedValue = (int) (Integer.MIN_VALUE +
+                               Math.round( (0.2d *
+        ( (long) Integer.MAX_VALUE - (long) Integer.MIN_VALUE))));
+    assertEquals(new Integer(expectedValue), gene.getAllele());
+  }
 
-    /**
+  /**
      * @throws Exception
      *
      * @author David Kemp
@@ -1011,4 +1012,5 @@ public class IntegerGeneTest
       int expectedValue = (int) (range + Integer.MIN_VALUE);
       assertEquals(expectedValue, gene.intValue());
     }
+
  }
