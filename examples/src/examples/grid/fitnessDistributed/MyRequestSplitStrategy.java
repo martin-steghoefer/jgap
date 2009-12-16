@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Configuration m_config;
 
@@ -52,7 +52,12 @@ public class MyRequestSplitStrategy
     // This is necessary as a Population can grow further than given
     // with the Configuration (it has to do with performance, sorry).
     // ---------------------------------------------------------------
-    pop.sortByFitness();
+    if (m_config.getGenerationNr() > 0) {
+      // Only sort by fitness after the initial generation as in
+      // generation 0 no requests have been processed on the workers.
+      // ------------------------------------------------------------
+      pop.sortByFitness();
+    }
     int count = getConfiguration().getPopulationSize();
     JGAPRequest[] result = new JGAPRequest[count];
     for (int i = 0; i < count; i++) {
