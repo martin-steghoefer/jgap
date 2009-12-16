@@ -2,6 +2,8 @@
 -----------------------------------------------------------
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
 * Added test cases
+* Fixed bug in grid example for distributed fitness
+* calculation
 
 3.4.4
 -----------------------------------------------------------
