@@ -1,5 +1,6 @@
 3.5
 -----------------------------------------------------------
+* Added new class MultipleIntegerGene, thanx to Chris Jones
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
 * Added test cases
 * Fixed bug in grid example for distributed fitness
