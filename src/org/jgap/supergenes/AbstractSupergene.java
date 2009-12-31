@@ -9,10 +9,9 @@
  */
 package org.jgap.supergenes;
 
-import java.io.*;
 import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -31,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * This field separates gene class name from
@@ -197,13 +196,12 @@ public abstract class AbstractSupergene
     }
     try {
       Constructor constr = getClass().getConstructor(new Class[] {Configuration.class, Gene[].class});
-      AbstractSupergene age =
-          (AbstractSupergene) constr.newInstance(new Object[] {getConfiguration(), getGenes()});
+      AbstractSupergene asg =
+          (AbstractSupergene) constr.newInstance(new Object[] {getConfiguration(), g});
       if (m_validator != this) {
-        age.setValidator(m_validator);
+        asg.setValidator(m_validator);
       }
-      age.m_genes = g;
-      return age;
+      return asg;
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -217,14 +215,14 @@ public abstract class AbstractSupergene
   /**
    * Applies a mutation of a given intensity (percentage) onto the gene
    * at the given index. Retries while isValid() returns true for the
-   * supergene. The method is delegated to the first element ] of the
-   * gene, indexed by <code>index</code>.
+   * supergene. The method is delegated to the first element of the
+   * gene, indexed by a_index.
    * See org.jgap.supergenes.AbstractSupergene.isValid()
    */
   public void applyMutation(final int a_index, final double a_percentage) {
-    // Return immediately the current value is found in
-    // the list of immutable alleles for this position.
-    // ---------------------------------------------------
+    // Immediately return the current value is found in the list of immutable
+    // alleles for this position.
+    // ----------------------------------------------------------------------
     if (a_index < m_immutable.length) {
       if (m_immutable[a_index] != null) {
         synchronized (m_immutable) {
@@ -234,15 +232,26 @@ public abstract class AbstractSupergene
         }
       }
     }
-    // Following commented out because if only very few valid states exist it
+    // Following commented out because if only very few valid states exist, it
     // may be that they are not reached within a given number of tries.
     // ----------------------------------------------------------------------
 //    if (!isValid()) {
 //      throw new Error("Should be valid on entry");
 //    }
     Object backup = m_genes[a_index].getAllele();
+    // Care that in case of a composite supergene, each sub-gene is mutated
+    // sometimes.
+    // --------------------------------------------------------------------
+    int size = m_genes[a_index].size();
+    int mutIndex;
+    if (size > 0) {
+      mutIndex = getConfiguration().getRandomGenerator().nextInt(size + 1);
+    }
+    else {
+      mutIndex = 0;
+    }
     for (int i = 0; i < MAX_RETRIES; i++) {
-      m_genes[a_index].applyMutation(0, a_percentage);
+      m_genes[a_index].applyMutation(mutIndex, a_percentage);
       if (isValid()) {
         return;
       }
