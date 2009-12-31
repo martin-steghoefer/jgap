@@ -1,10 +1,16 @@
 3.5
 -----------------------------------------------------------
 * Added new class MultipleIntegerGene, thanx to Chris Jones
+* Support cloning of application data of sample chromosome
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
-* Added test cases
 * Fixed bug in grid example for distributed fitness
 * calculation
+* Fixed AbstractSupergene's newGeneInternal, thanx to
+  Christoph Langgut
+* Fixed AbstractSupergene's applyMutation, thanx to
+  Christoph Langgut
+* Added test cases
+* Enhanced Javadoc
 
 3.4.4
 -----------------------------------------------------------
