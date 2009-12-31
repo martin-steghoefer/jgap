@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class ConfigurationForTesting
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
@@ -50,6 +50,8 @@ public class ConfigurationForTesting
     genes[0] = gene;
     gene = new StringGene(this, 1,10,StringGene.ALPHABET_CHARACTERS_LOWER);
     genes[1] = gene;
+    Object appData = new MyAppData("TEST123");
+    gene.setApplicationData(appData);
     gene = new IntegerGene(this, 100,300);
     genes[2] = gene;
     Chromosome chrom = new Chromosome(this, genes);
@@ -73,6 +75,28 @@ public class ConfigurationForTesting
     }
     catch (NoSuchFieldException nex) {
       throw new InvalidConfigurationException(nex.getMessage());
+    }
+  }
+
+  public class MyAppData
+      implements Cloneable, java.io.Serializable {
+    private String m_value;
+
+    public MyAppData(String a_value) {
+      m_value = a_value;
+    }
+
+    public String getValue() {
+      return m_value;
+    }
+
+    public int compareTo(Object a_o) {
+      MyAppData other = (MyAppData)a_o;
+      return m_value.compareTo(other.m_value);
+    }
+
+    public Object clone() {
+      return new String(m_value);
     }
   }
 }
