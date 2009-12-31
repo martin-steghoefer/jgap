@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.99 $";
+  private final static String CVS_REVISION = "$Revision: 1.100 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -445,15 +445,36 @@ public class Chromosome
    */
   protected Object cloneObject(Object a_object)
       throws Exception {
+    return cloneObject(getConfiguration(), a_object, this);
+  }
+
+  /**
+   * Static convenience method.
+   * Clones an object by using clone handlers. If no deep cloning possible, then
+   * return the reference.
+   *
+   * @param a_config a valid configuration to obtain the JGAPFactory from
+   * @param a_object the object to clone
+   * @param a_master the super object of a_object, e.g. a chromosome in case of
+   * application to be cloned
+   * @return the cloned object, or the object itself if no coning supported
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public static Object cloneObject(Configuration a_config, Object a_object,
+                                   Object a_master)
+      throws Exception {
     if (a_object == null) {
       return null;
     }
     // Try to clone via a registered clone handler.
     // --------------------------------------------
-    ICloneHandler cloner = getConfiguration().getJGAPFactory().
+    ICloneHandler cloner = a_config.getJGAPFactory().
         getCloneHandlerFor(a_object, a_object.getClass());
     if (cloner != null) {
-      return cloner.perform(a_object, null, this);
+      return cloner.perform(a_object, null, a_master);
     }
     else {
       // No cloning supported, so just return the reference.
@@ -661,6 +682,17 @@ public class Chromosome
       // for the respective gene position they're going to inhabit.
       // -----------------------------------------------------------
       newGenes[i] = sampleGenes[i].newGene();
+      // If application data is set, try to clone it as well.
+      // ----------------------------------------------------
+      Object appData = sampleGenes[i].getApplicationData();
+      if(appData != null) {
+        try {
+          cloneObject(a_configuration, appData, sampleChromosome);
+        } catch (Exception ex) {
+          throw new InvalidConfigurationException("Application data of "
+              +"sample chromsome is not cloneable",ex);
+        }
+      }
       // Set the gene's value (allele) to a random value.
       // ------------------------------------------------
       newGenes[i].setToRandomValue(generator);
