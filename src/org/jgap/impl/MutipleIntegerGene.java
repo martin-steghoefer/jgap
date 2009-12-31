@@ -27,7 +27,7 @@ import org.jgap.*;
 public class MutipleIntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -96,6 +96,13 @@ public class MutipleIntegerGene
     m_lowerBounds = a_lowerBound;
     m_upperBounds = a_upperBound;
     m_significance = a_significance;
+    if(m_upperBounds - m_lowerBounds < m_significance) {
+      int test = round((m_upperBounds+m_lowerBounds)/2,m_significance);
+      if(test < m_lowerBounds || test > m_upperBounds) {
+        throw new IllegalArgumentException(
+            "Lower and upper bound do not match significance!");
+      }
+    }
   }
 
   /**
