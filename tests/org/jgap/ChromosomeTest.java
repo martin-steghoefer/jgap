@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.67 $";
+  private final static String CVS_REVISION = "$Revision: 1.68 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -1129,6 +1129,10 @@ public class ChromosomeTest
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
+    ConfigurationForTesting.MyAppData appData = (ConfigurationForTesting.MyAppData)(chrom.getGene(1).getApplicationData());
+    assertEquals("TEST123", appData.getValue());
+    assertNull(chrom.getGene(0).getApplicationData());
+    assertNull(chrom.getGene(2).getApplicationData());
   }
 
   /**
