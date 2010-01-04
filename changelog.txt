@@ -11,6 +11,8 @@
   Christoph Langgut
 * Enhanced Chromosome's clone-method, thanx to Peter
   Molettiere for the hints
+* Added listeners that fire before and after genetic
+  operators are being applied (see class BreederBase)
 * Added test cases
 * Enhanced Javadoc
 
