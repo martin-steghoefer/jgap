@@ -45,6 +45,7 @@
  */
 package org.jgap;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -64,7 +65,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.100 $";
+  private final static String CVS_REVISION = "$Revision: 1.101 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -390,8 +391,36 @@ public class Chromosome
             copy = new Chromosome(getConfiguration(), copyOfGenes);
           }
           else {
-            copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
-            copy.setGenes(copyOfGenes);
+            try {
+              // Try dynamic call og constructor. Attention: This may not
+              // work for inner classes!
+              // --------------------------------------------------------
+              Constructor[] constr = getClass().getDeclaredConstructors();
+              if (constr != null) {
+                for (int i = 0; i < constr.length; i++) {
+                  Class[] params = constr[i].getParameterTypes();
+                  if (params != null && params.length == 1) {
+                    if (params[0] == Configuration.class) {
+                      copy = (IChromosome) constr[i].newInstance(new Object[] {
+                          getConfiguration()});
+                      copy.setGenes(copyOfGenes);
+                    }
+                  }
+                }
+              }
+              if (copy == null) {
+                // Enforce alternative cloning to get at least something.
+                // ------------------------------------------------------
+                throw new Exception(
+                    "No appropriate constructor for cloning found.");
+              }
+            } catch (Exception ex) {
+              ex.printStackTrace();
+              // Do it the old way with the danger of getting a stack overflow.
+              // --------------------------------------------------------------
+              copy = (IChromosome) getConfiguration().getSampleChromosome().clone();
+              copy.setGenes(copyOfGenes);
+            }
           }
         }
         else {
