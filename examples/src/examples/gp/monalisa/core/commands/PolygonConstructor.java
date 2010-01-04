@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class PolygonConstructor
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private boolean m_mutateable;
 
@@ -73,7 +73,7 @@ public class PolygonConstructor
 
   @Override
   public String toString() {
-    String s = "new Polygon(";
+    String s = "Polygon(";
     for (int i = 0; i < m_points; i++) {
       if (i > 0) {
         s += ", ";
