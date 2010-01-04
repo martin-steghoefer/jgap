@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.68 $";
+  private final static String CVS_REVISION = "$Revision: 1.69 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -581,6 +581,52 @@ public class ChromosomeTest
     Gene[] clonedGenes = chrom2.getGenes();
     assertEquals(genes[0].getEnergy(), clonedGenes[0].getEnergy(), DELTA);
     assertEquals(genes[1].getEnergy(), clonedGenes[1].getEnergy(), DELTA);
+  }
+
+  /**
+   * Tests cloning of sub class of org.jgap.Chromosome.
+   * This test uses a chromosome with own clone method.
+   * Thanx to Peter Molettiere for pointing out the problem with
+   * Chromosome.clone().
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void testClone_7()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new RandomFitnessFunction());
+    IChromosome chrom = new ChromosomeForTesting(conf);
+    conf.setSampleChromosome(chrom);
+    Gene[] genes = new Gene[1];
+    genes[0] = new IntegerGene(conf);
+    chrom.setGenes(genes);
+    IChromosome copy = (IChromosome)chrom.clone();
+    assertEquals(copy, chrom);
+  }
+
+  /**
+   * Tests cloning of sub class of org.jgap.Chromosome.
+   * This test uses a chromosome without own clone method.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void testClone_8()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new RandomFitnessFunction());
+    IChromosome chrom = new ChromosomeForTesting2(conf);
+    conf.setSampleChromosome(chrom);
+    Gene[] genes = new Gene[1];
+    genes[0] = new IntegerGene(conf);
+    chrom.setGenes(genes);
+    IChromosome copy = (IChromosome)chrom.clone();
+    assertEquals(copy, chrom);
   }
 
   private final static int MAX_CHROMOSOME_TO_TEST = 1000;
