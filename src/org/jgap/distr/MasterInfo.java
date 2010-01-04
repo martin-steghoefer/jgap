@@ -9,6 +9,8 @@
  */
 package org.jgap.distr;
 
+import java.io.*;
+
 import org.jgap.util.*;
 
 /**
@@ -17,9 +19,9 @@ import org.jgap.util.*;
  * @author Klaus Meffert
  * @since 2.4
  */
-public class MasterInfo {
+public class MasterInfo implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The computer's address over which it is reachable in the network
