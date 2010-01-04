@@ -9,17 +9,17 @@
  */
 package org.jgap.gp.impl;
 
+import java.io.*;
 import java.util.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
+
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
-import org.jgap.impl.*;
 import org.jgap.distr.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
-import org.jgap.gp.terminal.Variable;
-import org.jgap.util.ICloneable;
-import org.jgap.util.CloneException;
-import java.io.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.impl.*;
+import org.jgap.util.*;
 
 /**
  * Configuration for a GP.
@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   /**@todo introduce lock for configuration*/
   /**
