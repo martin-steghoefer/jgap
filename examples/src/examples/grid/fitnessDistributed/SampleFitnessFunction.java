@@ -21,7 +21,7 @@ import org.jgap.impl.*;
 public class SampleFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The fitness evaluation routine.
@@ -33,6 +33,9 @@ public class SampleFitnessFunction
    * @since 3.01
    */
   public double evaluate(IChromosome a_subject) {
+    return evaluateRemote(a_subject);
+  }
+  public double evaluateRemote(IChromosome a_subject) {
     int total = 0;
     for (int i = 0; i < a_subject.size(); i++) {
       BooleanGene value = (BooleanGene) a_subject.getGene(a_subject.size() -
