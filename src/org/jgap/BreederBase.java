@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+import org.jgap.event.GeneticEvent;
 
 /**
  * Abstract base class for breeders.
@@ -20,7 +21,7 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public BreederBase() {
   }
@@ -106,7 +107,17 @@ public abstract class BreederBase
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
       /**@todo utilize jobs: integrate job into GeneticOperator*/
+      // Fire listener before genetic operator will be executed.
+      // -------------------------------------------------------
+      a_config.getEventManager().fireGeneticEvent(
+          new GeneticEvent(GeneticEvent.BEFORE_GENETIC_OPERATOR, new Object[] {
+                           this, operator}));
       operator.operate(a_pop, a_pop.getChromosomes());
+      // Fire listener after genetic operator has been executed.
+      // -------------------------------------------------------
+      a_config.getEventManager().fireGeneticEvent(
+          new GeneticEvent(GeneticEvent.AFTER_GENETIC_OPERATOR, new Object[] {
+                           this, operator}));
     }
   }
 
