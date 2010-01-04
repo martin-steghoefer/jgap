@@ -25,6 +25,11 @@ public class ChromosomeForTesting
     super(Genotype.getStaticConfiguration());
   }
 
+  public ChromosomeForTesting(Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config);
+  }
+
   public ChromosomeForTesting(Configuration a_config, final Gene[] a_initialGenes)
       throws InvalidConfigurationException {
     super(a_config, a_initialGenes);
