@@ -23,7 +23,7 @@ import java.util.EventObject;
 public class GeneticEvent
     extends EventObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Multi-purpose value object
@@ -42,6 +42,20 @@ public class GeneticEvent
 
   public static final String GPGENOTYPE_NEW_BEST_SOLUTION =
       "gpgenotype_best_solution";
+
+  /**
+   * Fired before a genetic operator, liek mutation or crossing over, is
+   * executed.
+   */
+  public static final String BEFORE_GENETIC_OPERATOR =
+      "before_genetic_operator";
+
+  /**
+   * Fired after a genetic operator, liek mutation or crossing over, is
+   * executed.
+   */
+  public static final String AFTER_GENETIC_OPERATOR =
+      "after_genetic_operator";
 
   /**
    * References the name of this event instance.
