@@ -33,7 +33,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.105 $";
+  private final static String CVS_REVISION = "$Revision: 1.106 $";
 
   /**
    * The current Configuration instance.
@@ -263,9 +263,9 @@ public class Genotype
    */
   public List<String> evolve(IEvolutionMonitor a_monitor) {
     a_monitor.start(getConfiguration());
+    getConfiguration().setMonitor(a_monitor);
     List<String> messages = new Vector();
     do {
-      getConfiguration();
       evolve();
       boolean goon = a_monitor.nextCycle(getPopulation(), messages);
       if (!goon) {
