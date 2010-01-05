@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ChainedMonitors
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private List<IEvolutionMonitor> m_monitors;
 
@@ -99,6 +99,23 @@ public class ChainedMonitors
   public void start(Configuration a_config) {
     for (IEvolutionMonitor monitor : m_monitors) {
       monitor.start(a_config);
+    }
+  }
+
+  /**
+   * Called whenever it's worth monitoring.
+   *
+   * @param a_monitorEvent see constants at top of class IEvolutionMonitor
+   * @param a_evolutionNo the index of the evolution round (1, 2, ...)
+   * @param a_information event-specific information
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void event(String a_monitorEvent, int a_evolutionNo,
+                    Object[] a_information) {
+    for (IEvolutionMonitor monitor : m_monitors) {
+      monitor.event(a_monitorEvent, a_evolutionNo, a_information);
     }
   }
 }
