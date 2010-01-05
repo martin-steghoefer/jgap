@@ -10,7 +10,9 @@
 package org.jgap;
 
 import java.util.*;
-import org.jgap.event.GeneticEvent;
+
+import org.jgap.audit.*;
+import org.jgap.event.*;
 
 /**
  * Abstract base class for breeders.
@@ -21,7 +23,7 @@ import org.jgap.event.GeneticEvent;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public BreederBase() {
   }
@@ -42,6 +44,7 @@ public abstract class BreederBase
   protected Population applyNaturalSelectors(Configuration a_config,
       Population a_pop, boolean a_processBeforeGeneticOperators) {
     /**@todo optionally use working pool*/
+    boolean monitorActive = a_config.getMonitor() != null;
     try {
       // Process all natural selectors applicable before executing the
       // genetic operators (reproduction, crossing over, mutation...).
@@ -55,8 +58,7 @@ public abstract class BreederBase
         population_size = (int) Math.round(population_size *
             a_config.getSelectFromPrevGen());
         int single_selection_size;
-        Population new_population = new Population(a_config,
-            population_size);
+        Population new_population = new Population(a_config, population_size);
         NaturalSelector selector;
         // Repopulate the population of chromosomes with those selected
         // by the natural selector. Iterate over all natural selectors.
@@ -72,10 +74,28 @@ public abstract class BreederBase
           else {
             single_selection_size = population_size / selectorSize;
           }
+          if (monitorActive) {
+            // Monitor that selection is going to be performed.
+            // ------------------------------------------------
+            a_config.getMonitor().event(
+                IEvolutionMonitor.MONITOR_EVENT_BEFORE_SELECT,
+                a_config.getGenerationNr(),
+                new Object[] {selector, a_pop, single_selection_size,
+                a_processBeforeGeneticOperators});
+          }
           // Do selection of chromosomes.
           // ----------------------------
           /**@todo utilize jobs: integrate job into NaturalSelector!*/
           selector.select(single_selection_size, a_pop, new_population);
+          if (monitorActive) {
+            // Monitor population after selection took place.
+            // ----------------------------------------------
+            a_config.getMonitor().event(
+                IEvolutionMonitor.MONITOR_EVENT_AFTER_SELECT,
+                a_config.getGenerationNr(),
+                new Object[] {selector, a_pop, new_population,
+                single_selection_size, a_processBeforeGeneticOperators});
+          }
           // Clean up the natural selector.
           // ------------------------------
           selector.empty();
@@ -104,6 +124,7 @@ public abstract class BreederBase
   protected void applyGeneticOperators(Configuration a_config, Population a_pop) {
     List geneticOperators = a_config.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
+    boolean monitorActive = a_config.getMonitor() != null;
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
       /**@todo utilize jobs: integrate job into GeneticOperator*/
@@ -112,7 +133,23 @@ public abstract class BreederBase
       a_config.getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.BEFORE_GENETIC_OPERATOR, new Object[] {
                            this, operator}));
+      if (monitorActive) {
+        // Monitor that operator will be performed.
+        // ----------------------------------------
+        a_config.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_BEFORE_OPERATE,
+            a_config.getGenerationNr(),
+            new Object[] {operator, a_pop, a_pop.getChromosomes()});
+      }
       operator.operate(a_pop, a_pop.getChromosomes());
+      if (monitorActive) {
+        // Monitor that operator has been performed.
+        // -----------------------------------------
+        a_config.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_AFTER_OPERATE,
+            a_config.getGenerationNr(),
+            new Object[] {operator, a_pop, a_pop.getChromosomes()});
+      }
       // Fire listener after genetic operator has been executed.
       // -------------------------------------------------------
       a_config.getEventManager().fireGeneticEvent(
@@ -130,7 +167,7 @@ public abstract class BreederBase
   public abstract Object clone();
 
   /**
-   * @param a_other sic
+   * @param a_other object to compare to
    * @return as always
    *
    * @author Klaus Meffert

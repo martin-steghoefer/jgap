@@ -13,6 +13,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.jgap.audit.*;
 import org.jgap.util.*;
 
 /**
@@ -25,12 +26,12 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.64 $";
+  private static final String CVS_REVISION = "$Revision: 1.65 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */
-  private List m_chromosomes;
+  private List<IChromosome> m_chromosomes;
 
   /**
    * The fittest Chromosome of the population.
@@ -242,7 +243,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public List getChromosomes() {
+  public List<IChromosome> getChromosomes() {
     return m_chromosomes;
   }
 
@@ -446,15 +447,23 @@ public class Population
 //      m_chromosomes = newPop.getChromosomes();
 //      setChanged(true);
 //    }
+    boolean monitorActive = getConfiguration().getMonitor() != null;
     while (popSize > maxSize) {
+      if (monitorActive) {
+        // Fire monitor with population and index of chromosome to be removed.
+        // -------------------------------------------------------------------
+        getConfiguration().getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME,
+            getConfiguration().getGenerationNr(),
+            new Object[] {this, new Integer(0)});
+      }
       // Remove a chromosome.
       // --------------------
       /**@todo use dedicated selector for that*/
       removeChromosome(0);
       popSize--;
     }
-  }
-
+    }
   /**
    * Sorts the Chromosome list and returns the fittest n Chromosomes in
    * the population.

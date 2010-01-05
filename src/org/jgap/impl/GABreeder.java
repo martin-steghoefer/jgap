@@ -10,12 +10,13 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+import org.jgap.audit.*;
 import org.jgap.event.*;
 
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private transient Configuration m_lastConf;
 
@@ -42,6 +43,7 @@ public class GABreeder
   public Population evolve(Population a_pop, Configuration a_conf) {
     Population pop = a_pop;
     int originalPopSize = a_conf.getPopulationSize();
+    boolean monitorActive = a_conf.getMonitor() != null;
     IChromosome fittest = null;
     // If first generation: Set age to one to allow genetic operations,
     // see CrossoverOperator for an illustration.
@@ -77,7 +79,21 @@ public class GABreeder
     }
     // Ensure fitness value of all chromosomes is udpated.
     // ---------------------------------------------------
+    if (monitorActive) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES1,
+          a_conf.getGenerationNr(), new Object[]{pop});
+    }
     updateChromosomes(pop, a_conf);
+    if (monitorActive) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1,
+          a_conf.getGenerationNr(), new Object[]{pop});
+    }
     // Apply certain NaturalSelectors before GeneticOperators will be executed.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, true);
@@ -116,13 +132,41 @@ public class GABreeder
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     if (bulkFunction != null) {
+      if (monitorActive) {
+        // Monitor that bulk fitness will be called for evaluation.
+        // --------------------------------------------------------
+        a_conf.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_BEFORE_BULK_EVAL,
+            a_conf.getGenerationNr(), new Object[] {bulkFunction, pop});
+      }
       /**@todo utilize jobs: bulk fitness function is not so important for a
        * prototype! */
       bulkFunction.evaluate(pop);
+      if (monitorActive) {
+        // Monitor that bulk fitness has been called for evaluation.
+        // ---------------------------------------------------------
+        a_conf.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_AFTER_BULK_EVAL,
+            a_conf.getGenerationNr(), new Object[] {bulkFunction, pop});
+      }
     }
     // Ensure fitness value of all chromosomes is udpated.
     // ---------------------------------------------------
+    if (monitorActive) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2,
+          a_conf.getGenerationNr(), new Object[]{pop});
+    }
     updateChromosomes(pop, a_conf);
+    if (monitorActive) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2,
+          a_conf.getGenerationNr(), new Object[]{pop});
+    }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, false);
@@ -148,12 +192,26 @@ public class GABreeder
              * invalid combinations may have to be filtered out*/
             newChrom = (IChromosome) chromIniter.perform(sampleChrom,
                 sampleChromClass, null);
+            if (monitorActive) {
+              // Monitor that fitness value of chromosomes is being updated.
+              // -----------------------------------------------------------
+              a_conf.getMonitor().event(
+                  IEvolutionMonitor.MONITOR_EVENT_BEFORE_ADD_CHROMOSOME,
+                  a_conf.getGenerationNr(), new Object[]{pop, newChrom});
+            }
             pop.addChromosome(newChrom);
           } catch (Exception ex) {
             throw new RuntimeException(ex);
           }
         }
       }
+    }
+    if (monitorActive) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST,
+          a_conf.getGenerationNr(), new Object[]{pop, fittest});
     }
     reAddFittest(pop, fittest);
     // Increase number of generations.
@@ -186,6 +244,13 @@ public class GABreeder
     return new GABreeder();
   }
 
+  /**
+   * Cares that population size is kept constant and does not exceed the desired
+   * size.
+   *
+   * @param a_pop Population
+   * @param a_conf Configuration
+   */
   protected void keepPopSizeConstant(Population a_pop, Configuration a_conf) {
     if (a_conf.isKeepPopulationSizeConstant()) {
       try {
