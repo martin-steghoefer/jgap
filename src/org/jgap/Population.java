@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.65 $";
+  private static final String CVS_REVISION = "$Revision: 1.66 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -447,13 +447,13 @@ public class Population
 //      m_chromosomes = newPop.getChromosomes();
 //      setChanged(true);
 //    }
-    boolean monitorActive = getConfiguration().getMonitor() != null;
+    IEvolutionMonitor monitor = getConfiguration().getMonitor();
+    boolean monitorActive = monitor != null;
     while (popSize > maxSize) {
       if (monitorActive) {
         // Fire monitor with population and index of chromosome to be removed.
         // -------------------------------------------------------------------
-        getConfiguration().getMonitor().event(
-            IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME,
+        monitor.event(IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME,
             getConfiguration().getGenerationNr(),
             new Object[] {this, new Integer(0)});
       }
@@ -834,4 +834,36 @@ public class Population
     }
     return a;
   }
+
+  /***
+   * Hashcode function for the genotype, tries to create a unique hashcode for
+   * the chromosomes within the population. The logic for the hashcode is
+   *
+   * Step  Result
+   * ----  ------
+   *    1  31*0      + hashcode_0 = y(1)
+   *    2  31*y(1)   + hashcode_1 = y(2)
+   *    3  31*y(2)   + hashcode_2 = y(3)
+   *    n  31*y(n-1) + hashcode_n-1 = y(n)
+   *
+   * @return the computed hashcode
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public int hashCode() {
+    int i, size = size();
+    IChromosome s;
+    int twopower = 1;
+    // For empty population we want a special value different from other
+    // hashcode implementations.
+    // ------------------------------------------------------------------
+    int localHashCode = -593;
+    for (i = 0; i < size; i++, twopower = 2 * twopower) {
+      s = getChromosome(i);
+      localHashCode = 31 * localHashCode + s.hashCode();
+    }
+    return localHashCode;
+  }
+
 }
