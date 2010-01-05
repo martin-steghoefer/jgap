@@ -22,7 +22,7 @@ import org.jgap.util.*;
 public class KeyedValues2D
     implements ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /** The row keys */
   private List m_rowKeys;
@@ -187,7 +187,7 @@ public class KeyedValues2D
   }
 
   /**
-   * Sets a value
+   * Sets a value.
    *
    * @param a_value the value
    * @param a_rowKey the row key
