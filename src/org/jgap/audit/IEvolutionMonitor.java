@@ -10,6 +10,7 @@
 package org.jgap.audit;
 
 import java.util.*;
+import java.io.*;
 import org.jgap.*;
 
 /**
@@ -18,9 +19,9 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.4.4
  */
-public interface IEvolutionMonitor {
+public interface IEvolutionMonitor extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final static String MONITOR_EVENT_REMOVE_CHROMOSOME =
       "remove_chromosome";
