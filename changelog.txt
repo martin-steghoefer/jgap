@@ -1,5 +1,6 @@
 3.5
 -----------------------------------------------------------
+* Improved monitoring of evolution progress a lot
 * Added new class MultipleIntegerGene, thanx to Chris Jones
 * Support cloning of application data of sample chromosome
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
