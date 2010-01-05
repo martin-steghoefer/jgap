@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.commons.lang.builder.*;
+import org.jgap.audit.*;
 import org.jgap.data.config.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
@@ -43,7 +44,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.97 $";
+  private final static String CVS_REVISION = "$Revision: 1.98 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -321,6 +322,13 @@ public class Configuration
    * @since 3.01
    */
   private String m_id;
+
+  /**
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  private IEvolutionMonitor m_monitor;
 
   public Configuration() {
     this("", null);
@@ -1847,4 +1855,25 @@ public class Configuration
     }
   }
 
+  /**
+   * Sets a monitor for auditing evolution progress.
+   *
+   * @param a_monitor the monitor to use
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void setMonitor(IEvolutionMonitor a_monitor) {
+    m_monitor = a_monitor;
+  }
+
+  /**
+   * @return the monitor uses for auditing the evolution progress.
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public IEvolutionMonitor getMonitor() {
+    return m_monitor;
+  }
 }
