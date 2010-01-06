@@ -10,6 +10,7 @@
 package org.jgap.util;
 
 import java.io.*;
+import java.util.*;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.Option;
@@ -22,7 +23,7 @@ import org.apache.commons.cli.Option;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -141,6 +142,16 @@ public class SystemKit {
       }
       System.exit(0);
     }
+  }
+
+  /**
+   * @return a GUID
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public static String getGUID() {
+    return UUID.randomUUID().toString();
   }
 
 }
