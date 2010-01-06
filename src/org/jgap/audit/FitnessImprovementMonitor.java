@@ -23,7 +23,7 @@ import org.jgap.*;
 public class FitnessImprovementMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_initialWaitSeconds;
 
@@ -161,25 +161,27 @@ public class FitnessImprovementMonitor
       // --------------------
       return;
     }
-    if(a_information == null) {
+    if (a_information == null) {
       return;
     }
     // The events are queried in the chronological order they do appear.
     // -----------------------------------------------------------------
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME)) {
-      Population pop = (Population)a_information[0];
-      Integer chromosomeIndex = (Integer)a_information[1];
+      Population pop = (Population) a_information[0];
+      Integer chromosomeIndex = (Integer) a_information[1];
     }
-    if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES1)) {
-      Population pop = (Population)a_information[0];
+    if (a_monitorEvent.equals(IEvolutionMonitor.
+                              MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES1)) {
+      Population pop = (Population) a_information[0];
     }
-    if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1)) {
-      Population pop = (Population)a_information[0];
+    if (a_monitorEvent.equals(IEvolutionMonitor.
+                              MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1)) {
+      Population pop = (Population) a_information[0];
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_SELECT)) {
-      NaturalSelector selector = (NaturalSelector)a_information[0];
-      Population pop = (Population)a_information[1];
-      int selectionSize = (Integer)a_information[2];
+      NaturalSelector selector = (NaturalSelector) a_information[0];
+      Population pop = (Population) a_information[1];
+      int selectionSize = (Integer) a_information[2];
       boolean a_processBeforeGeneticOperators = (Boolean) a_information[3];
       /*
        * a_processBeforeGeneticOperators = true:
@@ -189,11 +191,11 @@ public class FitnessImprovementMonitor
        */
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_SELECT)) {
-      NaturalSelector selector = (NaturalSelector)a_information[0];
-      Population pop = (Population)a_information[1];
-      Population newPop = (Population)a_information[2];
-      int selectionSize = (Integer)a_information[3];
-      boolean a_processBeforeGeneticOperators = (Boolean)a_information[4];
+      NaturalSelector selector = (NaturalSelector) a_information[0];
+      Population pop = (Population) a_information[1];
+      Population newPop = (Population) a_information[2];
+      int selectionSize = (Integer) a_information[3];
+      boolean a_processBeforeGeneticOperators = (Boolean) a_information[4];
       /*
        * a_processBeforeGeneticOperators = true:
        *    called after MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1
@@ -202,42 +204,41 @@ public class FitnessImprovementMonitor
        */
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_OPERATE)) {
-      GeneticOperator operator = (GeneticOperator)a_information[0];
-      Population pop = (Population)a_information[1];
-      List<IChromosome> chromosomes = (List<IChromosome>)a_information[2];
+      GeneticOperator operator = (GeneticOperator) a_information[0];
+      Population pop = (Population) a_information[1];
+      List<IChromosome> chromosomes = (List<IChromosome>) a_information[2];
     }
-
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_OPERATE)) {
-      GeneticOperator operator = (GeneticOperator)a_information[0];
-      Population pop = (Population)a_information[1];
-      List<IChromosome> chromosomes = (List<IChromosome>)a_information[2];
+      GeneticOperator operator = (GeneticOperator) a_information[0];
+      Population pop = (Population) a_information[1];
+      List<IChromosome> chromosomes = (List<IChromosome>) a_information[2];
     }
-
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_BULK_EVAL)) {
-      BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)a_information[0];
-      Population pop = (Population)a_information[1];
+      BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)
+          a_information[0];
+      Population pop = (Population) a_information[1];
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_BULK_EVAL)) {
-      BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)a_information[0];
-      Population pop = (Population)a_information[1];
+      BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)
+          a_information[0];
+      Population pop = (Population) a_information[1];
     }
-
-    if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2)) {
-      Population pop = (Population)a_information[0];
+    if (a_monitorEvent.equals(IEvolutionMonitor.
+                              MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2)) {
+      Population pop = (Population) a_information[0];
     }
-    if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2)) {
-      Population pop = (Population)a_information[0];
+    if (a_monitorEvent.equals(IEvolutionMonitor.
+                              MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2)) {
+      Population pop = (Population) a_information[0];
     }
-
-    if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_ADD_CHROMOSOME)) {
-      Population pop = (Population)a_information[0];
-      IChromosome newChromosome = (IChromosome)a_information[1];
+    if (a_monitorEvent.equals(IEvolutionMonitor.
+                              MONITOR_EVENT_BEFORE_ADD_CHROMOSOME)) {
+      Population pop = (Population) a_information[0];
+      IChromosome newChromosome = (IChromosome) a_information[1];
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST)) {
-      Population pop = (Population)a_information[0];
-      IChromosome fittest = (IChromosome)a_information[1];
+      Population pop = (Population) a_information[0];
+      IChromosome fittest = (IChromosome) a_information[1];
     }
-
-
   }
 }
