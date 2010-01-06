@@ -9,8 +9,9 @@
  */
 package org.jgap.audit;
 
-import org.jgap.*;
+import java.io.*;
 import java.util.*;
+import org.jgap.*;
 
 /**
  * Gathers statistical data and returns them on request.
@@ -18,23 +19,24 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 2.2
  */
-public class Evaluator {
+public class Evaluator
+    implements Serializable {
   /**@todo implement: overall score calculation (out of best/avg. fitness value
    * etc.)
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Each data has its own data container
    */
-  private Map m_permutationData;
+  private Map<Object, KeyedValues2D> m_permutationData;
 
   /**
    * Stores the run-numbers (indexes) for all permutations submitted
    */
-  private Map m_permutationRuns;
+  private Map<Integer, Map> m_permutationRuns;
 
   /**
    * For processinf without permutation
@@ -46,16 +48,17 @@ public class Evaluator {
   /**
    * Genotype data per permutation per run
    */
-  private Map m_genotypeData;
+  private Map<String, GenotypeData> m_genotypeData;
 
   /**
    * Genotype data per permutation (averaged over all runs)
    */
-  private List m_genotypeDataAvg;
+  private List<GenotypeDataAvg> m_genotypeDataAvg;
 
   public Evaluator(final PermutingConfiguration a_conf) {
     if (a_conf == null) {
-      throw new IllegalArgumentException("Configuration must not be null!");
+      throw new IllegalArgumentException(
+          "Permuting Configuration must not be null!");
     }
     m_permConf = a_conf;
     m_data = new KeyedValues2D();
@@ -86,6 +89,7 @@ public class Evaluator {
 
   /**
    * Sets a specific value.
+   *
    * @param a_permutation int
    * @param a_run int
    * @param a_value double
@@ -98,8 +102,7 @@ public class Evaluator {
   public void setValue(int a_permutation, int a_run, double a_value,
                        Comparable a_rowKey, Comparable a_columnKey) {
     Object key = createKey(a_permutation, a_run);
-    KeyedValues2D a_data = (KeyedValues2D) m_permutationData.get(
-        key);
+    KeyedValues2D a_data = m_permutationData.get(key);
     if (a_data == null) {
       a_data = new KeyedValues2D();
       m_permutationData.put(key, a_data);
@@ -111,7 +114,7 @@ public class Evaluator {
   }
 
   protected void addRunNumber(int a_permutation, int a_run) {
-    Map v = (Map) m_permutationRuns.get(new Integer(a_permutation));
+    Map v = m_permutationRuns.get(new Integer(a_permutation));
     if (v == null) {
       v = new Hashtable();
     }
@@ -121,8 +124,7 @@ public class Evaluator {
 
   public Number getValue(int a_permutation, int a_run, Comparable rowKey,
                          Comparable columnKey) {
-    KeyedValues2D a_data = (KeyedValues2D) m_permutationData.get(
-        createKey(a_permutation, a_run));
+    KeyedValues2D a_data = m_permutationData.get(createKey(a_permutation, a_run));
     if (a_data == null) {
       return null;
     }
@@ -172,7 +174,7 @@ public class Evaluator {
                                       final KeyedValues2D result) {
     // Determine run-numbers of given permutation.
     // -------------------------------------------
-    Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
+    Map runNumbers = m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
       return;
     }
@@ -185,8 +187,8 @@ public class Evaluator {
       runI = (Integer) it.next();
       // Determine dataset of given permutation.
       // ---------------------------------------
-      KeyedValues2D a_data = (KeyedValues2D) m_permutationData.
-          get(createKey(a_permutation, runI.intValue()));
+      KeyedValues2D a_data = m_permutationData.get(createKey(a_permutation,
+          runI.intValue()));
       // Determine values for current run-number and "add" them to gathered
       // data.
       // ------------------------------------------------------------------
@@ -195,7 +197,7 @@ public class Evaluator {
           // Previous value (summation).
           // --------------------------.
           Double d = (Double) result.getValue(a_data.getRowKey(row),
-                                              a_data.getColumnKey(col));
+              a_data.getColumnKey(col));
           double newValue;
           if (d == null) {
             newValue = 0.0d;
@@ -240,7 +242,7 @@ public class Evaluator {
   public KeyedValues2D calcAvgFitnessImpr(int a_permutation) {
     /**@todo implement*/
     /**@todo is this method used resp. contained in calcPerformance?*/
-    Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
+    Map runNumbers = m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
       return null;
     }
@@ -254,8 +256,8 @@ public class Evaluator {
       runI = (Integer) it.next();
       // Determine dataset of given permutation.
       // ---------------------------------------
-      KeyedValues2D a_data = (KeyedValues2D) m_permutationData.
-          get(createKey(a_permutation, runI.intValue()));
+      KeyedValues2D a_data = m_permutationData.get(createKey(a_permutation,
+          runI.intValue()));
       for (int col = 0; col < a_data.getColumnCount(); col++) {
         for (int row = 0; row < a_data.getRowCount(); row++) {
         }
@@ -270,7 +272,7 @@ public class Evaluator {
    * @return the number of runs for the given permutation
    */
   public int getNumberOfRuns(int a_permutation) {
-    Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
+    Map runNumbers = m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
       return 0;
     }
@@ -289,18 +291,33 @@ public class Evaluator {
    * @since 2.2
    */
   public void storeGenotype(int a_permutation, int a_run, Genotype a_genotype) {
+    storePopulation(a_permutation, a_run, a_genotype.getPopulation());
+  }
+
+  /**
+   * Stores information contained in the given genotype.
+   *
+   * @param a_permutation int
+   * @param a_run index of the run proceeded for the given genotype
+   * @param a_pop the population holding the relevant chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 3.5 (originally named storeGenotype)
+   */
+  public void storePopulation(int a_permutation, int a_run, Population a_pop) {
     /**@todo implement*/
     // average and maximum fitness value
     //
     GenotypeData data = new GenotypeData();
-    int generation = a_genotype.getConfiguration().getGenerationNr();
+    int generation = a_pop.getConfiguration().getGenerationNr();
     data.generation = generation;
-    Population pop = a_genotype.getPopulation();
-    data.hashCode = a_genotype.hashCode();
+    Population pop = a_pop;
+    data.hashCode = a_pop.hashCode();
     int popSize = pop.size();
     data.chromosomeData = new ChromosomeData[popSize];
     data.size = popSize;
-    // gather data of Chromosomes
+    // Gather data of Chromosomes.
+    // ---------------------------
     IChromosome chrom;
     ChromosomeData chromData;
     for (int i = 0; i < popSize; i++) {
@@ -317,7 +334,7 @@ public class Evaluator {
   }
 
   public GenotypeData retrieveGenotype(int a_permutation, int a_run) {
-    return (GenotypeData) m_genotypeData.get(a_permutation + "_" + a_run);
+    return m_genotypeData.get(a_permutation + "_" + a_run);
   }
 
   /**
@@ -351,11 +368,11 @@ public class Evaluator {
     ChromosomeData chrom;
     for (int i = 0; i < numRuns; i++) {
       data = retrieveGenotype(a_permutation, i);
-      // generation the genotype data represents
       if (i == 0) {
         dataAvg.generation = data.generation;
       }
-      // average number of chromosomes
+      // Average number of chromosomes.
+      // ------------------------------
       sizeAvg += (double) data.size / numRuns;
       size = data.size;
       fitnessAvgChroms = 0.0d;
@@ -400,7 +417,8 @@ public class Evaluator {
     dataAvg.bestFitnessValueGeneration = fitnessBestGen;
     dataAvg.avgDiversityFitnessValue = fitnessDiversityAvg;
     dataAvg.avgBestDeltaFitnessValue = fitnessBestDeltaAvg;
-    //store computed (averaged) data
+    // Store computed (averaged) data.
+    // -------------------------------
     m_genotypeDataAvg.add(dataAvg);
     return dataAvg;
   }
@@ -449,5 +467,14 @@ public class Evaluator {
     public int size;
 
     public double fitnessValue;
+  }
+  /**
+   * @return Averaged genotype data
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public List<GenotypeDataAvg> getGenotypeAverageData() {
+    return m_genotypeDataAvg;
   }
 }
