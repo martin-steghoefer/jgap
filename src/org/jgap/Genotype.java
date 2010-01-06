@@ -33,7 +33,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.106 $";
+  private final static String CVS_REVISION = "$Revision: 1.107 $";
 
   /**
    * The current Configuration instance.
@@ -539,9 +539,6 @@ public class Genotype
    *    2  31*y(1)   + hashcode_1 = y(2)
    *    3  31*y(2)   + hashcode_2 = y(3)
    *    n  31*y(n-1) + hashcode_n-1 = y(n)
-   *
-   * Each hashcode is a number and the binary equivalent is computed and
-   * returned.
    *
    * @return the computed hashcode
    *
