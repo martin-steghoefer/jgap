@@ -44,7 +44,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.98 $";
+  private final static String CVS_REVISION = "$Revision: 1.99 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -313,6 +313,15 @@ public class Configuration
   private boolean m_alwaysCalculateFitness;
 
   private transient String threadKey;
+
+  /**
+   * True: Use unique keys, especially in Chromosomes, to allow tracking and
+   * monitoring of evolution progress.
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  private boolean m_uniqueKeysActive;
 
   /**
    * Unique ID for a configuration to distinguish it from other configurations
@@ -1875,5 +1884,25 @@ public class Configuration
    */
   public IEvolutionMonitor getMonitor() {
     return m_monitor;
+  }
+
+  /**
+   * @param a_active true: use unique keys to allow tracking and monitoring
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void setUniqueKeysActive(boolean a_active) {
+    m_uniqueKeysActive = a_active;
+  }
+
+  /**
+   * @return true: use unique keys to allow tracking and monitoring
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public boolean isUniqueKeysActive() {
+    return m_uniqueKeysActive;
   }
 }
