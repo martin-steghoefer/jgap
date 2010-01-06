@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   private double m_deviation;
 
@@ -103,12 +103,18 @@ public class GaussianMutationOperator
         // ...take a copy of it...
         // -----------------------
         if (copyOfChromosome == null) {
-          copyOfChromosome = (IChromosome) a_population.getChromosome(i).clone();
+          IChromosome originalChrom = a_population.getChromosome(i);
+          copyOfChromosome = (IChromosome) originalChrom.clone();
           // ...add it to the candidate pool...
           // ----------------------------------
           a_candidateChromosomes.add(copyOfChromosome);
           // ...then Gaussian mutate all its genes
           genes = copyOfChromosome.getGenes();
+          // In case monitoring is active, support it.
+          // -----------------------------------------
+          if (m_monitorActive) {
+            copyOfChromosome.setUniqueIDTemplate(originalChrom.getUniqueID(), 1);
+          }
         }
         // Process all atomic elements in the gene. For a StringGene this
         // would be the length of the string, for an IntegerGene, it is

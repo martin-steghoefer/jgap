@@ -23,12 +23,14 @@ import org.jgap.*;
 public class InversionOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -43,6 +45,8 @@ public class InversionOperator
    *
    * @param a_config the configuration to use
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -52,6 +56,9 @@ public class InversionOperator
   }
 
   /**
+   * @param a_population the population to operate on
+   * @param a_candidateChromosomes resulting chromosomes
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -71,6 +78,11 @@ public class InversionOperator
     index1 = generator.nextInt(size);
     IChromosome chrom1 = a_population.getChromosome(index1);
     IChromosome firstMate = (IChromosome) chrom1.clone();
+    // In case monitoring is active, support it.
+    // -----------------------------------------
+    if (m_monitorActive) {
+      firstMate.setUniqueIDTemplate(chrom1.getUniqueID(), 1);
+    }
     Gene[] firstGenes = firstMate.getGenes();
     int locus = generator.nextInt(firstGenes.length);
     // Swap the genes.

@@ -55,7 +55,7 @@ import org.jgap.*;
 public class GreedyCrossover
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -118,12 +118,20 @@ public class GreedyCrossover
     // Grefenstette et al say.
     // --------------------------------------------------------------
     for (int i = 0; i < numCrossovers; i++) {
-      IChromosome firstMate = (IChromosome)
-          a_population.getChromosome(generator.
-                                     nextInt(size)).clone();
-      IChromosome secondMate = (IChromosome)
-          a_population.getChromosome(generator.
-                                     nextInt(size)).clone();
+      IChromosome origChrom1 = a_population.getChromosome(generator.
+                                     nextInt(size));
+      IChromosome firstMate = (IChromosome)origChrom1.clone();
+      IChromosome origChrom2 = a_population.getChromosome(generator.
+                                     nextInt(size));
+      IChromosome secondMate = (IChromosome)origChrom2.clone();
+      // In case monitoring is active, support it.
+      // -----------------------------------------
+      if (m_monitorActive) {
+        firstMate.setUniqueIDTemplate(origChrom1.getUniqueID(), 1);
+        firstMate.setUniqueIDTemplate(origChrom2.getUniqueID(), 2);
+        secondMate.setUniqueIDTemplate(origChrom1.getUniqueID(), 1);
+        secondMate.setUniqueIDTemplate(origChrom2.getUniqueID(), 2);
+      }
       operate(firstMate, secondMate);
       // Add the modified chromosomes to the candidate pool so that
       // they'll be considered for natural selection during the next

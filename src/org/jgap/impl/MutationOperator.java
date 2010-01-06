@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -161,6 +161,7 @@ public class MutationOperator
                         a_population.size());
     IGeneticOperatorConstraint constraint = getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
+    //
     for (int i = 0; i < size; i++) {
       IChromosome chrom = a_population.getChromosome(i);
       Gene[] genes = chrom.getGenes();
@@ -209,6 +210,11 @@ public class MutationOperator
             // ...then mutate all its genes...
             // -------------------------------
             genes = copyOfChromosome.getGenes();
+            // In case monitoring is active, support it.
+            // -----------------------------------------
+            if (m_monitorActive) {
+              copyOfChromosome.setUniqueIDTemplate(chrom.getUniqueID(), 1);
+            }
           }
           // Process all atomic elements in the gene. For a StringGene this
           // would be as many elements as the string is long , for an

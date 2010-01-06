@@ -9,8 +9,11 @@
  */
 package org.jgap;
 
+import org.jgap.audit.*;
+
 /**
  * Base class for any implementation of interface GeneticOperator.
+ * See MutationOperator or CrossoverOperator for examples.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -18,9 +21,13 @@ package org.jgap;
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Configuration m_configuration;
+
+  protected IEvolutionMonitor m_monitor;
+
+  protected boolean m_monitorActive;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
@@ -35,6 +42,9 @@ public abstract class BaseGeneticOperator
       throw new InvalidConfigurationException("Configuration must not be null");
     }
     m_configuration = a_configuration;
+    // Monitoring stuff:
+    IEvolutionMonitor m_monitor = getConfiguration().getMonitor();
+    boolean m_monitorActive = m_monitor != null;
   }
 
   /**

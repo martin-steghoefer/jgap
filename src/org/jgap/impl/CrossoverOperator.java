@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -38,7 +39,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -344,6 +345,7 @@ public class CrossoverOperator
     // the two chromosomes.
     // --------------------------------------------------------------
     int index1, index2;
+    //
     for (int i = 0; i < numCrossovers; i++) {
       index1 = generator.nextInt(size);
       index2 = generator.nextInt(size);
@@ -371,6 +373,14 @@ public class CrossoverOperator
       // ----------------------
       IChromosome firstMate = (IChromosome) chrom1.clone();
       IChromosome secondMate = (IChromosome) chrom2.clone();
+      // In case monitoring is active, support it.
+      // -----------------------------------------
+      if (m_monitorActive) {
+        firstMate.setUniqueIDTemplate(chrom1.getUniqueID(), 1);
+        firstMate.setUniqueIDTemplate(chrom2.getUniqueID(), 2);
+        secondMate.setUniqueIDTemplate(chrom1.getUniqueID(), 1);
+        secondMate.setUniqueIDTemplate(chrom2.getUniqueID(), 2);
+      }
       // Cross over the chromosomes.
       // ---------------------------
       doCrossover(firstMate, secondMate, a_candidateChromosomes, generator);

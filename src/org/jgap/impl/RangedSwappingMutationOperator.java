@@ -30,7 +30,7 @@ import org.jgap.*;
 public class RangedSwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_startOffset = 0;
 
@@ -171,7 +171,7 @@ public class RangedSwappingMutationOperator
   /**
    * Operate on the given chromosome with the given mutation rate.
    *
-   * @param a_x chromosome to operate
+   * @param a_chrom chromosome to operate
    * @param a_rate mutation rate
    * @param a_generator random generator to use (must not be null)
    * @return mutated chromosome of null if no mutation has occured.
@@ -180,16 +180,21 @@ public class RangedSwappingMutationOperator
    * @author Florian Hafner
    * @since 3.3.2
    */
-  protected IChromosome operate(final IChromosome a_x, final int a_rate,
+  protected IChromosome operate(final IChromosome a_chrom, final int a_rate,
                                 final RandomGenerator a_generator) {
     IChromosome chromosome = null;
     // ----------------------------------------
-    for (int j = m_startOffset; j < a_x.size(); j++) {
+    for (int j = m_startOffset; j < a_chrom.size(); j++) {
       // Ensure probability of 1/currentRate for applying mutation.
       // ----------------------------------------------------------
       if (a_generator.nextInt(a_rate) == 0) {
         if (chromosome == null) {
-          chromosome = (IChromosome) a_x.clone();
+          chromosome = (IChromosome) a_chrom.clone();
+          // In case monitoring is active, support it.
+          // -----------------------------------------
+          if (m_monitorActive) {
+            chromosome.setUniqueIDTemplate(a_chrom.getUniqueID(), 1);
+          }
         }
         Gene[] genes = chromosome.getGenes();
         if (m_range == 0) {
