@@ -31,7 +31,7 @@ import org.apache.commons.lang.builder.*;
 public class JGAPFactory
     implements IJGAPFactory, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private List m_parameters;
 
@@ -53,6 +53,8 @@ public class JGAPFactory
 
   private boolean m_useCaching;
 
+  private Map<String,Long> m_lastKeys;
+
   public JGAPFactory(boolean a_useCaching) {
     m_initer = new Vector();
     m_cache = new LRUCache(50);
@@ -64,6 +66,7 @@ public class JGAPFactory
     m_defaultCloneHandler = new DefaultCloneHandler();
     m_defaultIniter = new DefaultInitializer();
     m_defaultComparer = new DefaultCompareToHandler();
+    m_lastKeys = new HashMap();
   }
 
   /**
@@ -382,5 +385,34 @@ public class JGAPFactory
           .append(m_geneticOpConstraint, other.m_geneticOpConstraint)
           .toComparison();
     }
+  }
+
+  /**
+   * Returns a unique key for the given context. The key uses the current date
+   * and time and a GUID. Thus it is quite probable, that the key is unique
+   * worldwide.
+   *
+   * @param a_context the context to get the next key for, like "Chromosome".
+   * @return the unique key for the given context
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public String getUniqueKey(String a_context) {
+    // For each context, keep track of keys used.
+    // ------------------------------------------
+    Long lastKey = m_lastKeys.get(a_context);
+    if(lastKey == null) {
+      lastKey = new Long(1);
+    }
+    else {
+      // The next key is always the increment of the previous key.
+      // ---------------------------------------------------------
+      lastKey = lastKey.longValue() + 1;
+    }
+    m_lastKeys.put(a_context, lastKey);
+    String GUID = UUID.randomUUID().toString();
+    String key = GUID + "_"+ DateKit.getNowAsString() + "_" + lastKey;
+    return key;
   }
 }
