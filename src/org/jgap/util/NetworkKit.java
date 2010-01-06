@@ -10,7 +10,6 @@
 package org.jgap.util;
 
 import java.net.*;
-import java.util.*;
 import java.io.*;
 
 /**
@@ -21,7 +20,7 @@ import java.io.*;
  */
 public final class NetworkKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Private constructor because it's a utility class.
