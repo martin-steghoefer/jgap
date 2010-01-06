@@ -1,7 +1,9 @@
 3.5
 -----------------------------------------------------------
 * Improved monitoring of evolution progress a lot
+* Added monitoring support to all genetic operators
 * Added new class MultipleIntegerGene, thanx to Chris Jones
+* Introduced method hashCode() for class Population
 * Support cloning of application data of sample chromosome
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
 * Fixed bug in grid example for distributed fitness
@@ -14,6 +16,9 @@
   Molettiere for the hints
 * Added listeners that fire before and after genetic
   operators are being applied (see class BreederBase)
+* Fixed AveragingChrossoverOperator: added cloning
+* Added JGAPFactory.getUniqueKey
+* Added SystemKit.getGUID
 * Added test cases
 * Enhanced Javadoc
 
