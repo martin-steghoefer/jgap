@@ -13,6 +13,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.jgap.impl.*;
 import org.jgap.util.*;
 
 /**
@@ -24,7 +25,7 @@ import org.jgap.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -63,6 +64,10 @@ public abstract class BaseChromosome
 
   private int m_operatedOn;
 
+  private String m_uniqueID;
+
+  private Map<Integer,String> m_uniqueIDTemplates;
+
   /**
    * The only constructor in this class. Sets the immutable configuration.
    *
@@ -80,7 +85,54 @@ public abstract class BaseChromosome
           + " be null!");
     }
     m_configuration = a_configuration;
+    if(m_configuration.isUniqueKeysActive()) {
+      m_uniqueIDTemplates = new HashMap();
+      IJGAPFactory factory = m_configuration.getJGAPFactory();
+      if (JGAPFactory.class.isAssignableFrom(factory.getClass())) {
+        m_uniqueID = ( (JGAPFactory) (m_configuration.getJGAPFactory())).
+            getUniqueKey(getClass().getName());
+      }
+    }
   }
+
+  /**
+   * @return String
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public String getUniqueID() {
+    return m_uniqueID;
+  }
+
+  /**
+   * A template is a chromosome that is the logical predecessor of the current
+   * chromosome. A template can occur in mutation or crossing over. In the
+   * latter case can be at least two template chromosomes. This is why in this
+   * setter method the parameter a_index exists.
+   *
+   * @param a_templateID the unique ID of the template
+   * @param a_index the index of the template, e.g. in crossing over for the
+   * second candidate chromosome this is 2
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void setUniqueIDTemplate(String a_templateID, int a_index) {
+    m_uniqueIDTemplates.put(a_index, a_templateID);
+  }
+
+  /**
+   * @param a_index the index of the template to retrieve the key for
+   * @return String
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public String getUniqueIDTemplate(int a_index) {
+    return m_uniqueIDTemplates.get(a_index);
+  }
+
 
   /**
    * @return the configuration used
@@ -276,6 +328,12 @@ public abstract class BaseChromosome
     return b.toString();
   }
 
+  /**
+   * @return the persistent representation of the chromosome by considering
+   * its genes.
+   *
+   * @author Klaus Meffert
+   */
   public StringBuffer getGenesPersistentRepresentation() {
     StringBuffer b = new StringBuffer();
     getGenesPersistentRepresentation(b);
@@ -292,6 +350,14 @@ public abstract class BaseChromosome
     return getGenesPersistentRepresentation().toString();
   }
 
+  /**
+   * Retrieves the persistent representation of the chromosome by considering
+   * its genes.
+   *
+   * @param a_buffer the variable to store the persistent representation in
+   *
+   * @author Klaus Meffert
+   */
   public void getGenesPersistentRepresentation(StringBuffer a_buffer) {
     Gene gene;
     int size = size();

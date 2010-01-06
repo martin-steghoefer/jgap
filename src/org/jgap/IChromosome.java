@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public interface IChromosome
     extends Comparable, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.15 $";
+  final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Constants for toString()
@@ -292,11 +292,33 @@ public interface IChromosome
    */
   int operatedOn();
 
+  /**
+   *
+   * @return String
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
   String getUniqueID();
 
+  /**
+   *
+   * @param a_templateID String
+   * @param a_index int
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
   void setUniqueIDTemplate(String a_templateID, int a_index);
 
+  /**
+   *
+   * @param a_index int
+   * @return String
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
   String getUniqueIDTemplate(int a_index);
-
 
 }
