@@ -26,7 +26,7 @@ import org.jgap.impl.*;
 public class PolygonMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public PolygonMutationOperator(final Configuration a_config,
                                  final int a_desiredMutationRate)
@@ -102,6 +102,11 @@ public class PolygonMutationOperator
           // ...then mutate all its genes...
           // -------------------------------
           genes = copyOfChromosome.getGenes();
+          // In case monitoring is active, support it.
+          // -----------------------------------------
+          if (m_monitorActive) {
+            copyOfChromosome.setUniqueIDTemplate(chrom.getUniqueID(), 1);
+          }
         }
         Polygon poly = conf.getPhenotypeExpresser().expressPolygon(chrom,
             polygon);

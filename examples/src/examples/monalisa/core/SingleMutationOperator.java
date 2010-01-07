@@ -14,7 +14,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Mutates one gene of each chromosome.
+ * Mutates only one gene of each chromosome.
  *
  * @author Yann N. Dauphin
  * @since 3.4
@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class SingleMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public SingleMutationOperator(final Configuration a_config,
                                 final int a_desiredMutationRate)
@@ -64,10 +64,8 @@ public class SingleMutationOperator
       IChromosome chrom = a_population.getChromosome(i);
       Gene[] genes = chrom.getGenes();
       IChromosome copyOfChromosome = null;
-      // For each Chromosome in the population...
-      // ----------------------------------------
-
-      /* Find gene to mutate */
+      // For each Chromosome in the population find the gene to mutate.
+      // --------------------------------------------------------------
       int target;
       int polygon = generator.nextInt(conf.getMaxPolygons());
       boolean decision = generator.nextBoolean();
@@ -126,6 +124,11 @@ public class SingleMutationOperator
           // ...then mutate all its genes...
           // -------------------------------
           genes = copyOfChromosome.getGenes();
+          // In case monitoring is active, support it.
+          // -----------------------------------------
+          if (m_monitorActive) {
+            copyOfChromosome.setUniqueIDTemplate(chrom.getUniqueID(), 1);
+          }
         }
         // Process all atomic elements in the gene. For a StringGene this
         // would be as many elements as the string is long , for an
@@ -133,12 +136,25 @@ public class SingleMutationOperator
         // --------------------------------------------------------------
         if (genes[target] instanceof ICompositeGene) {
           ICompositeGene compositeGene = (ICompositeGene) genes[target];
+          if (m_monitorActive) {
+            compositeGene.setUniqueIDTemplate(chrom.getGene(target).getUniqueID(),
+                1);
+          }
           for (int k = 0; k < compositeGene.size(); k++) {
             mutateGene(compositeGene.geneAt(k), generator);
+            if (m_monitorActive) {
+              compositeGene.geneAt(k).setUniqueIDTemplate(
+                  ( (ICompositeGene) chrom.getGene(target)).geneAt(k).
+                  getUniqueID(), 1);
+            }
           }
         }
         else {
           mutateGene(genes[target], generator);
+          if (m_monitorActive) {
+            genes[target].setUniqueIDTemplate(chrom.getGene(target).getUniqueID(),
+                1);
+          }
         }
       }
     }

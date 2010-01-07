@@ -9,13 +9,6 @@
  */
 package org.jgap;
 
-import java.io.*;
-import java.math.*;
-import java.util.*;
-import org.jgap.*;
-import org.jgap.util.*;
-import gnu.trove.*;
-
 /**
  * An extended implementation of NaturalSelector that acts as a base class for
  * the built-in JGAP selectors BestChromosomesSelector and
@@ -169,9 +162,13 @@ public abstract class NaturalSelectorExt
           getCloneHandlerFor(a_chrom, null);
       if (cloner != null) {
         try {
-          a_chrom = (IChromosome) cloner.perform(a_chrom, null, null);
+          IChromosome original = a_chrom;
+          a_chrom = (IChromosome) cloner.perform(original, null, null);
           a_chrom.setIsSelectedForNextGeneration(true);
           m_to_pop.addChromosome(a_chrom);
+          if (m_monitorActive) {
+            a_chrom.setUniqueIDTemplate(original.getUniqueID(), 1);
+          }
         } catch (Exception ex) {
           ex.printStackTrace();
         }
