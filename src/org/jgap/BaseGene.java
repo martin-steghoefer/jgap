@@ -9,7 +9,10 @@
  */
 package org.jgap;
 
-import org.jgap.util.StringKit;
+import java.util.*;
+
+import org.jgap.impl.*;
+import org.jgap.util.*;
 
 /**
  * Abstract base class for all genes. Provides default implementations.
@@ -20,7 +23,12 @@ import org.jgap.util.StringKit;
 public abstract class BaseGene
     implements Gene, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
+
+  /**
+   * Constants for toString()
+   */
+  public final static String S_APPLICATION_DATA = "Application data";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -52,9 +60,16 @@ public abstract class BaseGene
   private Configuration m_configuration;
 
   /**
-   * Constants for toString()
+   * Unique ID of the gene that allows to distinct it from other genes. In the
+   * best case, this ID is unique worldwide.
    */
-  public final static String S_APPLICATION_DATA = "Application data";
+  private String m_uniqueID;
+
+  /**
+   * In case mutation, crossing over etc. happened, this sequence gives evidence
+   * about the parent(s) of the current gene.
+   */
+  private Map<Integer,String> m_uniqueIDTemplates;
 
   /**
    *
@@ -70,8 +85,15 @@ public abstract class BaseGene
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_configuration = a_configuration;
+    if (m_configuration.isUniqueKeysActive()) {
+      m_uniqueIDTemplates = new HashMap();
+      IJGAPFactory factory = m_configuration.getJGAPFactory();
+      if (JGAPFactory.class.isAssignableFrom(factory.getClass())) {
+        m_uniqueID = ( (JGAPFactory) (m_configuration.getJGAPFactory())).
+            getUniqueKey(getClass().getName());
+      }
+    }
   }
-
   /**
    * Retrieves the allele value represented by this Gene.
    *
@@ -404,4 +426,44 @@ public abstract class BaseGene
   protected String decode(String a_string) {
     return StringKit.decode(a_string);
   }
+
+  /**
+   * @return unique ID of the gene, which allows to distinct this instance
+   * from others, in the best case worldwide
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public String getUniqueID() {
+    return m_uniqueID;
+  }
+
+  /**
+   * A template is a gene that is the logical predecessor of the current
+   * gene. A template can occur in mutation or crossing over. In the
+   * latter case can be at least two template genes. This is why in this
+   * setter method the parameter a_index exists.
+   *
+   * @param a_templateID the unique ID of the template
+   * @param a_index the index of the template, e.g. in crossing over for the
+   * second candidate gene this is 2
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void setUniqueIDTemplate(String a_templateID, int a_index) {
+    m_uniqueIDTemplates.put(a_index, a_templateID);
+  }
+
+  /**
+   * @param a_index the index of the template to retrieve the key for
+   * @return String
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public String getUniqueIDTemplate(int a_index) {
+    return m_uniqueIDTemplates.get(a_index);
+  }
+
 }

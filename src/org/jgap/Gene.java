@@ -27,9 +27,9 @@ import java.io.Serializable;
  * @since 1.0
  */
 public interface Gene
-    extends Comparable, Serializable {
+    extends Comparable, Serializable, IUniqueKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.25 $";
+  final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
