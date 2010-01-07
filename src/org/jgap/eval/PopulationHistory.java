@@ -9,6 +9,7 @@
  */
 package org.jgap.eval;
 
+import java.io.*;
 import java.util.*;
 
 import org.jgap.*;
@@ -20,9 +21,9 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 2.0
  */
-public class PopulationHistory {
+public class PopulationHistory implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private List m_populations;
 
@@ -62,6 +63,9 @@ public class PopulationHistory {
    * @since 2.0
    */
   public void addPopulation(final Population a_population) {
+    if(a_population == null) {
+      throw new IllegalArgumentException("Population must not be null");
+    }
     m_populations.add(0, a_population);
     int popSize = m_populations.size();
     if (m_maxSize != 0 && popSize > m_maxSize) {
@@ -87,6 +91,7 @@ public class PopulationHistory {
 
   /**
    * Sets the list of populations to the list provided.
+   *
    * @param a_populations list of populations to be set
    *
    * @author Klaus Meffert
@@ -100,5 +105,27 @@ public class PopulationHistory {
         m_populations.remove(m_maxSize);
       }
     }
+  }
+
+  /**
+   * @param a_other other object to compare to
+   * @return true other object seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public boolean equals(Object a_other) {
+    PopulationHistory other = (PopulationHistory)a_other;
+//    if(other.m_maxSize != m_maxSize) {
+//      return false;
+//    }
+    for(int i=0;i<size();i++) {
+      Population pop1 = getPopulation(i);
+      Population pop2 = other.getPopulation(i);
+      if(!pop1.equals(pop2)) {
+        return false;
+      }
+    }
+    return true;
   }
 }
