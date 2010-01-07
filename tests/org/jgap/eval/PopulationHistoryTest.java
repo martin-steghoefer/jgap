@@ -10,10 +10,8 @@
 package org.jgap.eval;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 
 /**
@@ -25,7 +23,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -55,8 +53,7 @@ public class PopulationHistoryTest
     try {
       new PopulationHistory( -1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -71,6 +68,8 @@ public class PopulationHistoryTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
@@ -100,6 +99,8 @@ public class PopulationHistoryTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
@@ -115,7 +116,9 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Limited capacity of 2 Population objects.
+   * Limited capacity for 2 Population objects.
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -137,6 +140,8 @@ public class PopulationHistoryTest
   /**
    * Unlimited capacity of Population objects.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
@@ -156,6 +161,8 @@ public class PopulationHistoryTest
 
   /**
    * Unlimited capacity of Population objects.
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -180,6 +187,8 @@ public class PopulationHistoryTest
   /**
    * Limited capacity of Population objects.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
@@ -201,6 +210,8 @@ public class PopulationHistoryTest
 
   /**
    * Limited capacity of Population objects.
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -225,6 +236,8 @@ public class PopulationHistoryTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGetPopulations_0()
@@ -244,5 +257,19 @@ public class PopulationHistoryTest
     assertEquals(pop2, l.get(0));
     assertEquals(pop2, l.get(1));
     assertEquals(pop, l.get(2));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public void testSerializable_0()
+      throws Exception {
+    PopulationHistory ph = new PopulationHistory(0);
+    assertTrue(super.isSerializable(ph));
+    PopulationHistory clon = (PopulationHistory)doSerialize(ph);
+    assertEquals(ph, clon);
   }
 }
