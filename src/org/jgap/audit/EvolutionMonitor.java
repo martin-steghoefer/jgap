@@ -10,7 +10,9 @@
 package org.jgap.audit;
 
 import java.util.*;
+
 import org.jgap.*;
+import org.jgap.eval.*;
 
 /**
  * Monitors the evolution progress extensively.
@@ -21,7 +23,25 @@ import org.jgap.*;
 public class EvolutionMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  public static final int CONTEXT_UPDATE_CHROMOSOMES1 = 0;
+
+  public static final int CONTEXT_OFFSET_GENETIC_OPERATOR1 = 1;
+
+  public static final int CONTEXT_OFFSET_AFTER_OPERATE = 10;
+
+  public static final int CONTEXT_AFTER_BULK_EVALUATION = 20;
+
+  public static final int CONTEXT_UPDATE_CHROMOSOMES2 = 22;
+
+  public static final int CONTEXT_NEW_CHROMOSOME = 22;
+
+  public static final int CONTEXT_READD_FITTEST = 23;
+
+  public static final int CONTEXT_OFFSET_GENETIC_OPERATOR2 = 30;
+
+  public static final int CONTEXT_END_OF_CYCLE = 999;
 
   private long m_startMillis;
 
@@ -31,6 +51,12 @@ public class EvolutionMonitor
 
   private Evaluator m_evaluator;
 
+  private PopulationHistory m_popHist;
+
+  private int m_selectorIndex;
+
+  private int m_operatorIndex;
+
   public EvolutionMonitor() {
     init();
   }
@@ -38,6 +64,7 @@ public class EvolutionMonitor
   protected void init() {
     PermutingConfiguration permConfig = new PermutingConfiguration();
     m_evaluator = new Evaluator(permConfig);
+    m_popHist = new PopulationHistory(100);
   }
 
   /**
@@ -60,9 +87,16 @@ public class EvolutionMonitor
       // -----------------------
     }
     else {
+      // No solution exists at all.
+      // --------------------------
     }
+    // Store the population
+    Population popClone = (Population) a_pop.clone();
+//    m_popHist.addPopulation(popClone);
+    m_evaluator.storePopulation(CONTEXT_END_OF_CYCLE, m_checks, popClone);
     m_lastCheckMillis = System.currentTimeMillis();
     m_checks++;
+    initCounters();
     return true;
   }
 
@@ -76,6 +110,12 @@ public class EvolutionMonitor
    */
   public void start(Configuration a_config) {
     m_startMillis = System.currentTimeMillis();
+    initCounters();
+  }
+
+  private void initCounters() {
+    m_selectorIndex = 0;
+    m_operatorIndex = 0;
   }
 
   /**
@@ -114,10 +154,10 @@ public class EvolutionMonitor
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1)) {
       // Initiated by GABreeder.evolve after calling updateChromosomes(..)
-      Population pop = (Population) a_information[0];
+      Population pop = (Population) ( (Population) a_information[0]).clone();
       // Record population as now each chromosome has a fitness value assigned.
       // ----------------------------------------------------------------------
-      m_evaluator.storePopulation(0, m_checks, pop);
+      m_evaluator.storePopulation(CONTEXT_UPDATE_CHROMOSOMES1, m_checks, pop);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_SELECT)) {
       NaturalSelector selector = (NaturalSelector) a_information[0];
@@ -127,21 +167,30 @@ public class EvolutionMonitor
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_SELECT)) {
       NaturalSelector selector = (NaturalSelector) a_information[0];
-      Population pop = (Population) a_information[1];
-      Population newPop = (Population) a_information[2];
+      Population pop = (Population) ( (Population) a_information[1]).clone();
+      Population newPop = (Population) ( (Population) a_information[2]).clone();
       int selectionSize = (Integer) a_information[3];
       boolean a_processBeforeGeneticOperators = (Boolean) a_information[4];
       if (a_processBeforeGeneticOperators) {
         // Selection executed before genetic operators.
         // --------------------------------------------
-        /**@todo store data for each selector subsequently*/
-        m_evaluator.storePopulation(1 + 0 * 1, m_checks, pop);
+        // Store data for each selector subsequently.
+        // ------------------------------------------
+        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR1 +
+                                    m_selectorIndex * 2 + 1, m_checks, pop);
+        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR1 +
+                                    m_selectorIndex * 2 + 2, m_checks, newPop);
+        m_selectorIndex++;
       }
       else {
         // Selection executed after genetic operators.
         // -------------------------------------------
-        /**@todo store data for each selector subsequently*/
-        m_evaluator.storePopulation(30 + 0 * 1, m_checks, pop);
+        // Store data for each selector subsequently.
+        // ------------------------------------------
+        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR2 +
+                                    m_selectorIndex * 2 + 1, m_checks, pop);
+        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR2 +
+                                    m_selectorIndex * 2 + 2, m_checks, newPop);
       }
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_OPERATE)) {
@@ -153,8 +202,12 @@ public class EvolutionMonitor
       GeneticOperator operator = (GeneticOperator) a_information[0];
       Population pop = (Population) a_information[1];
       List<IChromosome> chromosomes = (List<IChromosome>) a_information[2];
-      /**@todo store data for each operator subsequently*/
-      m_evaluator.storePopulation(10 + 0 * 1, m_checks, pop);
+      // Store data for each selector subsequently.
+      // ------------------------------------------
+      m_evaluator.storePopulation(CONTEXT_OFFSET_AFTER_OPERATE +
+                                  m_operatorIndex, m_checks, pop);
+      m_operatorIndex++;
+      m_selectorIndex = 0;
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_BULK_EVAL)) {
       BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)
@@ -164,8 +217,8 @@ public class EvolutionMonitor
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_AFTER_BULK_EVAL)) {
       BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)
           a_information[0];
-      Population pop = (Population) a_information[1];
-      m_evaluator.storePopulation(20, m_checks, pop);
+      Population pop = (Population) ( (Population) a_information[1]).clone();
+      m_evaluator.storePopulation(CONTEXT_AFTER_BULK_EVALUATION, m_checks, pop);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2)) {
@@ -174,15 +227,16 @@ public class EvolutionMonitor
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2)) {
       Population pop = (Population) a_information[0];
-      m_evaluator.storePopulation(21, m_checks, pop);
+      m_evaluator.storePopulation(CONTEXT_UPDATE_CHROMOSOMES2, m_checks, pop);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_BEFORE_ADD_CHROMOSOME)) {
       Population pop = (Population) a_information[0];
-      IChromosome newChromosome = (IChromosome) a_information[1];
+      IChromosome newChromosome = (IChromosome) ( (IChromosome) a_information[1]).
+          clone();
       try {
-        /**@todo eleganter machen*/
-        m_evaluator.storePopulation(22, m_checks,
+        /**@todo do it more elegantly*/
+        m_evaluator.storePopulation(CONTEXT_NEW_CHROMOSOME, m_checks,
                                     new Population(pop.getConfiguration(),
             newChromosome));
       } catch (Exception ex) {
@@ -191,10 +245,11 @@ public class EvolutionMonitor
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST)) {
       Population pop = (Population) a_information[0];
-      IChromosome fittest = (IChromosome) a_information[1];
+      IChromosome fittest = (IChromosome) ( (IChromosome) a_information[1]).
+          clone();
       try {
-        /**@todo eleganter machen*/
-        m_evaluator.storePopulation(23, m_checks,
+        /**@todo do it more elegantly*/
+        m_evaluator.storePopulation(CONTEXT_READD_FITTEST, m_checks,
                                     new Population(pop.getConfiguration(),
             fittest));
       } catch (Exception ex) {
