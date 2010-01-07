@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -64,8 +64,16 @@ public abstract class BaseChromosome
 
   private int m_operatedOn;
 
+  /**
+   * Unique ID of the chromosome that allows to distinct it from other
+   * chromosomes. In the best case, this ID is unique worldwide.
+   */
   private String m_uniqueID;
 
+  /**
+   * In case mutation, crossing over etc. happened, this sequence gives evidence
+   * about the parent(s) of the current chromosome.
+   */
   private Map<Integer,String> m_uniqueIDTemplates;
 
   /**
@@ -85,7 +93,7 @@ public abstract class BaseChromosome
           + " be null!");
     }
     m_configuration = a_configuration;
-    if(m_configuration.isUniqueKeysActive()) {
+    if (m_configuration.isUniqueKeysActive()) {
       m_uniqueIDTemplates = new HashMap();
       IJGAPFactory factory = m_configuration.getJGAPFactory();
       if (JGAPFactory.class.isAssignableFrom(factory.getClass())) {
@@ -94,9 +102,9 @@ public abstract class BaseChromosome
       }
     }
   }
-
   /**
-   * @return String
+   * @return unique ID of the chromosome, which allows to distinct this instance
+   * from others, in the best case worldwide
    *
    * @author Klaus Meffert
    * @since 3.5
@@ -132,7 +140,6 @@ public abstract class BaseChromosome
   public String getUniqueIDTemplate(int a_index) {
     return m_uniqueIDTemplates.get(a_index);
   }
-
 
   /**
    * @return the configuration used
