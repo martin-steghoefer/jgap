@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.72 $";
+  private final static String CVS_REVISION = "$Revision: 1.73 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1364,6 +1364,17 @@ public class GenotypeTest
       } catch (InvalidConfigurationException iex) {
         throw new IllegalStateException(iex.getMessage());
       }
+    }
+
+    public String getUniqueID() {
+      return "";
+    }
+
+    public void setUniqueIDTemplate(String a_templateID, int a_index) {
+    }
+
+    public String getUniqueIDTemplate(int a_index) {
+      return "";
     }
 
     public Gene[] getGenes() {
