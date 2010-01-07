@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -243,12 +243,26 @@ public class TwoWayMutationOperator
         // --------------------------------------------------------------
         if (genes[geneIndex] instanceof ICompositeGene) {
           ICompositeGene compositeGene = (ICompositeGene) genes[geneIndex];
+          if (m_monitorActive) {
+            compositeGene.setUniqueIDTemplate(chrom.getGene(geneIndex).
+                getUniqueID(), 1);
+          }
           for (int k = 0; k < compositeGene.size(); k++) {
             mutateGene(compositeGene.geneAt(k), generator);
+            if (m_monitorActive) {
+              compositeGene.geneAt(k).setUniqueIDTemplate(
+                  ( (ICompositeGene) chrom.getGene(geneIndex)).geneAt(k).
+                  getUniqueID(),
+                  1);
+            }
           }
         }
         else {
           mutateGene(genes[geneIndex], generator);
+          if (m_monitorActive) {
+            genes[geneIndex].setUniqueIDTemplate(chrom.getGene(geneIndex).
+                getUniqueID(), 1);
+          }
         }
       }
     }

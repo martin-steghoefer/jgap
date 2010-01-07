@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   private double m_deviation;
 
@@ -94,6 +94,7 @@ public class GaussianMutationOperator
     }
     for (int i = 0; i < size; i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
+      IChromosome originalChrom = a_population.getChromosome(i);
       IChromosome copyOfChromosome = null;
       // For each Chromosome in the population...
       // ----------------------------------------
@@ -103,7 +104,6 @@ public class GaussianMutationOperator
         // ...take a copy of it...
         // -----------------------
         if (copyOfChromosome == null) {
-          IChromosome originalChrom = a_population.getChromosome(i);
           copyOfChromosome = (IChromosome) originalChrom.clone();
           // ...add it to the candidate pool...
           // ----------------------------------
@@ -122,15 +122,28 @@ public class GaussianMutationOperator
         // --------------------------------------------------------------
         if (genes[j] instanceof CompositeGene) {
           CompositeGene compositeGene = (CompositeGene) genes[j];
+          if (m_monitorActive) {
+            compositeGene.setUniqueIDTemplate(originalChrom.getGene(j).
+                getUniqueID(), 1);
+          }
           for (int k = 0; k < compositeGene.size(); k++) {
             mutateGene(compositeGene.geneAt(k), diff);
+            if (m_monitorActive) {
+              compositeGene.geneAt(k).setUniqueIDTemplate(
+                  ( (ICompositeGene) originalChrom.getGene(j)).geneAt(k).
+                  getUniqueID(), 1);
+            }
           }
         }
         else {
           mutateGene(genes[j], diff);
+          if (m_monitorActive) {
+            genes[j].setUniqueIDTemplate(originalChrom.getGene(j).getUniqueID(),
+                1);
+          }
         }
       }
-    }
+      }
   }
 
   /**

@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -184,17 +184,24 @@ public class BestChromosomesSelector
         selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
         ICloneHandler cloner = getConfiguration().getJGAPFactory().
             getCloneHandlerFor(selectedChromosome, null);
+        IChromosome cloned = null;
         if (cloner != null) {
           try {
             int age = selectedChromosome.getAge() + 1;
-            selectedChromosome = (IChromosome) cloner.perform(
+            cloned = (IChromosome) cloner.perform(
                 selectedChromosome, null, null);
-            selectedChromosome.setAge(age);
+            cloned.setAge(age);
+            cloned.setIsSelectedForNextGeneration(true);
+            if(m_monitorActive) {
+              cloned.setUniqueIDTemplate(selectedChromosome.getUniqueID(), 1);
+            }
           } catch (Exception ex) {
             ex.printStackTrace();
           }
         }
-        selectedChromosome.setIsSelectedForNextGeneration(true);
+        if(cloned != null) {
+          selectedChromosome = cloned;
+        }
         a_to_pop.addChromosome(selectedChromosome);
       }
     }

@@ -33,7 +33,7 @@ import gnu.trove.*;
 public class WeightedRouletteSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -202,8 +202,12 @@ public class WeightedRouletteSelector
             getCloneHandlerFor(selectedChromosome, null);
         if (cloner != null) {
           try {
-            a_to_pop.addChromosome( (IChromosome) cloner.perform(
-                selectedChromosome, null, null));
+            IChromosome cloned = (IChromosome) cloner.perform(
+                selectedChromosome, null, null);
+            a_to_pop.addChromosome(cloned);
+            if (m_monitorActive) {
+              cloned.setUniqueIDTemplate(selectedChromosome.getUniqueID(), 1);
+            }
           } catch (Exception ex) {
             ex.printStackTrace();
             a_to_pop.addChromosome(selectedChromosome);
@@ -211,10 +215,16 @@ public class WeightedRouletteSelector
         }
         else {
           a_to_pop.addChromosome(selectedChromosome);
+          if (m_monitorActive) {
+            selectedChromosome.setUniqueIDTemplate(selectedChromosome.getUniqueID(), 1);
+          }
         }
       }
       else {
         a_to_pop.addChromosome(selectedChromosome);
+        if (m_monitorActive) {
+          selectedChromosome.setUniqueIDTemplate("new", 1);
+        }
       }
     }
   }

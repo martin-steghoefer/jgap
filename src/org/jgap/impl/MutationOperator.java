@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -222,12 +222,23 @@ public class MutationOperator
           // --------------------------------------------------------------
           if (genes[j] instanceof ICompositeGene) {
             ICompositeGene compositeGene = (ICompositeGene) genes[j];
+            if (m_monitorActive) {
+              compositeGene.setUniqueIDTemplate(chrom.getGene(j).getUniqueID(), 1);
+            }
             for (int k = 0; k < compositeGene.size(); k++) {
               mutateGene(compositeGene.geneAt(k), generator);
+              if (m_monitorActive) {
+                compositeGene.geneAt(k).setUniqueIDTemplate(
+                    ( (ICompositeGene) chrom.getGene(j)).geneAt(k).getUniqueID(),
+                    1);
+              }
             }
           }
           else {
             mutateGene(genes[j], generator);
+            if (m_monitorActive) {
+              genes[j].setUniqueIDTemplate(chrom.getGene(j).getUniqueID(), 1);
+            }
           }
         }
       }
@@ -238,7 +249,7 @@ public class MutationOperator
    * Helper: mutate all atomic elements of a gene.
    *
    * @param a_gene the gene to be mutated
-   * @param a_generator the generator delivering amount of mutation
+   * @param a_generator the generator delivering the amount of mutation
    *
    * @author Klaus Meffert
    * @since 1.1

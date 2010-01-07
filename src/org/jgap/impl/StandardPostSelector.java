@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class StandardPostSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -165,9 +165,9 @@ public class StandardPostSelector
     }
     int toAdd;
     toAdd = neededSize - a_to_pop.size();
-    // Add existing Chromosome's to fill up the return
-    // result to contain the desired number of Chromosome's.
-    // -----------------------------------------------------
+    // Add existing chromosomes to fill up the return
+    // result to contain the desired number of chromosomes.
+    // ----------------------------------------------------
     for (int i = 0; i < toAdd; i++) {
       selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
       selectedChromosome.setIsSelectedForNextGeneration(true);
@@ -176,20 +176,20 @@ public class StandardPostSelector
   }
 
   /**
-   * Empties out the working pool of Chromosomes.
+   * Empties out the working pool of chromosomes.
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public void empty() {
-    // Clear the list of chromosomes
-    // -----------------------------
+    // Clear the list of chromosomes.
+    // ------------------------------
     m_chromosomes.getChromosomes().clear();
     m_needsSorting = false;
   }
 
   /**
-   * @return always true as no Chromosome can be returnd multiple times
+   * @return always true as no chromosome can be returnd multiple times
    *
    * @author Klaus Meffert
    * @since 3.2

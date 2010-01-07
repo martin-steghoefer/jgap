@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   private int m_startOffset = 1;
 
@@ -218,6 +218,10 @@ public class SwappingMutationOperator
     Gene t = a_genes[a_target_gene];
     a_genes[a_target_gene] = a_genes[other];
     a_genes[other] = t;
+    if (m_monitorActive) {
+      a_genes[a_target_gene].setUniqueIDTemplate(a_genes[other].getUniqueID(), 1);
+      a_genes[other].setUniqueIDTemplate(a_genes[a_target_gene].getUniqueID(), 1);
+    }
     return a_genes;
   }
 
