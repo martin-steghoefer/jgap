@@ -11,7 +11,6 @@ package org.jgap.eval;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -21,9 +20,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 2.0
  */
-public class PopulationHistory implements Serializable {
+public class PopulationHistory
+    implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private List m_populations;
 
@@ -31,8 +31,10 @@ public class PopulationHistory implements Serializable {
 
   /**
    * Constructor.
+   *
    * @param a_maxSize the maximum number of Population objects to hold, or
    * zero if there is no limit.
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -40,7 +42,7 @@ public class PopulationHistory implements Serializable {
     m_populations = new Vector();
     if (a_maxSize < 0) {
       throw new IllegalArgumentException("Maximum size must be greater"
-                                         + " or equal to zero!");
+          + " or equal to zero!");
     }
     m_maxSize = a_maxSize;
   }
@@ -56,14 +58,15 @@ public class PopulationHistory implements Serializable {
 
   /**
    * Adds a population to the history. If the maximum size of this container
-   * is exceeded after that then the oldest population added is removed
+   * is exceeded, then the population added earliest is removed.
+   *
    * @param a_population the population to be added
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public void addPopulation(final Population a_population) {
-    if(a_population == null) {
+    if (a_population == null) {
       throw new IllegalArgumentException("Population must not be null");
     }
     m_populations.add(0, a_population);
@@ -115,14 +118,14 @@ public class PopulationHistory implements Serializable {
    * @since 3.5
    */
   public boolean equals(Object a_other) {
-    PopulationHistory other = (PopulationHistory)a_other;
+    PopulationHistory other = (PopulationHistory) a_other;
 //    if(other.m_maxSize != m_maxSize) {
-//      return false;
-//    }
-    for(int i=0;i<size();i++) {
+    //      return false;
+    //    }
+    for (int i = 0; i < size(); i++) {
       Population pop1 = getPopulation(i);
       Population pop2 = other.getPopulation(i);
-      if(!pop1.equals(pop2)) {
+      if (!pop1.equals(pop2)) {
         return false;
       }
     }
