@@ -65,7 +65,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.102 $";
+  private final static String CVS_REVISION = "$Revision: 1.103 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -365,7 +365,7 @@ public class Chromosome
         int size = size();
         if (size > 0) {
           Gene[] copyOfGenes = new Gene[size];
-          for (int i = 0; i < copyOfGenes.length; i++) {
+          for (int i = 0; i < size; i++) {
             copyOfGenes[i] = getGene(i).newGene();
             Object allele = getGene(i).getAllele();
             if (allele != null) {
