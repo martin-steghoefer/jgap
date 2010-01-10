@@ -44,7 +44,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.99 $";
+  private final static String CVS_REVISION = "$Revision: 1.100 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1874,6 +1874,9 @@ public class Configuration
    */
   public void setMonitor(IEvolutionMonitor a_monitor) {
     m_monitor = a_monitor;
+    if(m_monitor != null) {
+      setUniqueKeysActive(true);
+    }
   }
 
   /**
