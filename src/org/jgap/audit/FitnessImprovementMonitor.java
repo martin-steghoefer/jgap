@@ -10,7 +10,9 @@
 package org.jgap.audit;
 
 import java.util.*;
+
 import org.jgap.*;
+import org.jgap.eval.*;
 
 /**
  * Monitors the evolution and stops it if evolution does not make a progress
@@ -23,7 +25,7 @@ import org.jgap.*;
 public class FitnessImprovementMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_initialWaitSeconds;
 
@@ -240,5 +242,15 @@ public class FitnessImprovementMonitor
       Population pop = (Population) a_information[0];
       IChromosome fittest = (IChromosome) a_information[1];
     }
+  }
+
+  /**
+   * @return null as no data is gathered by this monitor
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public PopulationHistoryIndexed getPopulations() {
+    return null;
   }
 }

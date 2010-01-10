@@ -11,6 +11,7 @@ package org.jgap.audit;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.eval.PopulationHistoryIndexed;
 
 /**
  * A meta monitor that chains together given monitors and executes them
@@ -22,7 +23,7 @@ import org.jgap.*;
 public class ChainedMonitors
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List<IEvolutionMonitor> m_monitors;
 
@@ -117,5 +118,25 @@ public class ChainedMonitors
     for (IEvolutionMonitor monitor : m_monitors) {
       monitor.event(a_monitorEvent, a_evolutionNo, a_information);
     }
+  }
+
+  /**
+   * @return null, use getMonitors() and then call each monitor's method
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public PopulationHistoryIndexed getPopulations() {
+    return null;
+  }
+
+  /**
+   * @return List of monitors registered
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public List<IEvolutionMonitor> getMonitors() {
+    return m_monitors;
   }
 }

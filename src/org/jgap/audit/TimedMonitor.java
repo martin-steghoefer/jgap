@@ -10,7 +10,9 @@
 package org.jgap.audit;
 
 import java.util.*;
+
 import org.jgap.*;
+import org.jgap.eval.*;
 
 /**
  * Monitors the evolution and stops it after a given number of seconds.
@@ -21,7 +23,7 @@ import org.jgap.*;
 public class TimedMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private long m_startMillis;
 
@@ -87,5 +89,15 @@ public class TimedMonitor
                     Object[] a_information) {
     // Not needed here.
     // ----------------
+  }
+
+  /**
+   * @return null as no data is gathered by this monitor
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public PopulationHistoryIndexed getPopulations() {
+    return null;
   }
 }
