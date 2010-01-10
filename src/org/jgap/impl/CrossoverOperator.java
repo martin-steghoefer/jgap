@@ -39,7 +39,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -418,6 +418,10 @@ public class CrossoverOperator
       }
       else {
         gene2 = secondGenes[j];
+      }
+      if (m_monitorActive) {
+        gene1.setUniqueIDTemplate(gene2.getUniqueID(), 1);
+        gene2.setUniqueIDTemplate(gene1.getUniqueID(), 1);
       }
       firstAllele = gene1.getAllele();
       gene1.setAllele(gene2.getAllele());
