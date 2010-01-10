@@ -16,7 +16,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private transient Configuration m_lastConf;
 
@@ -206,14 +206,15 @@ public class GABreeder
         }
       }
     }
-    if (monitorActive) {
+    IChromosome newFittest = reAddFittest(pop, fittest);
+    if (monitorActive && newFittest != null) {
       // Monitor that fitness value of chromosomes is being updated.
       // -----------------------------------------------------------
       a_conf.getMonitor().event(
           IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST,
-          a_conf.getGenerationNr(), new Object[]{pop, fittest});
+          a_conf.getGenerationNr(), new Object[] {pop, fittest});
     }
-    reAddFittest(pop, fittest);
+
     // Increase number of generations.
     // -------------------------------
     a_conf.incrementGenerationNr();
@@ -261,14 +262,16 @@ public class GABreeder
     }
   }
 
-  protected void reAddFittest(Population a_pop, IChromosome a_fittest) {
+  protected IChromosome reAddFittest(Population a_pop, IChromosome a_fittest) {
     // Determine if all-time fittest chromosome is in the population.
     // --------------------------------------------------------------
     if (a_fittest != null && !a_pop.contains(a_fittest)) {
       // Re-add fittest chromosome to current population.
       // ------------------------------------------------
       a_pop.addChromosome(a_fittest);
+      return a_fittest;
     }
+    return null;
   }
 
   protected void updateChromosomes(Population a_pop, Configuration a_conf) {
