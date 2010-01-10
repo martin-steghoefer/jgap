@@ -10,12 +10,103 @@
 package org.jgap.audit;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.eval.*;
 
 /**
  * Monitors the evolution progress extensively.
+ * Keeps track of the population development for each single generation during
+ * the whole evolution process.
+ * Monitors chromosomes as well as genes. For each chromosome the originating
+ * chromosome is monitored (applies for natural selectors as well as for genetic
+ * operators that transform a single chromosome, like MutationOperator).
+ * For more complex genetic operators, like CrossoverOperator, all originating
+ * chromosomes are monitored (in crossover there are two).
+ * For genes an analogue monitoring is supported as for chromosomes.
+ *
+ * TO ACTIVATE MONITORING:
+ * Configuration.setMonitor(new EvolutionMonitor());
+ *
+ * Each chromosome and gene itself has a unique ID. This ID is set by method
+ * setUniqueID. A unique ID is a String value that, in best case, is unique
+ * worldwide.
+ *
+ * A chromosome's or gene's originator is set by method setUniqueIDTemplate.
+ * This method accepts an index, as there could be more than one originator
+ * (see below).
+ *
+ * --------------------------------------------------------------------------
+ *
+ * To give a better view, here are the population snapshots that are taken
+ * during a single evolution generation (chromosomes are given by *,+,-,.):
+ *
+ *     |-------|      |-------|      |-------|      |-------|      |-------|
+ *     | ** *  |      | **    |      |  *    |      |  +    |      |  +    |
+ *     |* *  * |  =>  |* *  * |  =>  |*    * |  =>  |*    - |  =>  |*    . |
+ *     | * **  |      |   **  |      |   **  |      |   **  |      |   -*  |
+ *     |-------|      |-------|      |-------|      |-------|      |-------|
+ *       Update        Natural        Natural        Genetic        Genetic
+ *    Chromosomes     Selector 1     Selector i     Operator 1     Operator j
+ *   (Fitness calc.)
+ *
+ *     |-------|      |-------|      |-------|      |-------|      |-------|
+ *     |  +    |      |  +    |      |  +**  |      |  +**  |      |  + *  |
+ * =>  |*    . |  =>  |*    . |  =>  |*    . |  =>  |* *  . |  =>  |* *  . |
+ *     |   -*  |      |   -*  |      |*  -*  |      |*  -*  |      |*  -   |
+ *     |-------|      |-------|      |-------|      |-------|      |-------|
+ *    Bulk Fitness      Update        Add new         Re-add        Natural
+ *      Function      Chromosomes    Chromosomes      Fittest      Selector k
+ *     (optional)                                   Chromosome     (Post-Sel.)
+ *
+ *     |-------|
+ *     |  + *  |
+ * =>  |* *  . |
+ *     |*  -   |
+ *     |-------|
+ *    End of cycle
+ *
+ * For each single evolution cycle, these population states are kept separately.
+ *
+ * --------------------------------------------------------------------------
+ *
+ * For each chromosome the originating chromosomes are tracked. Here are examples:
+ *
+ * Natural Selection, e.g. WeightedRouletteSelector:
+ *   Chromosome 4715 has originator Chromosome 4711 (different ID because of
+ *   cloning)
+ *
+ * Genetic Operation, e.g. MutationOperator:
+ *   Chromosome 5512 has originator Chromosome 1139
+ *
+ *  Genetic Operation, e.g. CrossoverOperator:
+ *   Chromosome 7119 has originator Chromosomes 807 and 5703
+ *   Chromosome 7120 has originator Chromosomes 807 and 5703
+ *   => two resulting Chromosomes have the same originators!
+ *
+ * Genetic, Operation, e.g. YourOperator:
+ *   There can be as many originating Chromosomes as your operator regards
+ *
+ * --------------------------------------------------------------------------
+ *
+ * For each gene the originating genes are tracked. Examples:
+ *
+ * Natural Selection, e.g. WeightedRouletteSelector:
+ *   All Genes in Chromosome 4711 have the same originating genes as
+ *   Chromosome 4711's originating Chromosome's genes.
+ *   => Chromosome is selected only, not modified, thus the Genes stick to the
+ *      Chromosome they belong to. Genes unique ID of template is not set.
+ *
+ * Genetic Operation, e.g. MutationOperator:
+ *   Each mutated Gene originates from exactly one other Gene
+ *
+ * Genetic Operation, e.g. CrossoverOperator:
+ *   Each crossed over Gene A has one originating Gene B.
+ *   In turn, Gene B has one originating Gene A, as their alleles are swapped.
+ *   All uncrossed Genes have the same originator as the Chromosome they
+ *   belong to, thus their unique ID of template is not set.
+ *
+ * Genetic, Operation, e.g. YourOperator:
+ *   A Gene could virtually have any number of originators.
  *
  * @author Klaus Meffert
  * @since 3.5
@@ -23,11 +114,11 @@ import org.jgap.eval.*;
 public class EvolutionMonitor
     implements IEvolutionMonitor {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static final int CONTEXT_UPDATE_CHROMOSOMES1 = 0;
 
-  public static final int CONTEXT_OFFSET_GENETIC_OPERATOR1 = 1;
+  public static final int CONTEXT_OFFSET_NATURAL_SELECTOR1 = 1;
 
   public static final int CONTEXT_OFFSET_AFTER_OPERATE = 10;
 
@@ -39,19 +130,13 @@ public class EvolutionMonitor
 
   public static final int CONTEXT_READD_FITTEST = 23;
 
-  public static final int CONTEXT_OFFSET_GENETIC_OPERATOR2 = 30;
+  public static final int CONTEXT_OFFSET_NATURAL_SELECTOR2 = 30;
 
   public static final int CONTEXT_END_OF_CYCLE = 999;
 
-  private long m_startMillis;
-
-  private long m_lastCheckMillis;
-
   private int m_checks;
 
-  private Evaluator m_evaluator;
-
-  private PopulationHistory m_popHist;
+  private PopulationHistoryIndexed m_popHist;
 
   private int m_selectorIndex;
 
@@ -62,9 +147,7 @@ public class EvolutionMonitor
   }
 
   protected void init() {
-    PermutingConfiguration permConfig = new PermutingConfiguration();
-    m_evaluator = new Evaluator(permConfig);
-    m_popHist = new PopulationHistory(100);
+    m_popHist = new PopulationHistoryIndexed();
   }
 
   /**
@@ -92,12 +175,15 @@ public class EvolutionMonitor
     }
     // Store the population
     Population popClone = (Population) a_pop.clone();
-//    m_popHist.addPopulation(popClone);
-    m_evaluator.storePopulation(CONTEXT_END_OF_CYCLE, m_checks, popClone);
-    m_lastCheckMillis = System.currentTimeMillis();
+//    m_evaluator.storePopulation(CONTEXT_END_OF_CYCLE, m_checks, popClone);
+    PopulationContext context = new PopulationContext(popClone);
+    context.setChromosome(best);
+    m_popHist.addPopulation(m_checks, CONTEXT_END_OF_CYCLE, context);
     m_checks++;
     initCounters();
-    return true;
+    // No continouos processing as in this example there is an outer main loop.
+    // ------------------------------------------------------------------------
+    return false;
   }
 
   /**
@@ -109,7 +195,6 @@ public class EvolutionMonitor
    * @since 3.5
    */
   public void start(Configuration a_config) {
-    m_startMillis = System.currentTimeMillis();
     initCounters();
   }
 
@@ -138,6 +223,7 @@ public class EvolutionMonitor
     if (a_information == null) {
       return;
     }
+    PopulationContext context;
     // The events are queried in the chronological order they do appear.
     // -----------------------------------------------------------------
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME)) {
@@ -157,7 +243,9 @@ public class EvolutionMonitor
       Population pop = (Population) ( (Population) a_information[0]).clone();
       // Record population as now each chromosome has a fitness value assigned.
       // ----------------------------------------------------------------------
-      m_evaluator.storePopulation(CONTEXT_UPDATE_CHROMOSOMES1, m_checks, pop);
+//      m_evaluator.storePopulation(CONTEXT_UPDATE_CHROMOSOMES1, m_checks, pop);
+      context = new PopulationContext(pop);
+      m_popHist.addPopulation(m_checks, CONTEXT_UPDATE_CHROMOSOMES1, context);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_SELECT)) {
       NaturalSelector selector = (NaturalSelector) a_information[0];
@@ -176,21 +264,29 @@ public class EvolutionMonitor
         // --------------------------------------------
         // Store data for each selector subsequently.
         // ------------------------------------------
-        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR1 +
-                                    m_selectorIndex * 2 + 1, m_checks, pop);
-        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR1 +
-                                    m_selectorIndex * 2 + 2, m_checks, newPop);
+        context = new PopulationContext(pop);
+        context.setSelector(selector);
+        m_popHist.addPopulation(m_checks, CONTEXT_OFFSET_NATURAL_SELECTOR1 +
+                                m_selectorIndex * 2 + 0, context);
+        context = new PopulationContext(newPop);
+        context.setSelector(selector);
+        m_popHist.addPopulation(m_checks, CONTEXT_OFFSET_NATURAL_SELECTOR1 +
+                                m_selectorIndex * 2 + 1, context);
         m_selectorIndex++;
       }
       else {
         // Selection executed after genetic operators.
         // -------------------------------------------
+        context = new PopulationContext(pop);
+        context.setSelector(selector);
         // Store data for each selector subsequently.
         // ------------------------------------------
-        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR2 +
-                                    m_selectorIndex * 2 + 1, m_checks, pop);
-        m_evaluator.storePopulation(CONTEXT_OFFSET_GENETIC_OPERATOR2 +
-                                    m_selectorIndex * 2 + 2, m_checks, newPop);
+        m_popHist.addPopulation(m_checks, CONTEXT_OFFSET_NATURAL_SELECTOR2 +
+                                m_selectorIndex * 2 + 0, context);
+        context = new PopulationContext(newPop);
+        context.setSelector(selector);
+        m_popHist.addPopulation(m_checks, CONTEXT_OFFSET_NATURAL_SELECTOR2 +
+                                m_selectorIndex * 2 + 1, context);
       }
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_BEFORE_OPERATE)) {
@@ -204,8 +300,10 @@ public class EvolutionMonitor
       List<IChromosome> chromosomes = (List<IChromosome>) a_information[2];
       // Store data for each selector subsequently.
       // ------------------------------------------
-      m_evaluator.storePopulation(CONTEXT_OFFSET_AFTER_OPERATE +
-                                  m_operatorIndex, m_checks, pop);
+      context = new PopulationContext(pop);
+      context.setOperator(operator);
+      m_popHist.addPopulation(m_checks, CONTEXT_OFFSET_AFTER_OPERATE +
+                              m_operatorIndex, context);
       m_operatorIndex++;
       m_selectorIndex = 0;
     }
@@ -218,7 +316,9 @@ public class EvolutionMonitor
       BulkFitnessFunction bulkFitnessFunction = (BulkFitnessFunction)
           a_information[0];
       Population pop = (Population) ( (Population) a_information[1]).clone();
-      m_evaluator.storePopulation(CONTEXT_AFTER_BULK_EVALUATION, m_checks, pop);
+      context = new PopulationContext(pop);
+      context.setBulkFitnessFunction(bulkFitnessFunction);
+      m_popHist.addPopulation(m_checks, CONTEXT_AFTER_BULK_EVALUATION, context);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2)) {
@@ -227,34 +327,29 @@ public class EvolutionMonitor
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2)) {
       Population pop = (Population) a_information[0];
-      m_evaluator.storePopulation(CONTEXT_UPDATE_CHROMOSOMES2, m_checks, pop);
+      context = new PopulationContext(pop);
+      m_popHist.addPopulation(m_checks, CONTEXT_UPDATE_CHROMOSOMES2, context);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.
                               MONITOR_EVENT_BEFORE_ADD_CHROMOSOME)) {
       Population pop = (Population) a_information[0];
       IChromosome newChromosome = (IChromosome) ( (IChromosome) a_information[1]).
           clone();
-      try {
-        /**@todo do it more elegantly*/
-        m_evaluator.storePopulation(CONTEXT_NEW_CHROMOSOME, m_checks,
-                                    new Population(pop.getConfiguration(),
-            newChromosome));
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
+      context = new PopulationContext(pop);
+      context.setChromosome(newChromosome);
+      m_popHist.addPopulation(m_checks, CONTEXT_NEW_CHROMOSOME, context);
     }
     if (a_monitorEvent.equals(IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST)) {
       Population pop = (Population) a_information[0];
       IChromosome fittest = (IChromosome) ( (IChromosome) a_information[1]).
           clone();
-      try {
-        /**@todo do it more elegantly*/
-        m_evaluator.storePopulation(CONTEXT_READD_FITTEST, m_checks,
-                                    new Population(pop.getConfiguration(),
-            fittest));
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
+      context = new PopulationContext(pop);
+      context.setChromosome(fittest);
+      m_popHist.addPopulation(m_checks, CONTEXT_READD_FITTEST, context);
     }
+  }
+
+  public PopulationHistoryIndexed getPopulations() {
+    return m_popHist;
   }
 }
