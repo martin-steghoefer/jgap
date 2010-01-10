@@ -2,6 +2,10 @@
 -----------------------------------------------------------
 * Improved monitoring of evolution progress a lot
 * Added monitoring support to all genetic operators
+* Added new interface iUniqueKey, introduced it to
+  IChromosome and Gene
+* Added new class PopulationContext: stores pop. data
+  together with context data (for monitoring)
 * Added new class MultipleIntegerGene, thanx to Chris Jones
 * Introduced method hashCode() for class Population
 * Support cloning of application data of sample chromosome
@@ -18,6 +22,7 @@
   operators are being applied (see class BreederBase)
 * Fixed AveragingChrossoverOperator: added cloning
 * Added JGAPFactory.getUniqueKey
+* Improved class PopulationHistory
 * Added SystemKit.getGUID
 * Added test cases
 * Enhanced Javadoc
