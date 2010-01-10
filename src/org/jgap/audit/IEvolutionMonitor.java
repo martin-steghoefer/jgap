@@ -9,9 +9,11 @@
  */
 package org.jgap.audit;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
 import org.jgap.*;
+import org.jgap.eval.*;
 
 /**
  * Monitors evolution and decides when to stop the evolution cycle.
@@ -21,7 +23,7 @@ import org.jgap.*;
  */
 public interface IEvolutionMonitor extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public final static String MONITOR_EVENT_REMOVE_CHROMOSOME =
       "remove_chromosome";
@@ -91,4 +93,12 @@ public interface IEvolutionMonitor extends Serializable {
    * @since 3.5
    */
   void event(String a_monitorEvent, int a_evolutionNo, Object[] a_information);
+
+  /**
+   * @return the gathered monitoring data
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  PopulationHistoryIndexed getPopulations();
 }
