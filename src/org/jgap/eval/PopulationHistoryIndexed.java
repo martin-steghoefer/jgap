@@ -23,7 +23,7 @@ import org.jgap.*;
 public class PopulationHistoryIndexed
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Map<Integer, Map> m_evolutions;
 
@@ -38,14 +38,15 @@ public class PopulationHistoryIndexed
 
   /**
    *
-   * @param a_index int
-   * @param a_event int
-   * @param a_pop Population
+   * @param a_index evolution number or any other appropriate index
+   * @param a_event unique identifier of an event (if needed). See class
+   * EvolutionMonitor for event constants
+   * @param a_pop the population to add
    *
    * @author Klaus Meffert
    * @since 3.5
    */
-  public void addPopulation(int a_index, int a_event, Population a_pop) {
+  public void addPopulation(int a_index, int a_event, PopulationContext a_pop) {
     Map entry = m_evolutions.get(a_index);
     if (entry == null) {
       entry = new HashMap();
@@ -56,27 +57,38 @@ public class PopulationHistoryIndexed
 
   /**
    *
-   * @param a_index int
-   * @return Map
+   * @param a_index evolution number or any other appropriate index
+   * @return Map with tuples <event, Population>
    *
    * @author Klaus Meffert
    * @since 3.5
    */
-  public Map<Integer, Population> getPopulations(int a_index) {
+  public Map<Integer, PopulationContext> getPopulations(int a_index) {
     return m_evolutions.get(a_index);
   }
 
   /**
-   *
-   * @param a_index int
-   * @param a_event int
-   * @return Population
+   * @return complete population history
    *
    * @author Klaus Meffert
    * @since 3.5
    */
-  public Population getPopulation(int a_index, int a_event) {
-    Map<Integer, Population> entry = getPopulations(a_index);
+  public Map<Integer, Map> getPopulationsHistory() {
+    return m_evolutions;
+  }
+
+  /**
+   *
+   * @param a_index evolution number or any other appropriate index
+   * @param a_event unique identifier of an event (if needed). See class
+   * EvolutionMonitor for event constants
+   * @return the population together with its context
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
+  public PopulationContext getPopulation(int a_index, int a_event) {
+    Map<Integer, PopulationContext> entry = getPopulations(a_index);
     if (entry != null) {
       Iterator<Integer> it = entry.keySet().iterator();
       while(it.hasNext()) {
