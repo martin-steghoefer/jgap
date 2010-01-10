@@ -12,6 +12,7 @@ package examples;
 import java.io.*;
 
 import org.jgap.*;
+import org.jgap.audit.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
 import org.jgap.xml.*;
@@ -38,12 +39,14 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
   private static final int MAX_ALLOWED_EVOLUTIONS = 200;
+
+  public static EvolutionMonitor m_monitor;
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -52,13 +55,17 @@ public class MinimizingMakeChange {
    *
    * @param a_targetChangeAmount the target amount of change for which this
    * method is attempting to produce the minimum number of coins
+   * @param a_doMonitor true: turn on monitoring for later evaluation of
+   * evolution progress
+   *
    * @throws Exception
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public static void makeChangeForAmount(int a_targetChangeAmount)
+  public static void makeChangeForAmount(int a_targetChangeAmount,
+      boolean a_doMonitor)
       throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
@@ -77,7 +84,12 @@ public class MinimizingMakeChange {
     FitnessFunction myFunc =
         new MinimizingMakeChangeFitnessFunction(a_targetChangeAmount);
     conf.setFitnessFunction(myFunc);
-
+    if (a_doMonitor) {
+      // Turn on monitoring/auditing of evolution progress.
+      // --------------------------------------------------
+      m_monitor = new EvolutionMonitor();
+      conf.setMonitor(m_monitor);
+    }
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
@@ -133,7 +145,12 @@ public class MinimizingMakeChange {
       if (!uniqueChromosomes(population.getPopulation())) {
         throw new RuntimeException("Invalid state in generation "+i);
       }
-      population.evolve();
+      if(m_monitor != null) {
+        population.evolve(m_monitor);
+      }
+      else {
+        population.evolve();
+      }
     }
     long endTime = System.currentTimeMillis();
     System.out.println("Total evolution time: " + ( endTime - startTime)
@@ -194,7 +211,7 @@ public class MinimizingMakeChange {
    */
   public static void main(String[] args)
       throws Exception {
-    if (args.length != 1) {
+    if (args.length < 1) {
       System.out.println("Syntax: MinimizingMakeChange <amount>");
     }
     else {
@@ -215,7 +232,14 @@ public class MinimizingMakeChange {
                            + ".");
       }
       else {
-        makeChangeForAmount(amount);
+        boolean doMonitor = false;
+        if (args.length > 1) {
+          String monitoring = args[1];
+          if(monitoring != null && monitoring.equals("MONITOR")) {
+            doMonitor = true;
+          }
+        }
+        makeChangeForAmount(amount, doMonitor);
       }
     }
   }
