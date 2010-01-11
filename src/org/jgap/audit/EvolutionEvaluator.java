@@ -10,20 +10,28 @@
 package org.jgap.audit;
 
 import java.util.*;
+
 import org.jgap.*;
 import org.jgap.eval.*;
+
 import examples.*;
 
 /**
  * Evaluates evolution progress thas has previously been tracked by
  * EvolutionMonitor (or a similar instance).
+ * This class regards a complete evolution, not just a single round. This is an
+ * optional way, another would be to just gather data per round and then display
+ * or evaluate the round-specific data.
+ * This class considers global (complete evolution) data because computations
+ * are executed on this data, like tracking chromosomes, evaluating the progress
+ * of selectors or genetic operators, etc.
  *
  * @author Klaus Meffert
  * @since 3.5
  */
 public class EvolutionEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private PopulationHistoryIndexed m_monitorData;
 
@@ -57,6 +65,7 @@ public class EvolutionEvaluator {
     // ----------------------
     Map<IChromosome, Map<Integer, List<IChromosome>>> chromTrack =
         trackChromosomes(data);
+    /**@todo use chromIDs and chromTrack*/
     int size = evolutionIndexes.size();
     for (int i = 0; i < size; i++) {
       evNo = evolutionIndexes.get(i);
@@ -233,6 +242,15 @@ public class EvolutionEvaluator {
     return chromIDs;
   }
 
+  /**
+   * Sample usage of monitoring, together with an existing JGAP example.
+   *
+   * @param args String[]
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.5
+   */
   public static void main(String[] args)
       throws Exception {
     args = new String[2];

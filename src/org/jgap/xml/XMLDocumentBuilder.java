@@ -23,7 +23,7 @@ import javax.xml.parsers.*;
 public class XMLDocumentBuilder
     extends DocumentBuilderBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   protected void setAttribute(final Object a_xmlElement, final String a_key,
                               final String a_value) {
@@ -48,6 +48,7 @@ public class XMLDocumentBuilder
   /**
    * Convenience method to build an XML document from a generic input structure
    * (of type IDataCreators)
+   *
    * @param a_document the input structure holding the data to be represented
    * as XML document
    * @throws Exception
