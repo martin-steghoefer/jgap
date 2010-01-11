@@ -13,7 +13,7 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * This genetic operator performs Gaussian mutation across all genes in a given
+ * This genetic operator performs Gaussian mutation across all genes in a
  * Chromosome.
  *
  * @author Klaus Meffert (modified JOONEGAP source)
@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.24 $";
+  private static final String CVS_REVISION = "$Revision: 1.25 $";
 
   private double m_deviation;
 
@@ -143,7 +143,7 @@ public class GaussianMutationOperator
           }
         }
       }
-      }
+    }
   }
 
   /**
@@ -161,10 +161,6 @@ public class GaussianMutationOperator
       // ------------------------------------------
       a_gene.applyMutation(k, a_percentage);
     }
-  }
-
-  private void setRandomGenerator(final RandomGenerator a_rg) {
-    m_rg = a_rg;
   }
 
   /**
