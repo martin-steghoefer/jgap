@@ -24,11 +24,24 @@ public class If
     extends CommandGene
 implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  private Class m_childType;
 
   public If(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_returnType);
+    m_childType = a_returnType;
+  }
+
+  public If(final GPConfiguration a_conf, Class childType, Class a_returnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 2, a_returnType);
+    m_childType = childType;
+  }
+
+  public Class getChildType(IGPProgram prog, int index) {
+    return m_childType;
   }
 
   public String toString() {
