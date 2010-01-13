@@ -11,9 +11,10 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.log4j.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.log4j.*;
 import org.jgap.util.*;
 
 /**
@@ -25,7 +26,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -357,6 +358,7 @@ public class GPPopulation
               if (cloner != null) {
                 try {
                   program = (IGPProgram) cloner.perform(prototype, null, null);
+                  /**@todo only output once*/
                   LOGGER.warn("Prototype program reused because random"
                               + " program did not satisfy constraints");
                   break;
