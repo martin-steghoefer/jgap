@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class IfElse
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private Class m_type;
 
@@ -54,7 +54,65 @@ public class IfElse
     return "IfElse";
   }
 
-  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+  public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    boolean condition;
+    if (m_type == CommandGene.IntegerClass) {
+      condition = c.execute_int(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.BooleanClass) {
+      condition = c.execute_boolean(n, 0, args);
+    }
+    else if (m_type == CommandGene.LongClass) {
+      condition = c.execute_long(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.DoubleClass) {
+      condition = c.execute_double(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.FloatClass) {
+      condition = c.execute_float(n, 0, args) > 0;
+    }
+    else {
+      throw new IllegalStateException("IfElse: cannot process type " + m_type);
+    }
+    if (condition) {
+      return c.execute_boolean(n, 1, args);
+    }
+    else {
+      return c.execute_boolean(n, 2, args);
+    }
+  }
+
+  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    boolean condition;
+    if (m_type == CommandGene.IntegerClass) {
+      condition = c.execute_int(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.BooleanClass) {
+      condition = c.execute_boolean(n, 0, args);
+    }
+    else if (m_type == CommandGene.LongClass) {
+      condition = c.execute_long(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.DoubleClass) {
+      condition = c.execute_double(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.FloatClass) {
+      condition = c.execute_float(n, 0, args) > 0;
+    }
+    else {
+      throw new IllegalStateException("IfElse: cannot process type " + m_type);
+    }
+    if (condition) {
+      return c.execute_int(n, 1, args);
+    }
+    else {
+      return c.execute_int(n, 2, args);
+    }
+  }
+
+   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     check(c);
     boolean condition;
     if (m_type == CommandGene.IntegerClass) {
