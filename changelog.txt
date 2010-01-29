@@ -21,6 +21,9 @@
 * Added listeners that fire before and after genetic
   operators are being applied (see class BreederBase)
 * Fixed AveragingChrossoverOperator: added cloning
+* Fixed GP functions CountMatrix and ResetMatrix
+* GP function If: Fixed clone, extended functionality
+* GP function IfElse: extended functionality
 * Added JGAPFactory.getUniqueKey
 * Improved class PopulationHistory
 * Added SystemKit.getGUID
