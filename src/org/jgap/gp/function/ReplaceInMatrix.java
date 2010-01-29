@@ -26,7 +26,7 @@ public class ReplaceInMatrix
         extends CommandGene implements ICloneable, IMutateable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -62,7 +62,7 @@ public class ReplaceInMatrix
           ReplacementMode a_mode, String a_targetCharacters,
           char a_replacement, int a_subChildType)
           throws InvalidConfigurationException {
-    super(a_conf, 0, CommandGene.IntegerClass, 0, new int[]{a_subChildType});
+    super(a_conf, 1, CommandGene.IntegerClass, 0, new int[]{a_subChildType});
     if (a_matrixName == null || a_matrixName.length() < 1) {
       throw new IllegalArgumentException("Matrix name must not be empty!");
     }
@@ -116,7 +116,11 @@ public class ReplaceInMatrix
     int count = 0;
     if (matrix != null) {
       int cols = matrix.length;
-      int rows = matrix[0].length;
+      if(index >= cols) {
+        index = cols - 1;
+      }
+
+      int rows = matrix[index].length;
       switch (m_mode) {
         case ROW:
           for (int col = 0; col < cols; col++) {

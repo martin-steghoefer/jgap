@@ -28,7 +28,7 @@ public class CountMatrix
         extends CommandGene implements ICloneable, IMutateable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -94,7 +94,7 @@ public class CountMatrix
     // Child = index --> only relevant if not replacement for whole matrix.
     // --------------------------------------------------------------------
     if (m_countType != CountType.MATRIX) {
-    index = c.execute_int(n, 0, args);
+      index = c.execute_int(n, 0, args);
     }
     else {
       index = 0;
@@ -106,7 +106,10 @@ public class CountMatrix
     int count = 0;
     if (matrix != null) {
       int cols = matrix.length;
-      int rows = matrix[0].length;
+      if(index >= cols) {
+        index = cols - 1;
+      }
+      int rows = matrix[index].length;
       switch (m_countType) {
         case ROW:
           for (int col = 0; col < cols; col++) {
