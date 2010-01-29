@@ -21,10 +21,9 @@ import org.jgap.util.*;
  * @since 3.0
  */
 public class If
-    extends CommandGene
-implements ICloneable {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private Class m_childType;
 
@@ -34,14 +33,19 @@ implements ICloneable {
     m_childType = a_returnType;
   }
 
-  public If(final GPConfiguration a_conf, Class childType, Class a_returnType)
+  public If(final GPConfiguration a_conf, Class a_childType, Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_returnType);
-    m_childType = childType;
+    m_childType = a_childType;
   }
 
   public Class getChildType(IGPProgram prog, int index) {
-    return m_childType;
+    if (index < 1) {
+      return m_childType;
+    }
+    else {
+      return getReturnType();
+    }
   }
 
   public String toString() {
@@ -58,9 +62,27 @@ implements ICloneable {
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    int x = c.execute_int(n, 0, args);
+    boolean condition;
+    if (m_childType == CommandGene.IntegerClass) {
+      condition = c.execute_int(n, 0, args) > 0;
+    }
+    else if (m_childType == CommandGene.BooleanClass) {
+      condition = c.execute_boolean(n, 0, args);
+    }
+    else if (m_childType == CommandGene.LongClass) {
+      condition = c.execute_long(n, 0, args) > 0;
+    }
+    else if (m_childType == CommandGene.DoubleClass) {
+      condition = c.execute_double(n, 0, args) > 0;
+    }
+    else if (m_childType == CommandGene.FloatClass) {
+      condition = c.execute_float(n, 0, args) > 0;
+    }
+    else {
+      throw new IllegalStateException("If: cannot process type " + m_childType);
+    }
     int value = 0;
-    if (x >= 0) {
+    if (condition) {
       value = c.execute_int(n, 1, args);
     }
     return value;
@@ -94,7 +116,8 @@ implements ICloneable {
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
-    int x = c.execute_int(n, 0, args);/**@todo add option for type of first child to constructor*/
+    int x = c.execute_int(n, 0, args);
+    /**@todo add option for type of first child to constructor*/
     if (x >= 0) {
       c.execute_void(n, 1, args);
     }
@@ -110,7 +133,8 @@ implements ICloneable {
    */
   public Object clone() {
     try {
-      If result = new If(getGPConfiguration(), getReturnType());
+      If result = new If(getGPConfiguration(), getChildType(null, 0),
+                         getReturnType());
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
