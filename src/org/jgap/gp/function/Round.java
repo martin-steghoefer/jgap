@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Round
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Round(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
@@ -46,12 +46,12 @@ public class Round
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     float f = c.execute_float(n, 0, args);
-    return Math.abs(f);
+    return Math.round(f);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     double d = c.execute_double(n, 0, args);
-    return Math.abs(d);
+    return Math.round(d);
   }
 
   /**
