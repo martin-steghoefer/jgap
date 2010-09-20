@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
@@ -129,10 +129,10 @@ public class ChainOfSelectorsTest
     ChainOfSelectors c2 = new ChainOfSelectors(conf);
     assertFalse(c1.equals(null));
     assertTrue(c1.equals(c2));
-    TournamentSelector t1 = new TournamentSelector();
+    TournamentSelector t1 = new TournamentSelector(conf, 3, 0.2d);
     c1.addNaturalSelector(t1);
     assertFalse(c1.equals(c2));
-    c2.addNaturalSelector(new TournamentSelector());
+    c2.addNaturalSelector(new TournamentSelector(conf,4,0.1d));
     /**@todo improve: 2 unsame selectors of same class with same params should
      * make the chain equal!
      */

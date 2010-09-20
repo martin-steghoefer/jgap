@@ -24,7 +24,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -40,12 +40,14 @@ public class TournamentSelectorTest
    */
   public void testConstruct_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
+    Configuration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    TournamentSelector sel = new TournamentSelector(conf, 1, 1.0d);
     assertNotNull(privateAccessor.getField(sel, "m_chromosomes"));
     assertNotNull(privateAccessor.getField(sel, "m_fitnessValueComparator"));
-    new TournamentSelector(null, 1, 0.5d);
-    new TournamentSelector(null, 10, 0.00001d);
-    new TournamentSelector(null, 50, 0.4d);
+    new TournamentSelector(conf, 1, 0.5d);
+    new TournamentSelector(conf, 10, 0.00001d);
+    new TournamentSelector(conf, 50, 0.4d);
   }
 
   /**
@@ -488,7 +490,9 @@ public class TournamentSelectorTest
    * @since 2.2
    */
   public void testReturnsUniqueChromosomes_0() throws Exception {
-    TournamentSelector selector = new TournamentSelector(null, 2, 0.5d);
+    Configuration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    TournamentSelector selector = new TournamentSelector(conf, 2, 0.5d);
     assertFalse(selector.returnsUniqueChromosomes());
   }
 
@@ -500,7 +504,9 @@ public class TournamentSelectorTest
    */
   public void testSetTournametSize_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
+    Configuration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    TournamentSelector sel = new TournamentSelector(conf, 1, 1.0d);
     sel.setTournamentSize(5);
     assertEquals(5, sel.getTournamentSize());
     try {
@@ -520,7 +526,9 @@ public class TournamentSelectorTest
    */
   public void testSetProbability_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
+    Configuration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    TournamentSelector sel = new TournamentSelector(conf, 1, 1.0d);
     sel.setProbability(0.6d);
     assertEquals(0.6d, sel.getProbability(), DELTA);
     try {

@@ -24,7 +24,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -42,6 +42,8 @@ public class WeightedRouletteSelectorTest
    * @throws Exception
    */
   public void testConstruct_0() throws Exception{
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setStaticConfiguration(conf);
     new WeightedRouletteSelector();
   }
 
@@ -206,6 +208,7 @@ public class WeightedRouletteSelectorTest
   public void testSelect_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setStaticConfiguration(conf);
     conf.addNaturalSelector(new WeightedRouletteSelector(), false);
     RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.0d);
@@ -300,8 +303,9 @@ public class WeightedRouletteSelectorTest
    */
   public void testEmpty_0()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
+    Genotype.setStaticConfiguration(conf);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     conf.setPopulationSize(7);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene gene = new BooleanGene(conf);
@@ -365,6 +369,8 @@ public class WeightedRouletteSelectorTest
    * @since 2.2
    */
   public void testReturnsUniqueChromosomes_0() throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setStaticConfiguration(conf);
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertFalse(selector.returnsUniqueChromosomes());
   }
@@ -379,6 +385,8 @@ public class WeightedRouletteSelectorTest
    */
   public void testIsSerializable_0()
       throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setStaticConfiguration(conf);
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertTrue(isSerializable(selector));
   }

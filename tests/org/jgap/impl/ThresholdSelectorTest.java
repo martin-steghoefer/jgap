@@ -25,7 +25,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -56,7 +56,9 @@ public class ThresholdSelectorTest
 
   public void testConstruct_2()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(null, 0.5d);
+    Configuration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    ThresholdSelector selector = new ThresholdSelector(conf, 0.5d);
     Double m_bestChroms_Percentage = (Double) getNestedField(selector,
         "m_config", "m_bestChroms_Percentage");
     assertEquals(0.5d, m_bestChroms_Percentage.doubleValue(), DELTA);

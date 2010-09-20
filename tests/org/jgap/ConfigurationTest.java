@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -320,6 +320,7 @@ public class ConfigurationTest
   public void testGetter_0()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     assertEquals(false, conf.isLocked());
     FitnessFunction fitFunc = new StaticFitnessFunction(2);
     conf.setFitnessFunction(fitFunc);
@@ -355,6 +356,7 @@ public class ConfigurationTest
   public void testSetNaturalSelector_0()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.setNaturalSelector(selector);
     assertEquals(selector, conf.getNaturalSelectors(false).get(0));
@@ -434,6 +436,7 @@ public class ConfigurationTest
   public void testAddNaturalSelector_0()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, true);
     assertEquals(selector, conf.getNaturalSelectors(true).get(0));
@@ -446,6 +449,7 @@ public class ConfigurationTest
   public void testAddNaturalSelector_1()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, false);
     assertEquals(selector, conf.getNaturalSelectors(false).get(0));
@@ -458,6 +462,7 @@ public class ConfigurationTest
   public void testAddNaturalSelector_2()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector1 = new WeightedRouletteSelector();
     NaturalSelector selector2 = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector1, false);
@@ -480,6 +485,7 @@ public class ConfigurationTest
   public void testAddNaturalSelector_3()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, false);
     conf.getNaturalSelectors(false).clear();
@@ -495,6 +501,7 @@ public class ConfigurationTest
   public void testAddNaturalSelector_4()
       throws Exception {
     Configuration conf = new Configuration();
+    Genotype.setStaticConfiguration(conf);
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, true);
     conf.getNaturalSelectors(true).clear();
