@@ -19,6 +19,7 @@ import org.jgap.gp.terminal.*;
 import org.jgap.util.*;
 import com.thoughtworks.xstream.*;
 import java.io.*;
+import org.jgap.distr.grid.gp.JGAPGPXStream;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -34,9 +35,9 @@ import java.io.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
-  private transient static Logger LOGGER = Logger.getLogger(Fibonacci.class);
+  transient static final Logger LOGGER = Logger.getLogger(Fibonacci.class);
 
   static Variable vx;
 
@@ -48,9 +49,13 @@ public class Fibonacci
 
   static int[] y = new int[NUMFIB];
 
+  private static PersistableObject po;
+  private final static String PERSISTFILENAME = "c:\\xstreamtest.xml";
+
   public Fibonacci(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf);
+    po = new PersistableObject(PERSISTFILENAME);
   }
 
   /**
@@ -217,14 +222,16 @@ public class Fibonacci
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
           double freeMem = SystemKit.getFreeMemoryMB();
-//          if (genotype.getAllTimeBest() != null) {
-//            try {
-//              writeToStream(genotype.getAllTimeBest());
-//              readFromStream();
-//            } catch (Exception ex) {
-//              ex.printStackTrace();
-//            }
-//          }
+          if (genotype.getAllTimeBest() != null) {
+            try {
+              if (!true) {
+                writeToStream(genotype.getAllTimeBest());
+                readFromStream();
+              }
+            } catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
           if (evno % 50 == 0) {
             double allBestFitness = genotype.getAllTimeBest().getFitnessValue();
             LOGGER.info("Evolving generation " + evno
@@ -352,21 +359,41 @@ public class Fibonacci
   }
   public static void writeToStream(IGPProgram prog)
       throws Exception {
-    XStream xstream = new XStream();
-    PrintWriter outFile = new PrintWriter(new FileOutputStream(
-        "c:\\xstreamtest.xml", false));
-    String xml = xstream.toXML(prog.getGPConfiguration());
-    outFile.print(xml);
-    outFile.close();
+    if (!true) {
+      po.setObject(prog);
+      po.save(true);
+    }
+    else {
+      XStream xstream = new JGAPGPXStream();
+//      xstream.setMode(XStream.ID_REFERENCES);
+      // Don't write the configuration object.
+      // -------------------------------------
+      xstream.omitField(GPProgramBase.class,"m_conf");
+      xstream.omitField(GPProgram.class,"m_conf");
+      xstream.omitField(CommandGene.class,"m_configuration");
+      xstream.omitField(ProgramChromosome.class,"m_configuration");
+      xstream.omitField(BaseGPChromosome.class,"m_configuration");
+
+      PrintWriter outFile = new PrintWriter(new FileOutputStream(
+          PERSISTFILENAME, false));
+      String xml = xstream.toXML(prog);
+      outFile.print(xml);
+      outFile.flush();
+      outFile.close();
+    }
   }
 
   public static Object readFromStream()
       throws Exception {
-    XStream xstream = new XStream();
-    File f = new File("c:\\xstreamtest.xml");
-    InputStream oi = new FileInputStream(f);
-    GPConfiguration result = (GPConfiguration) xstream.fromXML(oi);
-    result.clearMemory();
-    return result;
+    if (!true) {
+      return po.load();
+    }
+    else {
+      XStream xstream = new JGAPGPXStream();
+//      xstream.setMode(XStream.ID_REFERENCES);
+      InputStream oi = new FileInputStream(PERSISTFILENAME);
+      GPProgram result = (GPProgram) xstream.fromXML(oi);
+      return result;
+    }
   }
 }
