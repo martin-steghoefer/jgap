@@ -13,6 +13,8 @@
 * Introduced method hashCode() for class Population
 * Support cloning of application data of sample chromosome
 * Avoid stack overflow in DoubleGene.mapValueToWithinBounds
+* Optimized growOrFullNode
+* Fixed PersistableObject.save
 * Fixed bug in grid example for distributed fitness
 * calculation
 * Fixed AbstractSupergene's newGeneInternal, thanx to
@@ -32,6 +34,7 @@
 * Improved class PopulationHistory
 * Added SystemKit.getGUID
 * Added test cases
+* Fixed existing test cases
 * Enhanced Javadoc
 
 3.4.4
