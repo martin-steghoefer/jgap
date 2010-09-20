@@ -30,7 +30,7 @@ import org.jgap.util.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**@todo introduce lock for configuration*/
   /**
@@ -49,7 +49,6 @@ public class GPConfiguration
    */
   private transient Culture m_memory = new Culture(50);
 
-  /**@todo make 50 configurable*/
   private transient Hashtable<String, char[][]> m_matrices;
 
   /**
@@ -268,6 +267,7 @@ public class GPConfiguration
       throw new IllegalStateException("JGAPFactory not registered!");
     }
     m_programCache = new HashMap(50);
+    m_matrices = new Hashtable();
     if (a_fullInit) {
       m_variables = new Hashtable();
       m_crossMethod = new BranchTypingCross(this);
