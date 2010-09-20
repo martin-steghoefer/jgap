@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -569,6 +569,7 @@ public class ProgramChromosome
       // Clone the array, not the content of the array.
       // ----------------------------------------------
       CommandGene[] localFunctionSet = (CommandGene[]) a_functionSet.clone();
+      int len = a_functionSet.length;
       do {
         CommandGene node = selectNode(a_num, a_returnType, a_subReturnType,
                                       localFunctionSet, aFunction, a_grow);
@@ -578,7 +579,7 @@ public class ProgramChromosome
           // In the first round of evolution ensure to always have one valid
           // individual as we need a prototype for cloning!
           // ---------------------------------------------------------------
-          if (evolutionRound > 0 || tries <= 10) {
+          if (evolutionRound > 0 || tries <= len*2) {
             // Remove invalid node from local function set.
             // --------------------------------------------
             localFunctionSet = remove(localFunctionSet, node);
