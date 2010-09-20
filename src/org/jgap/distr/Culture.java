@@ -15,7 +15,8 @@ import org.apache.commons.lang.builder.*;
 
 /**
  * Culture is a memory not being bound to a generation, but possibly persistent
- * during the whole history of a genotype (over all generations).<p>
+ * during the whole history of a genotype (over all generations).
+ * See GPConfiguration for current support of culture with Genetic Programming.<p>
  * Also see http://cs.gmu.edu/~sean/papers/culture-gp96.pdf
  *
  * @author Klaus Meffert
@@ -24,7 +25,7 @@ import org.apache.commons.lang.builder.*;
 public class Culture
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The storage to use.
