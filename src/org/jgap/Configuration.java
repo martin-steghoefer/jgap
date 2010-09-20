@@ -44,7 +44,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.100 $";
+  private final static String CVS_REVISION = "$Revision: 1.101 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1501,7 +1501,7 @@ public class Configuration
     return m_factory;
   }
 
-  class ConfigurationConfigurable
+  public class ConfigurationConfigurable
       implements Serializable {
     /**
      * The number of chromosomes that will be stored in the Genotype.
