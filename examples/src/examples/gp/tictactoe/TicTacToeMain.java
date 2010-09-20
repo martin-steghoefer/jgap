@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static Variable vb;
 
@@ -358,6 +358,7 @@ public class TicTacToeMain
     }
 
     public double computeRawFitness(final IGPProgram a_program) {
+      /**@todo reduce fitness for NOP */
       double error = MY_WORST_FITNESS_VALUE;
       double errorOpponent = MY_WORST_FITNESS_VALUE;
       Object[] noargs = new Object[0];
@@ -455,7 +456,7 @@ public class TicTacToeMain
                 opponent.execute_void(j, noargs);
               }
             }
-            // Value the number of distincts read outs of the board by the
+            // Value the number of distinct read outs of the board by the
             // player.
             // -----------------------------------------------------------
             readCount = m_board.getReadPositionCount();
