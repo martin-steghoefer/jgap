@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.io.xml.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -56,10 +56,13 @@ public class PersistableObject {
   }
     public void save(boolean a_omitConfig, Object[][] a_omitFields)
         throws Exception {
+    log.info("Saving object to file "+m_file.getName());
     JGAPGPXStream xstream = new JGAPGPXStream();
     init(xstream);
-    FileOutputStream fos = new FileOutputStream(m_file);
     if (a_omitConfig) {
+      xstream.omitField(GPProgramBase.class,"m_conf");
+      xstream.omitField(ProgramChromosome.class,"m_configuration");
+      xstream.omitField(BaseGPChromosome.class,"m_configuration");
       xstream.omitField(GPPopulation.class, "m_config");
       xstream.omitField(GPProgram.class, "m_conf");
       xstream.omitField(GPProgramBase.class, "m_conf");
@@ -76,7 +79,6 @@ public class PersistableObject {
     FileWriter fw = new FileWriter(m_file);
     CompactWriter compact = new CompactWriter(fw);
     xstream.marshal(m_object, compact);
-    fos.close();
   }
 
   public Object load()
@@ -85,7 +87,7 @@ public class PersistableObject {
   }
 
   public Object load(File a_file) {
-    log.info("Loading database for file "+a_file.getName());
+    log.info("Loading object from file "+a_file.getName());
     JGAPGPXStream xstream = new JGAPGPXStream();
     init(xstream);
     try {
