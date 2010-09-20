@@ -39,7 +39,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -172,7 +172,7 @@ public class MinimizingMakeChange {
     IChromosome bestSolutionSoFar = population.getFittestChromosome();
     System.out.println("The best solution has a fitness value of " +
                        bestSolutionSoFar.getFitnessValue());
-    System.out.println("It contained the following: ");
+    System.out.println("It contains the following: ");
     System.out.println("\t" +
                        MinimizingMakeChangeFitnessFunction.
                        getNumberOfCoinsAtGene(
