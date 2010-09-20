@@ -16,7 +16,7 @@ import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.converters.*;
 
 /**
- * Converts a GPPopulation object.
+ * Converts an XStream to a GPPopulation object.
  *
  * @author Klaus Meffert
  * @since 3.3.4
@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.converters.*;
 public class GPPopulationConverter
     extends XStreamPassThruConverter implements Converter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public GPPopulationConverter(XStream a_xstream, GPConfiguration a_conf) {
     super(a_xstream, GPPopulation.class);
