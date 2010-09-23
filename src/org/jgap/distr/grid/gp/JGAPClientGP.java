@@ -54,7 +54,7 @@ public class JGAPClientGP
   /**@todo copy good results to online folder*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static final String APP_VERSION = "1.02a";
 
@@ -1110,17 +1110,6 @@ public class JGAPClientGP
       // ---------------------
       GridNodeClientConfig config = new GridNodeClientConfig();
       Options options = makeOptions();
-      options.addOption("l", true, "LAN or WAN");
-//      options.addOption("receive_only", false,
-//                        "Only receive results, don't send requests");
-//      options.addOption("list", false,
-//                        "List requests and results");
-//      options.addOption("no_comm", false,
-//                        "Don't receive any results, don't send requests");
-//      options.addOption("no_evolution", false,
-//                        "Don't perform genetic evolution");
-//      options.addOption("help", false,
-//                        "Display all available options");
       CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
       SystemKit.printHelp(cmd, options);
       String networkMode = cmd.getOptionValue("l", "LAN");
@@ -1168,6 +1157,7 @@ public class JGAPClientGP
 
   protected static Options makeOptions() {
     Options options = new Options();
+    options.addOption("l", true, "LAN or WAN");
     options.addOption("no_comm", false,
                       "Don't receive any results, don't send requests");
     options.addOption("no_evolution", false,
