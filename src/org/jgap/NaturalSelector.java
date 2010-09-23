@@ -24,7 +24,7 @@ import org.jgap.data.config.*;
 public abstract class NaturalSelector
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.31 $";
+  private static final String CVS_REVISION = "$Revision: 1.32 $";
 
   protected /*transient*/ Configuration m_config;
 
@@ -51,9 +51,12 @@ public abstract class NaturalSelector
   public NaturalSelector(Configuration a_config) {
     this();
     m_config = a_config;
+    if(m_config == null) {
+      throw new IllegalArgumentException("Configuration must not be null!");
+    }
     // Monitoring stuff:
     IEvolutionMonitor m_monitor = getConfiguration().getMonitor();
-    boolean m_monitorActive = m_monitor != null;
+    m_monitorActive = m_monitor != null;
   }
 
   /**
