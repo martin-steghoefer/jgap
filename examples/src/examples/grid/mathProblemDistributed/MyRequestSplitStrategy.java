@@ -24,7 +24,7 @@ import org.jgap.distr.grid.gp.*;
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private GPConfiguration m_config;
 
@@ -72,6 +72,9 @@ public class MyRequestSplitStrategy
     // Only send 10% of the population to the workers.
     // -----------------------------------------------
     int count = getConfiguration().getPopulationSize() / 10;
+    if(count < 1) {
+      count = 1;
+    }
     for (int j = 0; j < requests; j++) {
       result[j] = (JGAPRequestGP) a_request.newInstance("Population " + j, "todo"+j,0);
       // Setup JGAP configuration for worker.
