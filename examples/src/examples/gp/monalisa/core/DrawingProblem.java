@@ -27,7 +27,7 @@ import examples.gp.monalisa.core.commands.*;
 public class DrawingProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public DrawingProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -53,14 +53,15 @@ public class DrawingProblem
     CommandGene[][] nodeSets = { {
         SUBPROGRAM,
         new SubProgram(conf, new Class[] {Void.class, Void.class}, true),
-        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
-                       Void.class}, true),
-        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
-                       Void.class, Void.class}, true),
-        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
-                       Void.class, Void.class, Void.class}, true),
+//        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
+//                       Void.class}, true),
+//        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
+//                       Void.class, Void.class}, true),
+//        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
+//                       Void.class, Void.class, Void.class}, true),
         new SubProgram(conf, 4, Void.class, 2, 7, true),
-        new SubProgram(conf, 8, Void.class, 5, 20, true),
+        new SubProgram(conf, 6, Void.class, 5, 10, true),
+        new SubProgram(conf, 8, Void.class, 7, 15, true),
         new PointConstructor(conf),
         new PolygonConstructor(conf, 5, true),
         new ColorConstructor(conf),
@@ -73,7 +74,7 @@ public class DrawingProblem
                      conf.getTarget().getHeight() - 1, true,
                      TerminalType.HEIGHT.intValue()), }
     };
-    int[] minDepth = new int[] {4};
+    int[] minDepth = new int[] {12};
     int[] maxDepth = new int[] {50};
     int maxNodes = 3000;
     boolean[] fullMode = new boolean[] {true};
