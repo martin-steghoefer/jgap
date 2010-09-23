@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -76,7 +76,7 @@ public class ProgramChromosomeTest
     pc.growOrFullNode(0, 3, CommandGene.IntegerClass, 0, funcSet, null,
                       0, true, -1, false);
     pc.redepth();
-    assertEquals(CMD_SUB_V_I, pc.getNode(0));
+    assertEquals(CMD_SUB_V_I.toString(), pc.getNode(0).toString());
     assertEquals(CMD_FOR.toString(), pc.getNode(1).toString());
     assertSame(CMD_CONST2, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
@@ -115,7 +115,7 @@ public class ProgramChromosomeTest
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_V_I,
                       0, true, -1, false);
     pc.redepth();
-    assertEquals(CMD_SUB_V_I, pc.getNode(0));
+    assertEquals(CMD_SUB_V_I.toString(), pc.getNode(0).toString());
     assertEquals(CMD_FOR.toString(), pc.getNode(1).toString());
     assertSame(CMD_CONST4, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
