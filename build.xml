@@ -12,7 +12,7 @@
       <include name="junit-addons-1.4.jar"/>
       <include name="junit3.8.1.jar"/>
 <!--      <include name="jeksparser.jar"/> -->
-      <include name="commons-cli-1.0.jar"/>
+      <include name="commons-cli-1.2.jar"/>
       <include name="log4j.jar"/>
       <include name="jcgrid.jar"/>
       <include name="TableLayout.jar"/>
