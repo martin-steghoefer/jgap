@@ -30,6 +30,7 @@
 * Fixed AveragingChrossoverOperator: added cloning
 * Fixed GP functions CountMatrix and ResetMatrix
 * Fixed toString of GP function ADF
+* Fixed constructor of NaturalSelector
 * GP function If: Fixed clone, extended functionality
 * GP function IfElse: extended functionality
 * Added JGAPFactory.getUniqueKey
