@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -116,11 +116,12 @@ public class GPGenotypeTest
     // Evaluate program 1
     // ------------------
     IGPProgram p = pop.getGPProgram(0);
-    assertEquals(5, p.getChromosome(0).size());
+    assertEquals(8, p.getChromosome(0).size());
     assertEquals(CMD_SUB_V_V, p.getChromosome(0).getNode(0));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(1).getClass());
     assertSame(CMD_CONST1, p.getChromosome(0).getNode(2));
-    assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(3).getClass());
+    assertEquals(SubProgram.class, p.getChromosome(0).getNode(3).getClass());
+//    assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(3).getClass());
     assertSame(CMD_CONST1, p.getChromosome(0).getNode(4));
     // Evaluate program 2
     // ------------------
