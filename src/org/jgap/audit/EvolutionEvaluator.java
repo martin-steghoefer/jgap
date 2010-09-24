@@ -14,7 +14,7 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.eval.*;
 
-import examples.*;
+//import examples.*;
 
 /**
  * Evaluates evolution progress thas has previously been tracked by
@@ -31,7 +31,7 @@ import examples.*;
  */
 public class EvolutionEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private PopulationHistoryIndexed m_monitorData;
 
@@ -251,15 +251,15 @@ public class EvolutionEvaluator {
    * @author Klaus Meffert
    * @since 3.5
    */
-  public static void main(String[] args)
-      throws Exception {
-    args = new String[2];
-    args[0] = "93";
-    args[1] = "MONITOR";
-    MinimizingMakeChange.main(args);
-    IEvolutionMonitor monitor = MinimizingMakeChange.m_monitor;
-    EvolutionEvaluator evaluator = new EvolutionEvaluator(
-        monitor.getPopulations());
-    evaluator.evaluate();
-  }
+//  public static void main(String[] args)
+//      throws Exception {
+//    args = new String[2];
+//    args[0] = "93";
+//    args[1] = "MONITOR";
+//    MinimizingMakeChange.main(args);
+//    IEvolutionMonitor monitor = MinimizingMakeChange.m_monitor;
+//    EvolutionEvaluator evaluator = new EvolutionEvaluator(
+//        monitor.getPopulations());
+//    evaluator.evaluate();
+//  }
 }
