@@ -38,7 +38,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Variable vx;
 
@@ -101,6 +101,7 @@ public class MathProblem
         new Divide(conf, CommandGene.FloatClass),
         new Sine(conf, CommandGene.FloatClass),
         new Exp(conf, CommandGene.FloatClass),
+        new Subtract(conf, CommandGene.FloatClass),
         new Pow(conf, CommandGene.FloatClass),
         new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, true),
         // ADF-relevant:
