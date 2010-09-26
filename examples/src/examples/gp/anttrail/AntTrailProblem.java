@@ -38,7 +38,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   protected int[][] m_map;
 
@@ -151,7 +151,7 @@ public class AntTrailProblem
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 5000, new boolean[] {true}, true);
+        minDepths, maxDepths, 1000, new boolean[] {true}, true);
   }
 
   private int[][] readTrail(String a_filename)
