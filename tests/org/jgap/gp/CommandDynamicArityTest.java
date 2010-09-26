@@ -24,7 +24,7 @@ import junit.framework.*;
 public class CommandDynamicArityTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandDynamicArityTest.class);
@@ -101,6 +101,7 @@ public class CommandDynamicArityTest
         2, 1, 3, 0, 4, 6, 2, 5, 0, 5, 1, 1, 3, 0, 4, 9, 11, 45, 7, 3, 13, 2, 0,
         0, 0, 1
     });
+    m_gpconf.setDynamizeArityProb(1);
     GPGenotype gp;
     Class[] types = {
         Void.class};
@@ -128,7 +129,6 @@ public class CommandDynamicArityTest
       if (IfDyn.class.isAssignableFrom(gene.getClass())) {
         IfDyn ifdyn = (IfDyn) gene;
         int arity = ifdyn.getArity(null);
-        /**@todo check why arity does not vary*/
         switch (index) {
           case 0:
             assertEquals(4, arity);
@@ -147,6 +147,12 @@ public class CommandDynamicArityTest
             break;
           case 5:
             assertEquals(4, arity);
+            break;
+          case 7:
+            assertEquals(3, arity);
+            break;
+          case 9:
+            assertEquals(3, arity);
             break;
         }
         index++;
