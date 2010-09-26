@@ -1,8 +1,10 @@
 3.6
 -----------------------------------------------------------
-* added guard to ADF.getArity
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
+* added guard to ADF.getArity
+* Fibonacci GP example: Beautified output of free memory
+* Speedup of ProgramChromosome.isPossible
 
 3.5
 -----------------------------------------------------------
