@@ -16,6 +16,9 @@ package examples.island;
  * @since 3.5
  */
 public class IslandExample {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   private int nextNumber;
 
   public IslandExample() {
