@@ -1,11 +1,13 @@
 3.6
 -----------------------------------------------------------
+* GP: optimized crossing over
 * Added Island example for GP, see examples.gp.island
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
 * Added guard to ADF.getArity
 * Fibonacci GP example: Beautified output of free memory
 * Speedup of ProgramChromosome.isPossible
+* Enhanced Javadoc
 
 3.5
 -----------------------------------------------------------
