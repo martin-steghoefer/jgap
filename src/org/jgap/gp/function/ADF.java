@@ -34,7 +34,7 @@ public class ADF
 //    implements ICloneable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private int m_chromosomeNum;
 
@@ -80,7 +80,7 @@ public class ADF
   }
 
   public int getArity(IGPProgram a_individual) {
-    if (a_individual.size() <= m_chromosomeNum) {
+    if (a_individual == null || a_individual.size() <= m_chromosomeNum) {
       return 0;
     }
     return a_individual.getChromosome(m_chromosomeNum).getArity();
