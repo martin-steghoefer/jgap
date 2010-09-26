@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -233,7 +233,7 @@ public class ProgramChromosome
    * @param a_argTypes the array of argument types for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    * @param a_grow true: use grow method; false: use full method
-   * @param a_tries maximum number of tries to create a valid program
+   * @param a_tries maximum number of tries for creating a valid program
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -420,6 +420,9 @@ public class ProgramChromosome
     return s;
   }
 
+
+  private Map<NodeInfo,Boolean> m_possibleNodes = new HashMap();
+
   /**
    * Determines whether there exists a function or terminal in the given node
    * set with the given return and sub return type.
@@ -438,20 +441,37 @@ public class ProgramChromosome
   public boolean isPossible(Class a_returnType, int a_subReturnType,
                             CommandGene[] a_nodeSet,
                             boolean a_function, boolean a_growing) {
+    NodeInfo nodeInfo = new NodeInfo(a_returnType, a_subReturnType);
+    Boolean result = m_possibleNodes.get(nodeInfo);
+    if(result != null) {
+      return result;
+    }
     IGPProgram ind = getIndividual();
     for (int i = 0; i < a_nodeSet.length; i++) {
       if (a_nodeSet[i].getReturnType() == a_returnType
           && (a_subReturnType == 0
               || a_subReturnType == a_nodeSet[i].getSubReturnType())) {
         if (a_nodeSet[i].getArity(ind) == 0 && (!a_function || a_growing)) {
+          m_possibleNodes.put(nodeInfo, true);
           return true;
         }
         if (a_nodeSet[i].getArity(ind) != 0 && a_function) {
+          m_possibleNodes.put(nodeInfo, true);
           return true;
         }
       }
     }
+    m_possibleNodes.put(nodeInfo, false);
     return false;
+  }
+
+  private class NodeInfo {
+    public Class returnType;
+    public int subReturnType;
+    public NodeInfo(Class a_returnType, int a_subReturnType) {
+      returnType = a_returnType;
+      subReturnType = a_subReturnType;
+    }
   }
 
   /**
