@@ -35,7 +35,7 @@ import org.jgap.distr.grid.gp.JGAPGPXStream;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   transient static final Logger LOGGER = Logger.getLogger(Fibonacci.class);
 
@@ -236,7 +236,8 @@ public class Fibonacci
             double allBestFitness = genotype.getAllTimeBest().getFitnessValue();
             LOGGER.info("Evolving generation " + evno
                         + ", all-time-best fitness: " + allBestFitness
-                        + ", memory free: " + freeMem + " MB");
+                        + ", memory free: "
+                        + NumberKit.niceDecimalNumber(freeMem, 2) + " MB");
           }
           if (evno > 3000) {
             t.stop();
