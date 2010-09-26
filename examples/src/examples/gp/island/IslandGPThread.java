@@ -14,12 +14,11 @@ import org.jgap.gp.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.terminal.*;
-
 import examples.*;
 
 /**
- * Simple example of an island thread. It utilizes the former example class
- * MinimizingMakeChangeFitnessFunction.
+ * Simple GP example of an island thread. It utilizes the former example class
+ * SimpleExample in the gp package.
  *
  * @author Klaus Meffert
  * @since 3.6
@@ -27,7 +26,7 @@ import examples.*;
 public class IslandGPThread
     extends GPProblem implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPGenotype gen = null;
 
@@ -77,7 +76,7 @@ public class IslandGPThread
         // More challenging: Define a terminal that can be within -10 and 10
 //        new Constant(conf, CommandGene.IntegerClass, 0),
 //        new Constant(conf, CommandGene.IntegerClass, -8),
-        new Terminal(conf, CommandGene.IntegerClass,-10,10,true),
+        new Terminal(conf, CommandGene.IntegerClass, -10, 10, true),
         // Boolean operators to use.
         // _------------------------
         new GreaterThan(conf, CommandGene.IntegerClass),
@@ -109,7 +108,7 @@ public class IslandGPThread
                                      (20 + m_nextNumber * 5));
       }
       m_finished = true;
-      m_best = gen.getFittestProgram();;
+      m_best = gen.getFittestProgram(); ;
       // Use a lock to avoid cluttered output of best solution.
       // ------------------------------------------------------
       while (locked) {
@@ -118,13 +117,13 @@ public class IslandGPThread
       try {
         locked = true;
         System.out.println("Thread " + m_nextNumber + ": Best solution:");
-        if(m_best == null) {
+        if (m_best == null) {
           System.out.println(" None yet.");
         }
         else {
-            System.out.println("  Fitness value: " +
-                               m_best.getFitnessValue());
-            System.out.print("  Solution: " + m_best.toStringNorm(0));
+          System.out.println("  Fitness value: " +
+                             m_best.getFitnessValue());
+          System.out.println("  Solution: " + m_best.toStringNorm(0));
         }
         System.out.println("----");
       } finally {
@@ -159,10 +158,15 @@ public class IslandGPThread
         vx.set(new Integer(i));
         boolean y;
         if (i > 0) {
-          y = true;
+          if (i != 2) {
+            y = true;
+          }
+          else {
+            y = false;
+          }
         }
         else {
-          if (i != -8 && i != - 5) {
+          if (i != -8 && i != -5) {
             y = false;
           }
           else {

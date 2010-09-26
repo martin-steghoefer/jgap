@@ -10,14 +10,14 @@
 package examples.gp.island;
 
 /**
- * Simple example on how to build and run an island model with JGAP.
+ * Simple example on how to build and run an GP island model with JGAP.
  *
  * @author Klaus Meffert
  * @since 3.6
  */
 public class IslandGPExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int nextNumber;
 
