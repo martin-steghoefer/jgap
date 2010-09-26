@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -374,18 +374,6 @@ public class GPGenotype
     // Clean up memory.
     // ----------------
     System.gc();
-    // Determine which GP functions are never used as child.
-    // -----------------------------------------------------
-//    Map<String, CommandGene> invalidNodes = verifyChildNodes(a_conf, a_types,
-//        a_nodeSets);
-//    outputWarning(invalidNodes);
-    // Determine the depths for which GP functions are not possible.
-    // -------------------------------------------------------------
-//    Map<CommandGene, int[]> invalidDepthNodes = verifyDepthsForNodes(a_conf,
-//        a_types, a_minDepths, a_maxDepths, a_maxNodes, a_nodeSets);
-//    outputDepthInfo(invalidDepthNodes);
-    /**@todo implement*/
-
     if (a_verboseOutput) {
       LOGGER.info("Creating initial population");
       LOGGER.info("Mem free: "
@@ -400,12 +388,26 @@ public class GPGenotype
     } catch (Exception ex) {
       throw new InvalidConfigurationException(ex);
     }
+    // Clean up memory.
+    // ----------------
     System.gc();
     if (a_verboseOutput) {
       LOGGER.info("Mem free after creating population: "
                   + SystemKit.niceMemory(SystemKit.getTotalMemoryMB()) + " MB");
     }
     checkErroneousPop(pop, " after creating population/2");
+    // Determine which GP functions are never used as child.
+    // -----------------------------------------------------
+    Map<String, CommandGene> invalidNodes = verifyChildNodes(a_conf, a_types,
+        a_nodeSets);
+    outputWarning(invalidNodes);
+    // Determine the depths for which GP functions are not possible.
+    // -------------------------------------------------------------
+    Map<CommandGene, int[]> invalidDepthNodes = verifyDepthsForNodes(pop, a_conf,
+        a_types, a_minDepths, a_maxDepths, a_maxNodes, a_nodeSets);
+    outputDepthInfo(invalidDepthNodes);
+    /**@todo remove unused nodes from configuration*/
+
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
@@ -583,6 +585,7 @@ public class GPGenotype
           getGPConfiguration().getEventManager().fireGeneticEvent(
               new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
         } catch (IllegalArgumentException iex) {
+          iex.printStackTrace();
           /**@todo should not happen but does with ensureUniqueness(..)*/
         }
         if (m_verbose) {
@@ -694,30 +697,41 @@ public class GPGenotype
           do {
             try {
               checkErroneousProg(i1,
-                                 " at start of evolution (index " + i + "/01)", false);
-              checkErroneousProg(i2,
-                                 " at start of evolution (index " + i + "/02)", false);
-              IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
-                  i2);
-              newPopulation.setGPProgram(i, newIndividuals[0]);
-              newPopulation.setGPProgram(i + 1, newIndividuals[1]);
-              try {
-                checkErroneousProg(newIndividuals[0],
+                                 " at start of evolution (index " + i +
+                                 "/01)", false);
+              if (i1 != i2) {
+                // Crossing over the a program with itself does not lead anywhere.
+                // ---------------------------------------------------------------
+                checkErroneousProg(i2,
                                    " at start of evolution (index " + i +
-                                   "/11)", false);
-              } catch (RuntimeException t) {
-                writeToFile(i1, i2, newIndividuals[0],
-                            "Error in first X-over program");
-                throw t;
+                                   "/02)", false);
+                IGPProgram[] newIndividuals = conf.getCrossMethod().operate(
+                    i1,
+                    i2);
+                newPopulation.setGPProgram(i, newIndividuals[0]);
+                newPopulation.setGPProgram(i + 1, newIndividuals[1]);
+                try {
+                  checkErroneousProg(newIndividuals[0],
+                                     " at start of evolution (index " + i +
+                                     "/11)", false);
+                } catch (RuntimeException t) {
+                  writeToFile(i1, i2, newIndividuals[0],
+                              "Error in first X-over program");
+                  throw t;
+                }
+                try {
+                  checkErroneousProg(newIndividuals[1],
+                                     " at start of evolution (index " + i +
+                                     "/12)", false);
+                } catch (RuntimeException t) {
+                  writeToFile(i1, i2, newIndividuals[1],
+                              "Error in second X-over program");
+                  throw t;
+                }
               }
-              try {
-                checkErroneousProg(newIndividuals[1],
-                                   " at start of evolution (index " + i +
-                                   "/12)", false);
-              } catch (RuntimeException t) {
-                writeToFile(i1, i2, newIndividuals[1],
-                            "Error in second X-over program");
-                throw t;
+              else {
+                newPopulation.setGPProgram(i, i1);
+                newPopulation.setGPProgram(i + 1, i2);
               }
               i++;
               break;
@@ -754,21 +768,22 @@ public class GPGenotype
           reproduction++;
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
-      }
-      // Add new random programs.
-      // ------------------------
-      for (int i = popSize1; i < popSize; i++) {
-        creation++;
-        // Randomly determine depth between minInitDepth and maxInitDepth.
-        // ---------------------------------------------------------------
-        int depth = conf.getMinInitDepth()
-            + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
-                             + 1);
-        int tries = 0;
-        do {
-          try {
-            // Randomize grow option as growing produces a valid program
-            // more likely than the full mode.
+        }
+            // Add new random programs.
+            // ------------------------
+            for (int i = popSize1; i < popSize; i++) {
+          creation++;
+          // Randomly determine depth between minInitDepth and maxInitDepth.
+          // ---------------------------------------------------------------
+          int depth = conf.getMinInitDepth()
+              + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
+                               + 1);
+          int tries = 0;
+          int nogc = 0;
+          do {
+            try {
+              // Randomize grow option as growing produces a valid program
+              // more likely than the full mode.
             // ---------------------------------------------------------
             boolean grow;
             if (i % 2 == 0 || random.nextInt(8) > 6) {
@@ -795,6 +810,7 @@ public class GPGenotype
             break;
           } catch (IllegalStateException iex) {
             tries++;
+            nogc++;
             /**@todo instead of re-using prototype, create a program anyway
              * (ignoring the validator) in case it is the last try.
              * Or even better: Make the validator return a defect rate!
@@ -828,10 +844,14 @@ public class GPGenotype
                 }
               }
             }
+            if(nogc > 5) {
+              nogc = 0;
+              System.gc();
+            }
           }
         } while (true)
         ;
-      }
+        }
       LOGGER.debug("Did "
                    + crossover + " x-overs, "
                    + reproduction + " reproductions, "
@@ -878,9 +898,9 @@ public class GPGenotype
       while (!Thread.currentThread().interrupted()) {
         evolve();
         calcFitness();
-        // Pause between evolutions to avoid 100% CPU load.
-        // ------------------------------------------------
-        Thread.sleep(10);
+        // Do G.C. for cleanup and to avoid 100% CPU load.
+        // -----------------------------------------------
+        System.gc();
       }
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -1323,8 +1343,10 @@ public class GPGenotype
   }
 
   /**
+   * Determine impossible functions and terminals to obtimize creation of GP
+   * programs.
    *
-   * @param a_conf GPConfiguration
+   * @param a_conf GP configuration
    * @param a_types Class[]
    * @param a_nodeSets CommandGene[][]
    * @return Map
@@ -1438,7 +1460,9 @@ public class GPGenotype
   }
 
   /**
-   * Outputs the nodes that are never used.
+   * Outputs the nodes that are never used because they would result in creating
+   * GP programs which would not satisfy the depth constraints given in
+   * configuration.
    *
    * @param a_invalidDepths impossible depths for nodes
    *
@@ -1448,7 +1472,7 @@ public class GPGenotype
   protected static void outputDepthInfo(Map<CommandGene, int[]> a_invalidDepths) {
     if (a_invalidDepths != null && a_invalidDepths.size() > 0) {
       LOGGER.info("Your configuration contains commands that are not possible"
-                  + "for certain depths : ");
+                  + "for certain depths: ");
       Iterator it = a_invalidDepths.keySet().iterator();
       while (it.hasNext()) {
         CommandGene node = (CommandGene) it.next();
@@ -1466,7 +1490,7 @@ public class GPGenotype
     }
   }
 
-  public static Map<CommandGene, int[]> verifyDepthsForNodes(
+  public static Map<CommandGene, int[]> verifyDepthsForNodes(GPPopulation a_pop,
       GPConfiguration a_conf, Class[] a_types, int[] a_minDepths,
       int[] a_maxDepths, int a_maxNodes, CommandGene[][] a_nodeSets) {
     List<CommandGene> triedNodes;
@@ -1482,14 +1506,15 @@ public class GPGenotype
         // ----------------------------------------------
         possibleNodes = new Vector();
         /**@todo impl*/
-        for (int k = 0; k < a_nodeSets[i].length; j++) {
+        for (int k = 0; k < a_nodeSets[i].length; k++) {
           CommandGene nodeInQuestion = a_nodeSets[i][k];
           if (triedNodes.contains(nodeInQuestion)) {
             continue;
           }
           boolean valid = false;
           for(int l=0;l<nodeToCheck.size();l++) {
-            if (nodeInQuestion.getReturnType() == nodeToCheck.getChildType(null, l)) {
+            IGPProgram ind = a_pop.getGPProgram(0);
+            if (nodeInQuestion.getReturnType() == nodeToCheck.getChildType(ind, l)) {
               if (nodeInQuestion.getSubReturnType() == 0 ||
               nodeInQuestion.getSubReturnType() == nodeToCheck.getSubChildType(l)) {
                 valid = true;
