@@ -14,7 +14,6 @@ import org.jgap.gp.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.terminal.*;
-import examples.*;
 
 /**
  * Simple GP example of an island thread. It utilizes the former example class
@@ -26,7 +25,7 @@ import examples.*;
 public class IslandGPThread
     extends GPProblem implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private GPGenotype gen = null;
 
@@ -36,25 +35,48 @@ public class IslandGPThread
 
   private boolean m_finished;
 
+  private static GPConfiguration config;
+
   protected static Variable vx;
 
-  public IslandGPThread(int nextNumber)
+  public GPConfiguration createConfiguration(String a_threadKey)
       throws Exception {
-    m_nextNumber = nextNumber;
-    String threadKey = Thread.currentThread().getId() + "/" + m_nextNumber;
+    if (config == null) {
+      System.out.println("  Creating new configuration");
+      config = new GPConfiguration(a_threadKey, a_threadKey);
+      config.setMaxInitDepth(5);
+      config.setPopulationSize(150);
+      config.setFitnessFunction(new SimpleFitnessFunction());
+      config.setStrictProgramCreation(false);
+      config.setProgramCreationMaxTries(5);
+      config.setMaxCrossoverDepth(5);
+      // Lower fitness value is better as it indicates error rate.
+      // ---------------------------------------------------------
+      config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
+      return config;
+    }
+    else {
+      System.out.println("  Cloning configuration");
+      GPConfiguration configClone = (GPConfiguration) config.newInstanceGP(
+          a_threadKey, a_threadKey);
+      return configClone;
+    }
+  }
+
+  private IslandGPThread(int nextNumber)
+      throws Exception {
+  }
+
+  public static IslandGPThread newInstance(int nextNumber)
+      throws Exception {
+    IslandGPThread inst = new IslandGPThread(nextNumber);
+    inst.m_nextNumber = nextNumber;
+    String threadKey = Thread.currentThread().getId() + "/" + inst.m_nextNumber;
     System.out.println("Starting thread: " + nextNumber);
-    GPConfiguration config = new GPConfiguration(threadKey, threadKey);
-    config.setMaxInitDepth(5);
-    config.setPopulationSize(80);
-    config.setFitnessFunction(new SimpleFitnessFunction());
-    config.setStrictProgramCreation(false);
-    config.setProgramCreationMaxTries(5);
-    config.setMaxCrossoverDepth(5);
-    // Lower fitness value is better as fitness value indicates error rate.
-    // --------------------------------------------------------------------
-    config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
-    super.setGPConfiguration(config);
-    gen = create();
+    GPConfiguration config = inst.createConfiguration(threadKey);
+    inst.setGPConfiguration(config);
+    inst.gen = inst.create();
+    return inst;
   }
 
   public GPGenotype create()
@@ -72,9 +94,11 @@ public class IslandGPThread
         // ----------------------------------------------------------
         vx = Variable.create(conf, "X", CommandGene.IntegerClass),
         // Define the terminals (here: numbers) to try:
-        // Easiest: Define two constants
+        // Easiest: Define four constants
         // More challenging: Define a terminal that can be within -10 and 10
 //        new Constant(conf, CommandGene.IntegerClass, 0),
+//        new Constant(conf, CommandGene.IntegerClass, 3),
+//        new Constant(conf, CommandGene.IntegerClass, -5),
 //        new Constant(conf, CommandGene.IntegerClass, -8),
         new Terminal(conf, CommandGene.IntegerClass, -10, 10, true),
         // Boolean operators to use.
@@ -88,7 +112,7 @@ public class IslandGPThread
         // Boolean terminals to use (they do not appear in an optimal solution
         // and make the task more challenging) --> Leave away if needed
         // -------------------------------------------------------------------
-//        new True(conf, CommandGene.BooleanClass),
+        new True(conf, CommandGene.BooleanClass),
         new False(conf, CommandGene.BooleanClass)
     }
     };
@@ -102,8 +126,8 @@ public class IslandGPThread
 
   public void run() {
     try {
-      for (int i = 1; i <= 500; i++) {
-        gen.evolve(5);
+      for (int i = 1; i <= 100; i++) {
+        gen.evolve(2);
         Thread.currentThread().sleep( (int) Math.random() *
                                      (20 + m_nextNumber * 5));
       }
@@ -116,22 +140,33 @@ public class IslandGPThread
       }
       try {
         locked = true;
-        System.out.println("Thread " + m_nextNumber + ": Best solution:");
-        if (m_best == null) {
-          System.out.println(" None yet.");
-        }
-        else {
-          System.out.println("  Fitness value: " +
-                             m_best.getFitnessValue());
-          System.out.println("  Solution: " + m_best.toStringNorm(0));
-        }
-        System.out.println("----");
+        outputBestSolution();
       } finally {
         locked = false;
       }
+    } catch (InterruptedException iex) {
+      // Do nothing, this is an intended exception.
+      // ------------------------------------------
+      ;
     } catch (Exception ex) {
       ex.printStackTrace();
     }
+  }
+
+  /**
+   * outputBestSolution
+   */
+  public void outputBestSolution() {
+    System.out.println("Thread " + m_nextNumber + ": Best solution:");
+    if (m_best == null) {
+      System.out.println(" None yet.");
+    }
+    else {
+      System.out.println("  Fitness value: " +
+                         m_best.getFitnessValue());
+      System.out.println("  Solution: " + m_best.toStringNorm(0));
+    }
+    System.out.println("----");
   }
 
   public boolean isFinished() {
@@ -145,32 +180,38 @@ public class IslandGPThread
     return m_best;
   }
 
+  public GPPopulation getPopulation() {
+    return gen.getGPPopulation();
+  }
+
   class SimpleFitnessFunction
       extends GPFitnessFunction {
     protected double evaluate(final IGPProgram ind) {
       int error = 0;
       Object[] noargs = new Object[0];
       int maxDepth = ind.getChromosome(0).getDepth(0);
-      if (maxDepth > 2) {
-        error += maxDepth - 2;
+      if (maxDepth > 4) {
+        // penalty longer programs.
+        // ------------------------
+        error += maxDepth - 4;
       }
       for (int i = -10; i < 10; i++) {
         vx.set(new Integer(i));
         boolean y;
         if (i > 0) {
-          if (i != 2) {
-            y = true;
+          if (i == 3) {
+            y = false;
           }
           else {
-            y = false;
+            y = true;
           }
         }
         else {
-          if (i != -8 && i != -5) {
-            y = false;
+          if (i == -8 || i == -5) {
+            y = true;
           }
           else {
-            y = true;
+            y = false;
           }
         }
         try {
@@ -178,12 +219,18 @@ public class IslandGPThread
           if (result != y) {
             error += 10;
           }
-        } catch (ArithmeticException ex) { // some illegal operation was executed.
+        } catch (ArithmeticException ex) {
+          // Some illegal operation was executed.
+          // ------------------------------------
           System.out.println("x = " + i);
           System.out.println(ind);
           throw ex;
         }
       }
+//      if (error < 1) {
+//        System.out.println("BEST: "+ind.toStringNorm(0));
+//        ind.execute_boolean(0, noargs);
+//      }
       return error;
     }
   }
