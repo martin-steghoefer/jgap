@@ -30,7 +30,7 @@ import org.jgap.util.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   /**@todo introduce lock for configuration*/
   /**
@@ -535,6 +535,26 @@ public class GPConfiguration
           " not found!");
     }
     m_matrix[a_col][a_row] = a_value;
+  }
+
+  /**
+   * Sets a matrix field with a value.
+   *
+   * @param a_name the name of the matrix
+   * @param a_col column in the matrix
+   * @param a_row row in the matrix
+   * @param a_value the value to set in the matrix at given column and row
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void setMatrix(String a_name, int a_col, int a_row, int a_value) {
+    char[][] m_matrix = m_matrices.get(a_name);
+    if (m_matrix == null) {
+      throw new IllegalArgumentException("Matrix with name " + a_name +
+          " not found!");
+    }
+    m_matrix[a_col][a_row] = (char)a_value;
   }
 
   /**
