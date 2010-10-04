@@ -31,7 +31,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -172,11 +172,15 @@ public abstract class CommandGene
     m_arity = a_arity;
     m_returnType = a_returnType;
     if (a_returnType == Integer.class
-        || a_returnType == Long.class) {
+        || a_returnType == Long.class
+        || a_returnType == CommandGene.IntegerClass
+        || a_returnType == CommandGene.LongClass) {
       m_integerType = true;
     }
     else if (a_returnType == Double.class
-             || a_returnType == Float.class) {
+             || a_returnType == Float.class
+        || a_returnType == CommandGene.DoubleClass
+   || a_returnType == CommandGene.FloatClass) {
       m_floatType = true;
     }
   }
