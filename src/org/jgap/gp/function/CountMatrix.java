@@ -28,7 +28,7 @@ public class CountMatrix
         extends CommandGene implements ICloneable, IMutateable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -193,7 +193,7 @@ public class CountMatrix
    * @since 3.4.3
    */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
-    return Integer.class;
+    return CommandGene.IntegerClass;
   }
 
   /**

@@ -25,7 +25,7 @@ public class ReadFromMatrix
         extends CommandGene implements ICloneable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -95,7 +95,7 @@ public class ReadFromMatrix
    * @since 3.4.3
    */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
-    return Integer.class;
+    return CommandGene.IntegerClass;
   }
 
   /**
