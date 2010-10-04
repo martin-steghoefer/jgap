@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class WriteToMatrix
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
@@ -52,7 +52,29 @@ public class WriteToMatrix
                        int a_subChildType)
       throws InvalidConfigurationException {
     // Arity 3 = column, row, value
-    super(a_conf, 3, CommandGene.VoidClass, 0, new int[] {a_subChildType});
+    super(a_conf, 3, CommandGene.VoidClass, 0, new int[] {a_subChildType, a_subChildType,0});
+    if (a_matrixName == null || a_matrixName.length() < 1) {
+      throw new IllegalArgumentException("Matrix name must not be empty!");
+    }
+    m_matrixName = a_matrixName;
+  }
+
+  /**
+   * Allows setting the sub child types of all three children individually.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_matrixName String
+   * @param a_subChildType int
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public WriteToMatrix(final GPConfiguration a_conf, String a_matrixName,
+                       int a_subChildType1, int a_subChildType2, int a_subChildType3)
+      throws InvalidConfigurationException {
+    // Arity 3 = column, row, value
+    super(a_conf, 3, CommandGene.VoidClass, 0, new int[] {a_subChildType1, a_subChildType2, a_subChildType3});
     if (a_matrixName == null || a_matrixName.length() < 1) {
       throw new IllegalArgumentException("Matrix name must not be empty!");
     }
@@ -78,10 +100,12 @@ public class WriteToMatrix
     check(c);
     int col;
     int row;
-    char value;
     col = c.execute_int(n, 0, args);
     row = c.execute_int(n, 1, args);
-    value = (Character)(c.execute_object(n, 2, args));
+//    char value;
+//    value = (Character)(c.execute_object(n, 2, args));
+    int value;
+    value = (Integer)(c.execute_int(n, 2, args));
     // Write to matrix.
     // ----------------
     getGPConfiguration().setMatrix(m_matrixName, col, row, value);
@@ -103,9 +127,10 @@ public class WriteToMatrix
    */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     if (a_chromNum == 0 || a_chromNum == 1) {
-      return Integer.class;
+      return CommandGene.IntegerClass;
     }
-    return char.class;
+    //    return char.class;
+    return CommandGene.IntegerClass;
   }
 
   /**
