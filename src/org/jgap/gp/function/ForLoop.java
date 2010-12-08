@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class ForLoop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -132,7 +132,7 @@ public class ForLoop
     // ---------------------
     m_memory_name_int = INTERNAL_COUNTER_STORAGE;
     m_memory_name_int += m_varName;
-    m_memory_name_int += getGPConfiguration().getRandomGenerator().nextDouble();
+    m_memory_name_int += getGPConfiguration().getRandomGenerator().nextInt();
   }
 
   public String toString() {
