@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class IfColor
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_type;
 
@@ -36,6 +36,24 @@ public class IfColor
     this(a_conf, a_type, a_color, 0, null);
   }
 
+  /**
+   * Allows setting the sub child type.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_type Class
+   * @param a_color int
+   * @param a_subChildType1 int
+   * @param a_subChildType2 int
+   * @throws InvalidConfigurationException
+   *
+   * @since 3.6
+   */
+  public IfColor(final GPConfiguration a_conf, Class a_type,
+                 int a_color, int a_subChildType1, int a_subChildType2)
+      throws InvalidConfigurationException {
+    this(a_conf, a_type, a_color, 0, new int[]{a_subChildType1, a_subChildType2});
+  }
+
   public IfColor(final GPConfiguration a_conf, Class a_type,
                  int a_color, int a_subReturnType, int[] a_subChildTypes)
       throws InvalidConfigurationException {
@@ -45,7 +63,7 @@ public class IfColor
   }
 
   public String toString() {
-    return "if iscolor(&1) then (&2)";
+    return "if iscolor(" + m_color + ", &1) then (&2)";
   }
 
   /**
