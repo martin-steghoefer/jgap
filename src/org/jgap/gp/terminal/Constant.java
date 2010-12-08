@@ -12,6 +12,7 @@ package org.jgap.gp.terminal;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * A constant remaining the same value all time.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Constant
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Object m_value;
 
@@ -70,5 +71,23 @@ public class Constant
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     return m_value;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public Object clone() {
+    try {
+      Constant result = new Constant(getGPConfiguration(), getReturnType(),
+                                     m_value, getSubReturnType());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }
