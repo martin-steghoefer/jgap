@@ -17,7 +17,7 @@ import org.jgap.util.*;
 
 /**
  * Increments the value of a memory cell and returns the incremented value.
- * Allows presetting a value in case* memory cell is not initialized.
+ * Allows presetting a value in case the memory cell is not initialized.
  *
  * @author Klaus Meffert
  * @since 3.2
@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class IncrementMemory
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_increment;
 
