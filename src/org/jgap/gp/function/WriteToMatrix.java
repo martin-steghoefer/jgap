@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class WriteToMatrix
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
@@ -100,8 +100,16 @@ public class WriteToMatrix
     check(c);
     int col;
     int row;
-    col = c.execute_int(n, 0, args);
     row = c.execute_int(n, 1, args);
+    int maxlen = getGPConfiguration().getMatrix(m_matrixName).length;
+    if(row >= maxlen) {
+      throw new IllegalStateException("Not valid: Row > "+(maxlen-1));
+    }
+    col = c.execute_int(n, 0, args);
+    maxlen = getGPConfiguration().getMatrix(m_matrixName)[0].length;
+    if(col >= maxlen) {
+      throw new IllegalStateException("Not valid: Col > "+(maxlen-1));
+    }
 //    char value;
 //    value = (Character)(c.execute_object(n, 2, args));
     int value;
@@ -185,8 +193,9 @@ public class WriteToMatrix
    */
   public Object clone() {
     try {
+      int[] subChilds = getSubChildTypes();
       WriteToMatrix result = new WriteToMatrix(getGPConfiguration(),
-          m_matrixName, getSubChildType(0));
+          m_matrixName, subChilds[0], subChilds[1], subChilds[2]);
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
