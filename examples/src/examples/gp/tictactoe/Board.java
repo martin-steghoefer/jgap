@@ -22,7 +22,7 @@ public class Board {
 
   private int m_lastColor;
 
-  public static int WIDTH = 2;
+  public static int WIDTH = 3;
 
   public static int HEIGHT = WIDTH;
 
@@ -106,7 +106,7 @@ public class Board {
         || x > WIDTH || y > HEIGHT) {
       throw new IllegalArgumentException("x and y must be between 1.." + WIDTH);
     }
-    if (m_readPositions.get(x+"_"+y) == null) {
+    if (m_readPositions.get(x + "_" + y) == null) {
       m_readPositionCount++;
       m_readPositions.put(x + "_" + y, "jgap");
     }
@@ -123,8 +123,8 @@ public class Board {
       throw new IllegalArgumentException("Index must be between 1.." +
           (WIDTH * HEIGHT));
     }
-    int x = (a_index - 1) / WIDTH;
-    int y = (a_index - 1) % WIDTH;
+    int x = a_index - 1 / WIDTH - 1;
+    int y = a_index - 1 % HEIGHT - 1;
     return m_board[x][y];
   }
 

@@ -14,10 +14,17 @@ import org.jgap.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
+/**
+ * Puts a stone on a board. Accepts two parameters, representing X and Y
+ * coordinates on the board.
+ *
+ * @author Klaus Meffert
+ * @since 3.2
+ */
 public class PutStone
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Board m_board;
 
@@ -44,6 +51,12 @@ public class PutStone
     check(c);
     int x = c.execute_int(n, 0, args);
     int y = c.execute_int(n, 1, args);
+//    if (!c.getGene(1).getClass().getName().equals("org.jgap.gp.function.ReadTerminalIndexed")
+//        ||
+//        !c.getGene(2).getClass().getName().equals("org.jgap.gp.function.ReadTerminalIndexed")) {
+//      int a = 2;
+//      a *= 3;
+//    }
     // Put stone on board.
     // -------------------
     boolean gameWon = m_board.putStone(x, y, m_color);

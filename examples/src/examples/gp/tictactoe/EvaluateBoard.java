@@ -9,9 +9,10 @@
  */
 package examples.gp.tictactoe;
 
-import org.jgap.gp.*;
 import org.jgap.*;
+import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Evaluates the board. Generates one unique number for each board position.
@@ -20,15 +21,16 @@ import org.jgap.gp.impl.*;
  * @since 3.2
  */
 public class EvaluateBoard
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Board m_board;
 
   private int m_index;
 
   private Class m_type;
+  private int m_subChildType;
 
   public EvaluateBoard(final GPConfiguration a_conf, Board a_board,
                        int a_index)
@@ -42,6 +44,8 @@ public class EvaluateBoard
     super(a_conf, 0, CommandGene.VoidClass, a_subReturnType, null);
     m_board = a_board;
     m_index = a_index;
+    m_type = CommandGene.IntegerClass;
+    m_subChildType = -1;
   }
 
   public EvaluateBoard(final GPConfiguration a_conf, Board a_board,
@@ -57,6 +61,7 @@ public class EvaluateBoard
     m_board = a_board;
     m_index = -1;
     m_type = a_type;
+    m_subChildType = a_subChildType;
   }
 
   public String toString() {
@@ -116,5 +121,30 @@ public class EvaluateBoard
       memoryIndex = m_index;
     }
     getGPConfiguration().storeIndexedMemory(memoryIndex, new Integer(evaluation));
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public Object clone() {
+    try {
+      EvaluateBoard result;
+      if (m_subChildType >= 0) {
+        result = new EvaluateBoard(getGPConfiguration(), m_board,
+            m_type, getSubReturnType(), m_subChildType);
+      }
+      else {
+        result = new EvaluateBoard(getGPConfiguration(), m_board, m_index,
+            getSubReturnType());
+      }
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }

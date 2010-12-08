@@ -12,11 +12,13 @@ package examples.gp.tictactoe;
 import org.jgap.gp.*;
 import org.jgap.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.ICloneable;
+import org.jgap.util.CloneException;
 
 public class CountStones
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Board m_board;
 
@@ -40,7 +42,7 @@ public class CountStones
   }
 
   public String toString() {
-    return "Count Stones(" + m_color + "," + m_memoryNameBase + ")";
+    return "Count Stones(" + m_color + ", " + m_memoryNameBase + ")";
   }
 
   /**
@@ -118,5 +120,23 @@ public class CountStones
 
   private void store(String memoryName, int a_count) {
     getGPConfiguration().storeInMemory(memoryName, new Integer(a_count));
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public Object clone() {
+    try {
+      CountStones result = new CountStones(getGPConfiguration(), m_board,
+          m_color, m_memoryNameBase, getSubReturnType());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }
