@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class ResetMatrix
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
@@ -58,7 +58,7 @@ public class ResetMatrix
   }
 
   public String toString() {
-    return "resetMatrix(" + m_matrixName + ", " + m_filler + ")";
+    return "resetMatrix(" + m_matrixName + ", '" + m_filler + "')";
   }
 
   /**
@@ -68,7 +68,7 @@ public class ResetMatrix
    * @since 3.4.3
    */
   public String getName() {
-    return "ResetMatrix(" + m_matrixName + ", " + m_filler + ")";
+    return "ResetMatrix(" + m_matrixName + ", '" + m_filler + "')";
   }
 
   @Override

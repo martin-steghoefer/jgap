@@ -26,7 +26,7 @@ public class ReplaceInMatrix
         extends CommandGene implements ICloneable, IMutateable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
   /**
    * Symbolic name of the matrix. Must correspond with a chosen name for
    * ReadFromMatrix.
@@ -73,7 +73,8 @@ public class ReplaceInMatrix
   }
 
   public String toString() {
-    return "replaceInMatrix(" + m_matrixName + ")";
+    return "replaceInMatrix(" + m_matrixName + ", '" + m_targetCharacters + "', '" +
+        m_replacement + "')";
   }
 
   /**
