@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ReadTerminalIndexed
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Index of the memory cell to read.
@@ -67,8 +67,11 @@ public class ReadTerminalIndexed
     // -----------------
     try {
       try {
-        return ( (Integer) getGPConfiguration().readIndexedMemory(m_index)).
-            intValue();
+        Integer value = (Integer) getGPConfiguration().readIndexedMemory(m_index);
+        if (value == null) {
+          return 0;
+        }
+        return value.intValue();
       } catch (NullPointerException nex) {
         throw new IllegalArgumentException();
       }

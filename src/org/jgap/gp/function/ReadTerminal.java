@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ReadTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -49,7 +49,7 @@ public class ReadTerminal
   }
 
   public String toString() {
-    return "read_from(" + m_storageName + ")";
+    return "read_from('" + m_storageName + "')";
   }
 
   /**
@@ -67,8 +67,12 @@ public class ReadTerminal
     // Read from memory.
     // -----------------
     try {
-      return ( (Integer) getGPConfiguration().readFromMemory(
-          m_storageName)).intValue();
+      Integer value = (Integer) getGPConfiguration().readFromMemory(
+          m_storageName);
+      if(value == null) {
+        return 0;
+      }
+      return value.intValue();
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
