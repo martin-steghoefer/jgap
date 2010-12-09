@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class Loop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Class m_typeVar;
 
@@ -34,7 +34,7 @@ public class Loop
    * Constructor.
    *
    * @param a_conf the configuration to use
-   * @param a_typeVar Class of the loop counter terminakl (e.g. IntegerClass)
+   * @param a_typeVar Class of the loop counter terminal (e.g. IntegerClass)
    * @param a_count the number of loops to perform
    * @throws InvalidConfigurationException
    *
@@ -55,7 +55,7 @@ public class Loop
   }
 
   public String toString() {
-    return "loop(" + m_count + ", &1 }";
+    return "loop(" + m_count + ", &1 )";
   }
 
   /**
@@ -143,4 +143,5 @@ public class Loop
       throw new CloneException(ex);
     }
   }
+
 }
