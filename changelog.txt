@@ -7,6 +7,7 @@
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
 * Some GP commands: added convenience constructors
+* Some GP commands: added guard to avoid invalid operation
 * GP: Constant: Support for cloning
 * Added guard to ADF.getArity
 * Fibonacci GP example: Beautified output of free memory
