@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Divide
     extends MathCommand implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public Divide(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
@@ -68,7 +68,15 @@ public class Divide
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_int(n, 0, args) / c.execute_int(n, 1, args);
+    int c1 = c.execute_int(n, 0, args);
+    if (c1 == 0) {
+      return 0;
+    }
+    int c2 = c.execute_int(n, 1, args);
+    if (c2 == 0) {
+      throw new IllegalStateException("Division by zero");
+    }
+    return c1 / c2;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
