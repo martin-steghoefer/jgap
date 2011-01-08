@@ -1,8 +1,9 @@
 3.6
 -----------------------------------------------------------
-* GP: optimized crossing over
+* GP: made distributed math example working
 * GP: Enhanced TicTacToe example a lot
 * GP: Matrix commands: Enhanced usability
+* GP: optimized crossing over
 * Added Island example for GP, see examples.gp.island
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
