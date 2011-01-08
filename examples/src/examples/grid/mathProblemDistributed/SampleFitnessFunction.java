@@ -10,7 +10,6 @@
 package examples.grid.mathProblemDistributed;
 
 import java.util.*;
-
 import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
 import org.apache.log4j.*;
@@ -24,17 +23,21 @@ import org.apache.log4j.*;
 public class SampleFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
   static Variable vx;
 
-  static Float[] x = new Float[20]; /**@todo initialize*/
+  static Float[] x = new Float[20];
 
-  static float[] y = new float[20]; /**@todo initialize*/
+  static float[] y = new float[20];
 
   public SampleFitnessFunction() {
+    init();
+  }
+
+  public void init() {
     Random random = new Random();
     // Randomly initialize function data (X-Y table) for x^4+x^3+x^2-x
     // ---------------------------------------------------------------
@@ -55,8 +58,12 @@ public class SampleFitnessFunction
     Object[] noargs = new Object[0];
     Variable vx = ind.getGPConfiguration().getVariable("X");
     if (vx == null) {
+      /**@todo this still happens for some individuals (not for all)!*/
       log.error("Variable X not initialized correctly!");
       return GPFitnessFunction.MAX_FITNESS_VALUE;
+    }
+    if(x[0] == null) {
+      init();
     }
     for (int i = 0; i < 20; i++) {
       vx.set(x[i]);
