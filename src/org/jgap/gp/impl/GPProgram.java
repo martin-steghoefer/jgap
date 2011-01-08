@@ -27,7 +27,7 @@ public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
 
@@ -204,7 +204,7 @@ public class GPProgram
       // Decide whether to use grow mode or full mode.
       // Here, the program is finally created.
       // ---------------------------------------------
-      if (a_grow || !a_fullModeAllowed[i]) {
+      if (a_grow || a_fullModeAllowed == null || !a_fullModeAllowed[i]) {
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
                                     getNodeSet(i), true, a_tries);
       }
