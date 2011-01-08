@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.12 $";
+  public final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
@@ -39,22 +39,21 @@ public class ClientEvolveStrategy
 
   private GPPopulation m_pop;
 
+  private GridConfiguration m_gridConfig;
+
   private static Float[] x = new Float[20];
 
   private static float[] y = new float[20];
 
-  /**@todo pass config*/
-//  public ClientEvolveStrategy(GPConfiguration a_conf)
-//      throws InvalidConfigurationException {
-//    super(a_conf);
-//  }
-
   /**
    * Default constructor is necessary here as it will be called dynamically!
    * Don't declare any other constructor as it will not be called!
+   *
+   * @param a_gridConfig the grid configuration to use
    */
-  public ClientEvolveStrategy() {
+  public ClientEvolveStrategy(GridConfiguration a_gridConfig) {
     super();
+    m_gridConfig = a_gridConfig;
   }
 
   /**
@@ -163,7 +162,10 @@ public class ClientEvolveStrategy
         log.error("Empty result received");
       }
       else {
-        m_pop.addFittestProgram(best);
+        if (m_pop.getGPProgram(0).getFitnessValue() > best.getFitnessValue()) {
+          m_pop.setGPProgram(0, best);
+          m_pop.addFittestProgram(best);
+        }
       }
     }
     else {
@@ -171,16 +173,18 @@ public class ClientEvolveStrategy
     }
   }
 
-  public GPGenotype create()
+  public Variable createVariable(GPConfiguration a_conf)
       throws InvalidConfigurationException {
-    GPConfiguration conf = getGPConfiguration();
-    Class[] types = {
-        CommandGene.FloatClass};
-    Class[][] argTypes = { {}
-    };
-    Variable vx;
+    return Variable.create(a_conf, "X", CommandGene.FloatClass);
+  }
+
+  public CommandGene[][] getNodeSets(GPConfiguration conf)
+      throws InvalidConfigurationException {
+    if (m_gridConfig.getVariable() == null) {
+      m_gridConfig.setVariable(createVariable(conf));
+    }
     CommandGene[][] nodeSets = { {
-        vx = Variable.create(conf, "X", CommandGene.FloatClass),
+        m_gridConfig.getVariable(),
         new Add(conf, CommandGene.FloatClass),
         new Add3(conf, CommandGene.FloatClass),
         new Subtract(conf, CommandGene.FloatClass),
@@ -193,13 +197,28 @@ public class ClientEvolveStrategy
         new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, true),
     }
     };
+    return nodeSets;
+  }
+
+  public GPGenotype create()
+      throws InvalidConfigurationException {
+    GPConfiguration conf = getGPConfiguration();
+    m_gridConfig.setTypes(new Class[] {CommandGene.FloatClass});
+//    Class[] types = {CommandGene.FloatClass};
+    m_gridConfig.setArgTypes(new Class[][] { {}
+    });
+//    Class[][] argTypes = { {}
+//    };
+    m_gridConfig.setNodeSets(getNodeSets(conf));
+//    CommandGene[][] nodeSets = getNodeSets(conf);
     // Create genotype with initial population.
     // ----------------------------------------
-    GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes,
-        nodeSets,
-        20, true);
-    result.putVariable(vx);
-    conf.putVariable(vx);
+    m_gridConfig.setMaxNodes(20);
+    GPGenotype result = GPGenotype.randomInitialGenotype(conf,
+        m_gridConfig.getTypes(), m_gridConfig.getArgTypes(),
+        m_gridConfig.getNodeSets(), m_gridConfig.getMaxNodes(), true);
+    result.putVariable(m_gridConfig.getVariable());
+    conf.putVariable(m_gridConfig.getVariable());
     return result;
   }
 }
