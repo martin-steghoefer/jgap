@@ -9,13 +9,13 @@
  */
 package examples.grid.mathProblemDistributed;
 
-import org.jgap.distr.grid.*;
-import org.jgap.distr.grid.gp.*;
-import org.jgap.*;
-import org.jgap.impl.*;
-import org.jgap.event.*;
 import org.homedns.dade.jcgrid.client.*;
+import org.jgap.*;
+import org.jgap.distr.grid.gp.*;
+import org.jgap.event.*;
 import org.jgap.gp.impl.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.impl.*;
 
 /**
  * Main configuration for defining the problem and the way it is solved in the
@@ -27,7 +27,9 @@ import org.jgap.gp.impl.*;
 public class GridConfiguration
     extends GridConfigurationGPBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
+
+  private Variable m_var;
 
   public GridConfiguration() {
     super();
@@ -64,7 +66,7 @@ public class GridConfiguration
     setConfiguration(jgapconfig);
     // Set the evolution process (but evolve on workers).
     // --------------------------------------------------
-    setClientEvolveStrategy(new ClientEvolveStrategy());
+    setClientEvolveStrategy(new ClientEvolveStrategy(this));
     jgapconfig.setFitnessFunction(new SampleFitnessFunction());
     // Optional: Register client feedback listener.
     // --------------------------------------------
@@ -79,5 +81,13 @@ public class GridConfiguration
     if (getConfiguration() == null) {
       throw new RuntimeException("Please set the configuration first!");
     }
+  }
+
+  public Variable getVariable() {
+    return m_var;
+  }
+
+  public void setVariable(Variable a_var) {
+    m_var = a_var;
   }
 }
