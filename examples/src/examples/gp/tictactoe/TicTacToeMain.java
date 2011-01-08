@@ -17,6 +17,7 @@ import org.jgap.gp.function.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.util.*;
 import org.jgap.impl.*;
+import org.apache.log4j.Logger;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -30,11 +31,18 @@ import org.jgap.impl.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  public transient static Logger LOGGER = Logger.getLogger(TicTacToeMain.class);
 
   private static Variable vb;
 
   private Board m_board;
+
+  public static CommandGene LOOP;
+  public static CommandGene SUBPROGRAM1;
+  public static CommandGene SUBPROGRAM2;
+  public static CommandGene PUTSTONE1;
 
   public TicTacToeMain(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -66,23 +74,37 @@ public class TicTacToeMain
                            GPGenotype a_other, int a_otherColor)
       throws InvalidConfigurationException {
     Class[] types = {CommandGene.VoidClass, CommandGene.VoidClass,
-        CommandGene.VoidClass,
-        CommandGene.VoidClass};
+        CommandGene.VoidClass, CommandGene.VoidClass};
     Class[][] argTypes = { {}, {}, {}, {}
     };
     int[] minDepths = new int[] {0, 2, 2, 1};
-    int[] maxDepths = new int[] {0, 2, 6, 2};
-//    GPConfiguration conf = getGPConfiguration();
+    int[] maxDepths = new int[] {0, 2, 15, 4};
     int color = a_color;
+    int color2;
+    if (a_color == 2) {
+      color2 = 1;
+    }
+    else {
+      color2 = 2;
+    }
     ForLoop forLoop1 = new ForLoop(a_conf, SubProgram.VoidClass, 1, Board.WIDTH,
                                    1, "x", 0, 0);
-    ForLoop forLoop2 = new ForLoop(a_conf, SubProgram.VoidClass, 1, Board.HEIGHT,
+    ForLoop forLoop2 = new ForLoop(a_conf, SubProgram.VoidClass, 1,
+                                   Board.HEIGHT,
                                    1, "y", 0, 0);
     Variable vx = new Variable(a_conf, "move", CommandGene.IntegerClass);
     Variable vb = new Variable(a_conf, "firstmove", CommandGene.BooleanClass);
     //
     final String MATRIX1 = "MATRIX1";
     a_conf.createMatrix(MATRIX1, 3, 3);
+    //
+    LOOP = new Loop(a_conf, CommandGene.IntegerClass,
+                 Board.WIDTH * Board.HEIGHT);
+    SUBPROGRAM1 = new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+                       CommandGene.VoidClass});
+    SUBPROGRAM2 = new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+                       CommandGene.VoidClass, CommandGene.VoidClass});
+    PUTSTONE1 = new PutStone1(a_conf, m_board, color, 0, 0);
     //
     CommandGene[][] nodeSets = { {
         // Transfer board to evolution memory.
@@ -91,49 +113,60 @@ public class TicTacToeMain
     }, {
         // Create strategy data.
         // ---------------------
-        new Loop(a_conf, CommandGene.IntegerClass,
-                 Board.WIDTH * Board.HEIGHT),
+//        LOOP,
         new EvaluateBoard(a_conf, m_board, CommandGene.IntegerClass),
-        new IncrementMemory(a_conf, CommandGene.IntegerClass, "counter", 10),
+        new Terminal(a_conf, CommandGene.IntegerClass, 9.0d, 9, true),
+//        new IncrementMemory(a_conf, CommandGene.IntegerClass, "counter", 10),
         /**@todo evaluate board to matrix*/
     }, {
         // Evaluate.
         // ---------
         vx,
         vb,
-        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass}),
-        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass, CommandGene.VoidClass}),
-        new SubProgram(a_conf, new Class[] {TransferBoardToMemory.VoidClass,
-                       CommandGene.VoidClass}),
+        SUBPROGRAM1,
+        SUBPROGRAM2,
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass,
+                       CommandGene.VoidClass, CommandGene.VoidClass,
                        CommandGene.VoidClass}),
-//        forLoop1,
+        forLoop1,
 //        forLoop2,
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 0),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 1),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 2),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 3),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 4),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 5),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 6),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 10, 22),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 11, 22),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 12, 22),
-        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 13, 22),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 14, 23),
-        new EvaluateBoard(a_conf, m_board, 14),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 13, 22),
+//        new EvaluateBoard(a_conf, m_board, 0),
         new Loop(a_conf, SubProgram.class, Board.WIDTH),
         new Loop(a_conf, SubProgram.class, Board.HEIGHT),
         new Loop(a_conf, SubProgram.class, Board.WIDTH * Board.HEIGHT),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(2)),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(3)),
-        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 4),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0), 55),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1), 55),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(2), 55),
+//        new Constant(a_conf, CommandGene.IntegerClass, new Integer(3), 55),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0), 66),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1), 66),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(2), 66),
+        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true,
+                     4),
         new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
                      4),
+        new Modulo(a_conf, CommandGene.IntegerClass),
+        new Add(a_conf, CommandGene.IntegerClass),
+        new Subtract(a_conf, CommandGene.IntegerClass),
+        new Divide(a_conf, CommandGene.IntegerClass),
+        new Multiply(a_conf, CommandGene.IntegerClass),
         new Equals(a_conf, CommandGene.IntegerClass, 0, new int[] {22, 23}),
         new Equals(a_conf, CommandGene.IntegerClass, 0, new int[] {0, 8}),
+        new Equals(a_conf, CommandGene.IntegerClass),
+        new GreaterThan(a_conf, CommandGene.IntegerClass),
         new IfElse(a_conf, CommandGene.BooleanClass),
         new ReadBoard(a_conf, m_board, 0, new int[] {4, 4}),
         new ReadBoard(a_conf, m_board),
@@ -144,8 +177,9 @@ public class TicTacToeMain
                          new int[] {4, 4, 0}),
         new IfIsFree(a_conf, m_board, CommandGene.IntegerClass, 0, new int[] {4,
                      4, 0}),
-//        new CountStones(conf, m_board, color, "count", 2),
-        new IfColor(a_conf, CommandGene.IntegerClass, color),
+        new CountStones(a_conf, m_board, color, "count"),
+        new CountStones(a_conf, m_board, color2, "count"),
+        new IfColor(a_conf, CommandGene.IntegerClass, color, 0, 0),
         new IsOwnColor(a_conf, color),
         new Increment(a_conf, CommandGene.IntegerClass, 1),
         new Increment(a_conf, CommandGene.IntegerClass, -1),
@@ -153,31 +187,37 @@ public class TicTacToeMain
         new StoreTerminalIndexed(a_conf, 1, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 2, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 3, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 4, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 5, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 6, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 10, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 11, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 12, CommandGene.IntegerClass),
-        new StoreTerminalIndexed(a_conf, 13, CommandGene.IntegerClass),
         new StoreTerminalIndexed(a_conf, 14, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(a_conf, 13, CommandGene.IntegerClass),
         new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
 //        new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
         new AddAndStoreTerminal(a_conf, "memA", CommandGene.IntegerClass),
 //        new AddAndStoreTerminal(conf, "memB", CommandGene.IntegerClass),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "counter", 0),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "memA"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "memB"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr0", 1),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr1", 1),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "countc0", 8),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "countc1", 8),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "countd0"),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "countd1"),
-//        new ReadTerminal(conf, CommandGene.IntegerClass,
-//                         forLoop1.getCounterMemoryName(), 5),
-//        new ReadTerminal(conf, CommandGene.IntegerClass,
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "count"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "count2"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "countc0", 8),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "countc1", 8),
+//        new ReadTerminal(a_conf, CommandGene.IntegerClass, "countd0"),
+//        new ReadTerminal(a_conf, CommandGene.IntegerClass, "countd1"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass,
+                         forLoop1.getCounterMemoryName(), 5),
+//        new ReadTerminal(a_conf, CommandGene.IntegerClass,
 //                         forLoop2.getCounterMemoryName(), 6),
         new ReadFromMatrix(a_conf, MATRIX1),
-        new WriteToMatrix(a_conf, MATRIX1),
+        new WriteToMatrix(a_conf, MATRIX1, 55, 55, 66),
         new ResetMatrix(a_conf, MATRIX1, ' '),
         new CountMatrix(a_conf, MATRIX1, CountMatrix.CountType.COLUMN,
                         CountMatrix.CountMode.EMPTY, ' ', ' '),
@@ -189,35 +229,50 @@ public class TicTacToeMain
         // ------------
         vb,
 //        vx,
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "count"),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(2)),
         new Equals(a_conf, CommandGene.IntegerClass),
         new PutStone(a_conf, m_board, color),
-        new PutStone1(a_conf, m_board, color, 0, 33),
+        PUTSTONE1,
         new IfIsFree(a_conf, m_board, CommandGene.IntegerClass),
         new IfElse(a_conf, CommandGene.BooleanClass),
         new Increment(a_conf, CommandGene.IntegerClass, 1),
         new Increment(a_conf, CommandGene.IntegerClass, -1),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 1, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 2, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 3, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 4, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 5, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 6, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 7, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 8, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 9, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 10, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 11, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 12, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 13, 33),
+        new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 14, 33),
         new ReadTerminalIndexed(a_conf, CommandGene.IntegerClass, 15, 33),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "memA"),
-//        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-//                       CommandGene.VoidClass}),
-
-        //        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true),
-//        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true),
-//        new IfIsOccupied(conf, m_board, CommandGene.IntegerClass),
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+                       CommandGene.VoidClass}),
+        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true),
+        new Terminal(a_conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true),
+        new IfIsOccupied(a_conf, m_board, CommandGene.IntegerClass),
     }
     };
     a_conf.setFitnessFunction(new TicTacToeMain.
-                            GameFitnessFunction(getBoard(), a_color, a_other,
+                              GameFitnessFunction(getBoard(), a_color, a_other,
         a_otherColor));
 //    }
     // Create genotype with initial population.
     // ----------------------------------------
-    GPGenotype result = GPGenotype.randomInitialGenotype(a_conf, types, argTypes,
-        nodeSets, minDepths, maxDepths, 600, new boolean[] {!true, !true, !true, !true}, true);
+    GPGenotype result = GPGenotype.randomInitialGenotype(a_conf, types,
+        argTypes, nodeSets, minDepths, maxDepths, 600,
+        new boolean[] {!true, !true, !true, !true}, true);
     // Register variables to later have access to them.
     // ------------------------------------------------
     result.putVariable(vb);
@@ -228,7 +283,7 @@ public class TicTacToeMain
   public GPGenotype create()
       throws InvalidConfigurationException {
     throw new InvalidConfigurationException(
-        "Please use create(Board a_board, int a_color)");
+        "Please use other create-method!");
   }
 
   /**
@@ -242,8 +297,9 @@ public class TicTacToeMain
    */
   public static void main(String[] args) {
     try {
-      System.out.println("Problem: Find a strategy for playing Tic Tac Toe");
+      System.out.println("Task: Find a strategy for playing Tic Tac Toe");
       GPConfiguration config = new GPConfiguration();
+      config.setInitStrategy(new InitStrategy());
       config.setRandomGenerator(new GaussianRandomGenerator());
       config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
       int popSize;
@@ -253,28 +309,28 @@ public class TicTacToeMain
       // -------------------
       config.setMaxInitDepth(6);
       config.setMinInitDepth(2);
-      config.setNewChromsPercent(0.1d);
+      config.setNewChromsPercent(0.3d);
       config.setPopulationSize(popSize);
       config.setStrictProgramCreation(false);
-      config.setProgramCreationMaxTries(3);
+      config.setProgramCreationMaxTries(30);
       config.setMaxCrossoverDepth(10);
       INodeValidator validator = new GameNodeValidator();
       config.setNodeValidator(validator);
       final TicTacToeMain problem = new TicTacToeMain(config);
       config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_EVOLVED_EVENT, new MyGeneticEventListener());
+          GPGENOTYPE_EVOLVED_EVENT, new MyGeneticEventListener(LOGGER));
       // Setup for player 2.
       // -------------------
       GPConfiguration config2 = new GPConfiguration(config.getId() + "_2",
           config.getName() + "_2");
       config2.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
-      config2.setMaxInitDepth(6);
+      config2.setMaxInitDepth(7);
       config.setMinInitDepth(2);
-      config.setNewChromsPercent(0.1d);
+      config.setNewChromsPercent(0.3d);
       config2.setPopulationSize(popSize);
       config2.setStrictProgramCreation(false);
-      config2.setProgramCreationMaxTries(3);
-      config2.setMaxCrossoverDepth(7);
+      config2.setProgramCreationMaxTries(30);
+      config2.setMaxCrossoverDepth(10);
       config2.setNodeValidator(validator);
       final TicTacToeMain problem2 = new TicTacToeMain(config);
       GPGenotype gp2 = problem2.create(config2, 2, null, 1);
@@ -304,6 +360,9 @@ public class TicTacToeMain
       System.exit(1);
     }
   }
+
+  static double bestFitnessYet = -1;
+  static IGPProgram bestProgramYet = null;
 
   public static class GameFitnessFunction
       extends GPFitnessFunction {
@@ -378,11 +437,19 @@ public class TicTacToeMain
         opponent = m_other.getFittestProgramComputed();
         if (opponent == null) {
           nullfound++;
-          if (nullfound == 100) {
-            System.err.println(
-                "---------- Consecutive calls: opponent is null!");
+          if (nullfound == 10 && bestProgramYet != null) {
+            opponent = bestProgramYet;
+            nullfound = 0;
           }
-          opponent = m_other.getGPPopulation().getGPProgram(0);
+          else {
+            if (nullfound == 100) {
+              LOGGER.error("---------- Consecutive calls: opponent is null!");
+            }
+            opponent = m_other.getGPPopulation().getGPProgram(0);
+          }
+        }
+        else {
+          nullfound = 0;
         }
       }
       // Compute fitness for each program.
@@ -419,11 +486,16 @@ public class TicTacToeMain
             // -------------
             m_board.beginTurn();
             for (int j = 0; j < a_program.size(); j++) {
-              if (j == a_program.size() - 1) {
-                a_program.execute_void(j, noargs);
-              }
-              else {
-                a_program.execute_void(j, noargs);
+              try {
+                if (j == a_program.size() - 1) {
+                  a_program.execute_void(j, noargs);
+                }
+                else {
+                  a_program.execute_void(j, noargs);
+                }
+              } catch (IllegalStateException ise) {
+                // Ignore, but break the loop.
+                break;
               }
             }
             // Value the number of distinct read outs of the board by the
@@ -433,12 +505,13 @@ public class TicTacToeMain
             if (readCount > maxreads) {
               maxreads = readCount;
               if (maxreads > 1) {
-                System.out.println("**** Number of board reads reached: " +
+                LOGGER.info("**** Number of board reads reached: " +
                                    maxreads);
               }
             }
             error -= readCount * READ_VALUE;
             m_board.endTurn();
+            LOGGER.debug("**** First player made a correct move!");
             moves++;
             error -= ONE_MOVE2;
             // Initialize local stores.
@@ -449,11 +522,16 @@ public class TicTacToeMain
             // --------------
             m_board.beginTurn();
             for (int j = 0; j < opponent.size(); j++) {
-              if (j == opponent.size() - 1) {
-                opponent.execute_void(j, noargs);
-              }
-              else {
-                opponent.execute_void(j, noargs);
+              try {
+                if (j == opponent.size() - 1) {
+                  opponent.execute_void(j, noargs);
+                }
+                else {
+                  opponent.execute_void(j, noargs);
+                }
+              } catch (IllegalStateException ise) {
+                // Ignore, but break the loop.
+                break;
               }
             }
             // Value the number of distinct read outs of the board by the
@@ -463,7 +541,7 @@ public class TicTacToeMain
             if (readCount > maxreads) {
               maxreads = readCount;
               if (maxreads > 1) {
-                System.out.println("**** Number of board reads reached: " +
+                LOGGER.info("**** Number of board reads reached: " +
                                    maxreads);
               }
             }
@@ -489,7 +567,7 @@ public class TicTacToeMain
           }
           m_board.endRound();
         }
-        System.out.println("******************* SUPERB: WE MADE IT");
+        LOGGER.fatal("******************* SUPERB: WE MADE IT");
       } catch (IllegalArgumentException iax) {
         // Already cared about by not reducing error rate.
         // -----------------------------------------------
@@ -498,24 +576,64 @@ public class TicTacToeMain
         // Already cared about by not reducing error rate.
         // -----------------------------------------------
       }
-      if (maxMoves < moves) {
+      if (maxMoves < moves && moves > 0) {
         maxMoves = moves;
-        System.out.println("**** Number of valid moves reached: " + maxMoves);
+        LOGGER.info("**** Number of valid moves reached: " + maxMoves);
       }
+      int depth13 = a_program.getChromosome(3).getSize(0);
+      int depth1 = a_program.getChromosome(2).getSize(0) + depth13;
+      error -= depth1 * 100;
+      if(depth13 < 8) {
+        error += (8 - depth13) * 150;
+      }
+      int depth23 = opponent.getChromosome(3).getSize(0);
+      int depth2 = opponent.getChromosome(2).getSize(0) + depth23;
+      errorOpponent -= depth2 * 100;
+      if(depth23 < 8) {
+        errorOpponent += (8 - depth23) * 150;
+      }
+      /**@todo value memory reads and writes*/
       if (error < 0.000001) {
         error = 0.0d;
       }
-      else if (error < MY_WORST_FITNESS_VALUE * 0.8d) {
-        /**@todo add penalty for longer solutions*/
+      else if (error < (MY_WORST_FITNESS_VALUE * 0.999d)) {
+        // Add penalty for very long and very short solutions
+        if (depth1 < 12) {
+          // Very short solution.
+          // --------------------
+          error += (12 - depth1) * 200;
+        }
+        else if (depth1 > 110) {
+          // Very long solution.
+          // --------------------
+          error += (depth1 - 110) * 30;
+        }
       }
       if (errorOpponent < 0.000001) {
         errorOpponent = 0.0d;
       }
-      else if (errorOpponent < MY_WORST_FITNESS_VALUE * 0.8d) {
-        /**@todo add penalty for longer solutions*/
-
+      else if (errorOpponent < MY_WORST_FITNESS_VALUE * 0.999d) {
+        // Add penalty for very long and very short solutions
+        if (depth2 < 12) {
+            // Very short solution.
+            // --------------------
+            errorOpponent += (12 - depth2) * 200;
+          }
+          else if (depth2 > 110) {
+            // Very long solution.
+            // --------------------
+            errorOpponent += (depth2 - 110) * 30;
+          }
+        }
+        opponent.setFitnessValue(errorOpponent);
+        if (errorOpponent < bestFitnessYet || bestFitnessYet < 0) {
+          bestFitnessYet = errorOpponent;
+          bestProgramYet = opponent;
+        }
+        if (error < bestFitnessYet || bestFitnessYet < 0) {
+          bestFitnessYet = error;
+        bestProgramYet = a_program;
       }
-      opponent.setFitnessValue(errorOpponent);
       return error;
     }
   }
@@ -523,6 +641,7 @@ public class TicTacToeMain
 class BestGeneticEventListener
     implements GeneticEventListener {
   private GPGenotype m_other;
+
   public BestGeneticEventListener(GPGenotype a_other) {
     m_other = a_other;
   }
@@ -555,7 +674,9 @@ class BestGeneticEventListener
 };
 class MyGeneticEventListener
     implements GeneticEventListener {
-  public MyGeneticEventListener() {
+  private Logger LOGGER;
+  public MyGeneticEventListener(Logger LOGGER) {
+    this.LOGGER = LOGGER;
   }
 
   public void geneticEventFired(GeneticEvent a_firedEvent) {
@@ -569,16 +690,17 @@ class MyGeneticEventListener
         allBestFitness = best.
             getFitnessValue();
       }
-      System.out.println("Evolving generation " + evno
+      LOGGER.info("Evolving generation " + evno
                          + ", all-time-best fitness: " +
                          allBestFitness
-                         + ", memory free: " + freeMem + " MB");
+                         + ", memory free: "
+                         + NumberKit.niceDecimalNumber(freeMem, 2) + " MB");
       IGPProgram best1 = genotype.getFittestProgram();
-      System.out.println("  Best in current generation: " +
+      LOGGER.info("  Best in current generation: " +
                          best1.getFitnessValue());
-      System.out.println("    " + best1.toStringNorm(0));
+      LOGGER.info("    " + best1.toStringNorm(0));
     }
-    if (evno > 30000) {
+    if (evno > 50000) {
       System.exit(0);
     }
     else {
@@ -621,3 +743,10 @@ class Coevolution {
     }
   }
 }
+/**@todo avoid some commands to appear consecutively, e.g. loop, the negator or inc/dec*/
+/**@todo avoid loop to appear more than twice in one prog.chrom. */
+
+/**todo firstmove setzen*/
+/**@todo punish sequence of inc's*/
+/**@todo crossover: care that no sequence of inc's results*/
+/**@todo island model, mit einer Haupt-Insel (Konsolidierung)*/
