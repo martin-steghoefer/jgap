@@ -11,8 +11,10 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.log4j.*;
 import org.jgap.*;
+import org.jgap.distr.grid.gp.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
@@ -27,7 +29,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -150,6 +152,33 @@ public class GPGenotype
                     CommandGene[][] a_nodeSets, int[] a_minDepths,
                     int[] a_maxDepths, int a_maxNodes)
       throws InvalidConfigurationException {
+    this(a_configuration, a_population, a_types, a_argTypes, a_nodeSets,
+         a_minDepths, a_maxDepths, a_maxNodes, null);
+  }
+
+  /**
+   * See above constructor. Parameter a_popCreator is used in grid context only.
+   *
+   * @param a_configuration GPConfiguration
+   * @param a_population GPPopulation
+   * @param a_types Class[]
+   * @param a_argTypes Class[][]
+   * @param a_nodeSets CommandGene[][]
+   * @param a_minDepths int[]
+   * @param a_maxDepths int[]
+   * @param a_maxNodes int
+   * @param a_popCreator IPopulationCreator
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public GPGenotype(GPConfiguration a_configuration, GPPopulation a_population,
+                    Class[] a_types, Class[][] a_argTypes,
+                    CommandGene[][] a_nodeSets, int[] a_minDepths,
+                    int[] a_maxDepths, int a_maxNodes,
+                    IGPPopulationInitializer a_popCreator)
+      throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
     // ---------------------------------------------------------------
@@ -157,9 +186,24 @@ public class GPGenotype
       throw new IllegalArgumentException(
           "The configuration instance must not be null.");
     }
+    setGPConfiguration(a_configuration);
     if (a_population == null) {
       throw new IllegalArgumentException(
           "The population must not be null.");
+    }
+    setGPPopulation(a_population);
+    if(a_popCreator != null) {
+      // Initialize the population (normally only occurs for grid workers).
+      // ------------------------------------------------------------------
+      GPGenotype gen = a_popCreator.execute();
+      GPPopulation newPopulation = gen.getGPPopulation();
+      if (a_configuration.getPopulationSize() >= a_population.size()) {
+        IGPProgram[] programs = new IGPProgram[a_configuration.
+            getPopulationSize()];
+        System.arraycopy(newPopulation.getGPPrograms(), 0, programs, 0,
+                         newPopulation.getGPPrograms().length);
+        a_population.setGPPrograms(programs);
+      }
     }
     for (int i = 0; i < a_population.size(); i++) {
       if (a_population.getGPProgram(i) == null) {
@@ -175,8 +219,6 @@ public class GPGenotype
     m_maxDepths = a_maxDepths;
     m_minDepths = a_minDepths;
     m_maxNodes = a_maxNodes;
-    setGPPopulation(a_population);
-    setGPConfiguration(a_configuration);
     m_variables = new Hashtable();
     m_allTimeBestFitness = FitnessFunction.NO_FITNESS_VALUE;
     // Lock the settings of the configuration object so that it cannot
@@ -403,7 +445,8 @@ public class GPGenotype
     outputWarning(invalidNodes);
     // Determine the depths for which GP functions are not possible.
     // -------------------------------------------------------------
-    Map<CommandGene, int[]> invalidDepthNodes = verifyDepthsForNodes(pop, a_conf,
+    Map<CommandGene, int[]>
+        invalidDepthNodes = verifyDepthsForNodes(pop, a_conf,
         a_types, a_minDepths, a_maxDepths, a_maxNodes, a_nodeSets);
     outputDepthInfo(invalidDepthNodes);
     /**@todo remove unused nodes from configuration*/
@@ -489,11 +532,6 @@ public class GPGenotype
     }
 //    getGPPopulation().sort(new GPFitnessComparator());
     for (int i = 0; i < evolutions; i++) {
-//      if (m_bestFitness < 0.000001) {
-//        // Optimal solution found, quit.
-//        // -----------------------------
-//        return;
-//      }
       if (m_verbose) {
         if (i % 25 == 0) {
           String freeMB = SystemKit.niceMemory(SystemKit.getFreeMemoryMB());
@@ -768,22 +806,22 @@ public class GPGenotype
           reproduction++;
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
-        }
-            // Add new random programs.
-            // ------------------------
-            for (int i = popSize1; i < popSize; i++) {
-          creation++;
-          // Randomly determine depth between minInitDepth and maxInitDepth.
-          // ---------------------------------------------------------------
-          int depth = conf.getMinInitDepth()
-              + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
-                               + 1);
-          int tries = 0;
-          int nogc = 0;
-          do {
-            try {
-              // Randomize grow option as growing produces a valid program
-              // more likely than the full mode.
+      }
+      // Add new random programs.
+      // ------------------------
+      for (int i = popSize1; i < popSize; i++) {
+        creation++;
+        // Randomly determine depth between minInitDepth and maxInitDepth.
+        // ---------------------------------------------------------------
+        int depth = conf.getMinInitDepth()
+            + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
+                             + 1);
+        int tries = 0;
+        int nogc = 0;
+        do {
+          try {
+            // Randomize grow option as growing produces a valid program
+            // more likely than the full mode.
             // ---------------------------------------------------------
             boolean grow;
             if (i % 2 == 0 || random.nextInt(8) > 6) {
@@ -844,14 +882,14 @@ public class GPGenotype
                 }
               }
             }
-            if(nogc > 5) {
+            if (nogc > 5) {
               nogc = 0;
               System.gc();
             }
           }
         } while (true)
         ;
-        }
+      }
       LOGGER.debug("Did "
                    + crossover + " x-overs, "
                    + reproduction + " reproductions, "
@@ -909,7 +947,7 @@ public class GPGenotype
   }
 
   /**
-   * Retrieves the GPProgram in the population with the highest fitness
+   * Retrieves the GPProgram in the population with the best fitness
    * value.
    *
    * @return the GPProgram with the highest fitness value, or null if there
@@ -945,7 +983,7 @@ public class GPGenotype
    * value. Only considers programs for which the fitness value has already
    * been computed.
    *
-   * @return the GPProgram with the highest fitness value, or null if there
+   * @return the GPProgram with the best fitness value, or null if there
    * are no programs with known fitness value in this Genotype
    *
    * @author Klaus Meffert
@@ -1512,11 +1550,13 @@ public class GPGenotype
             continue;
           }
           boolean valid = false;
-          for(int l=0;l<nodeToCheck.size();l++) {
+          for (int l = 0; l < nodeToCheck.size(); l++) {
             IGPProgram ind = a_pop.getGPProgram(0);
-            if (nodeInQuestion.getReturnType() == nodeToCheck.getChildType(ind, l)) {
+            if (nodeInQuestion.getReturnType() ==
+                nodeToCheck.getChildType(ind, l)) {
               if (nodeInQuestion.getSubReturnType() == 0 ||
-              nodeInQuestion.getSubReturnType() == nodeToCheck.getSubChildType(l)) {
+                  nodeInQuestion.getSubReturnType() ==
+                  nodeToCheck.getSubChildType(l)) {
                 valid = true;
                 break;
               }
@@ -1527,7 +1567,6 @@ public class GPGenotype
           }
           triedNodes.add(nodeInQuestion);
         }
-
         // Determine possible depths for each node.
         // Do not consider nodes already in progress.
         // ------------------------------------------
