@@ -12,6 +12,7 @@ package examples.gp.tictactoe;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
+import org.jgap.gp.terminal.*;
 
 /**
  * Validates evolved nodes for the Tic Tac Toe problem.
@@ -66,63 +67,66 @@ public class GameNodeValidator
     // Chromosome 1.
     // -------------
     if (a_num == 1) {
-      // Program must start with a loop.
-      // -------------------------------
-      if (a_recurseLevel == 0 && a_node.getClass() != Loop.class) {
-        return false;
-      }
-      if (a_recurseLevel == 1 && a_node.getClass() != EvaluateBoard.class) {
-        return false;
-      }
+      // Program must start with a loop, followed by EvaluateBoard.
+      // ----------------------------------------------------------
+//      if (a_recurseLevel == 0 && a_node.getClass() != Loop.class) {
+//        return false;
+//      }
+//      if (a_recurseLevel == 1 && a_node.getClass() != EvaluateBoard.class) {
+//        return false;
+//      }
     }
     // Chromosome 2.
     // -------------
     if (a_num == 2) {
-      // SubProgram needed as root
-      if (a_recurseLevel == 0 && a_node.getClass() != SubProgram.class) {
-        return false;
-      }
-      // SubProgram forbidden other than at beginning
+      // SubProgram needed as root.
+//      if (a_recurseLevel == 0 && a_node.getClass() != SubProgram.class) {
+//        return false;
+//      }
+      // SubProgram forbidden other than at beginning.
 //      if (a_recurseLevel > 1 && a_node.getClass() == SubProgram.class) {
 //        return false;
 //      }
       // EvaluateBoard forbidden other than under root node and as not-first
-      // child
+      // child.
       if (a_recurseLevel > 1 && a_node.getClass() == EvaluateBoard.class
           && a_childIndex > 0) {
         return false;
       }
       if (a_recurseLevel == 1 && a_childIndex == 0 &&
           a_node.getClass() != EvaluateBoard.class) {
-        return false;
+//        return false;
       }
-      if (a_rootNode != null && a_rootNode.getClass() != SubProgram.class
+      if (a_childIndex <= 1 && a_rootNode != null &&
+          a_rootNode.getClass() != SubProgram.class &&
+          a_rootNode.getClass() != Loop.class
           && a_rootNode.getClass() != IfElse.class
-          && a_node.getClass() == IfElse.class
-          && a_childIndex <= 1) {
+          && a_node.getClass() == IfElse.class) {
         return false;
       }
       if (a_rootNode != null && a_rootNode.getClass() != IfElse.class &&
           a_node.getClass() != Equals.class) {
+//        return false;
+      }
+      // CountStones forbidden other than under SubProgram.
+      if ( (a_rootNode == null || a_rootNode.getClass() != SubProgram.class) &&
+          a_node.getClass() == CountStones.class) {
         return false;
       }
-      // CountStones forbidden other than under SubProgram
-//      if ( (a_rootNode == null || a_rootNode.getClass() != SubProgram.class) &&
-//          a_node.getClass() == CountStones.class) {
-//        return false;
-//      }
-      // CountStones needed one under root
-//      if (a_recurseLevel == 1 && a_node.getClass() != CountStones.class) {
-//        return false;
-//      }
+      // CountStones needed one under root.
+      if (a_recurseLevel == 1 && a_node.getClass() != CountStones.class) {
+        return false;
+      }
     }
     // Chromosome 3.
     // -------------
     if (a_num == 3) {
-      if (a_recurseLevel == 0 && a_node.getClass() != PutStone1.class) {
-        return false;
-      }
-      if (a_recurseLevel == 1 && a_node.getClass() != ReadTerminalIndexed.class) {
+//      if (a_recurseLevel == 0 && a_node.getClass() != PutStone1.class) {
+//        return false;
+//      }
+      if (a_recurseLevel == 1 && ( a_node.getClass() != ReadTerminalIndexed.class
+     || a_node.getClass() != Terminal.class
+     || a_node.getClass() != Constant.class)) {
         return false;
       }
     }
