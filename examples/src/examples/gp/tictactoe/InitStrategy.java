@@ -20,7 +20,7 @@ import org.jgap.gp.*;
 public class InitStrategy
     implements IGPInitStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Initializes a chromosome within a GP program before a random creation of
@@ -46,6 +46,7 @@ public class InitStrategy
         return gene;
       case 3:
         gene = TicTacToeMain.PUTSTONE1;
+        return gene;
     }
     return null;
   }
