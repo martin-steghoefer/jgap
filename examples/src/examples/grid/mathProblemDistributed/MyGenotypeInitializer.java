@@ -9,9 +9,8 @@
  */
 package examples.grid.mathProblemDistributed;
 
-import org.jgap.distr.grid.*;
 import org.jgap.distr.grid.gp.*;
-import org.jgap.*;
+import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
@@ -23,9 +22,10 @@ import org.jgap.gp.impl.*;
 public class MyGenotypeInitializer
     implements IGenotypeInitializerGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public GPGenotype setupGenotype(JGAPRequestGP a_req, GPPopulation a_initialPop)
+  public GPGenotype setupGenotype(JGAPRequestGP a_req,
+                                  GPPopulation a_initialPop)
       throws Exception {
     GPConfiguration conf = a_req.getConfiguration();
     GPPopulation pop;
@@ -33,23 +33,40 @@ public class MyGenotypeInitializer
       pop = new GPPopulation(conf, conf.getPopulationSize());
       /**@todo add a mechanism to allow workers to initialize the population
        * they work with.
+       * @todo make code in ClientEvolveStrategy.create() reusable
        */
     }
     else {
       if (a_initialPop.isFirstEmpty()) {
         throw new RuntimeException("Initial population must either be null"
-                                   +" or be completely filled with gp programs!");
+                                   + " or completely filled with gp programs!");
       }
       pop = a_initialPop;
     }
+    GridConfiguration gridConfig = (GridConfiguration) a_req.
+        getGridConfiguration();
     int size = conf.getPopulationSize() - pop.size();
-    IGridConfigurationGP gridConfig = a_req.getGridConfiguration();
+    GPPopulationInitializer popInit = null;
+    if (size > 0) {
+      // Randomly initialize the rest of the population.
+      // ----------------------------------------------
+      popInit = new GPPopulationInitializer();
+      Class[] types = {CommandGene.FloatClass};
+      Class[][] argTypes = { {}
+      };
+      popInit.setUp(conf, types, argTypes,
+                    gridConfig.getNodeSets(),
+                    gridConfig.getMaxNodes(), true);
+      popInit.setVariable(gridConfig.getVariable());
+    }
+    conf.putVariable(gridConfig.getVariable());
     GPGenotype result = new GPGenotype(conf, pop, gridConfig.getTypes(),
                                        gridConfig.getArgTypes(),
                                        gridConfig.getNodeSets(),
                                        gridConfig.getMinDepths(),
                                        gridConfig.getMaxDepths(),
-                                       gridConfig.getMaxNodes());
+                                       gridConfig.getMaxNodes(), popInit);
+    result.putVariable(gridConfig.getVariable());
     return result;
   }
 }
