@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -501,10 +501,20 @@ public class ProgramChromosome
           && (a_subReturnType == 0
               || a_subReturnType == a_functionSet[i].getSubReturnType())) {
         if (a_functionSet[i].getArity(ind) == 0 && (!a_function || a_growing)) {
-          possibleFunctions.add(a_functionSet[i]);
+          // Verify if function/terminal is allowed here.
+          // --------------------------------------------
+          if (isAllowed(a_chromIndex, this, a_functionSet, a_functionSet[i],
+                        a_returnType, a_subReturnType)) {
+            possibleFunctions.add(a_functionSet[i]);
+          }
         }
         if (a_functionSet[i].getArity(ind) != 0 && a_function) {
-          possibleFunctions.add(a_functionSet[i]);
+          // Verify if function/terminal is allowed here.
+          // --------------------------------------------
+          if (isAllowed(a_chromIndex, this, a_functionSet, a_functionSet[i],
+                        a_returnType, a_subReturnType)) {
+            possibleFunctions.add(a_functionSet[i]);
+          }
         }
       }
     }
@@ -698,13 +708,14 @@ public class ProgramChromosome
         // -------------------------------------------
         throw new IllegalStateException("Randomly created program violates"
                                         + " configuration constraints"
-                                        + " (symptom 2)");
+                                        + " (symptom 2):"
+                                        + " Root node: "
+                                        + a_rootNode.getClass().toString());
       }
     }
     return a_functionSet;
-  }
-
-  /**
+    }
+        /**
    * Recalculate the depth of each node.
    *
    * @author Klaus Meffert
@@ -1467,5 +1478,157 @@ public class ProgramChromosome
       }
     }
     return a;
+  }
+
+  /**@todo auslagern in TicTacToe-Beispiel und Interface dafür erstellen
+   * sowie in GP config aufnehmen*/
+  /**
+   * Checks if the given a_function is allowed in the current context.
+   *
+   * @param a_chromIndex index of the chromosome within the GP program
+   * @param a_pc the instance of the ProgramChromosome
+   * @param a_functionSet the current function set within the program chromosome
+   * (given as input parameter for convenience, could also be determined via
+   * a_pc.m_genes)
+   * @param a_function the function that should be added, if allowed
+   * @param a_returnType the class the return type is required to have
+   * @param a_subReturnTyp the sub return type the return type is required to
+   * have
+   * @return true if a_function's class exists within a_functionSet
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public boolean isAllowed(int a_chromIndex, ProgramChromosome a_pc,
+                           CommandGene[] a_functionSet, CommandGene a_function,
+                           Class a_returnType, int a_subReturnTyp) {
+    Class clazz = a_function.getClass();
+    if(clazz == org.jgap.gp.function.Loop.class) {
+      // Max. two loops per chromosome allowed.
+      // --------------------------------------
+      if(contains(a_functionSet, a_function,2) >= 2) {
+        return false;
+      }
+    }
+    if(clazz == org.jgap.gp.function.SubProgram.class) {
+      // Max. four sub programs per chromosome allowed.
+      // --------------------------------------
+      if(contains(a_functionSet, a_function,4) >= 4) {
+        return false;
+      }
+    }
+    if(clazz == org.jgap.gp.function.ForLoop.class) {
+      // Max. two loops per chromosome allowed.
+      // --------------------------------------
+      if(contains(a_functionSet, a_function,2) >= 2) {
+        return false;
+      }
+    }
+    if(clazz == org.jgap.gp.function.IncrementMemory.class
+        || clazz == org.jgap.gp.function.Increment.class) {
+      /**@todo provide setNonConsecutive(boolean) in CommandGene*/
+      if(a_pc.m_index > 0 && a_pc.m_genes[a_pc.m_index-1].getClass() ==  clazz) {
+        return false;
+      }
+    }
+    // Increment of constant or terminal is more or less useless
+    if(clazz == org.jgap.gp.terminal.Constant.class
+        || clazz == org.jgap.gp.terminal.Terminal.class) {
+      if (a_pc.m_index > 0
+          && a_pc.m_genes[a_pc.m_index - 1].getClass()
+          == org.jgap.gp.function.IncrementMemory.class) {
+        return false;
+      }
+    }
+    switch(a_chromIndex) {
+      case 0:
+        break;
+      case 2:
+        if(a_pc.m_index == 0 && (
+            clazz != org.jgap.gp.function.SubProgram.class
+           || ((org.jgap.gp.function.SubProgram)a_function).getArity(null) < 3)) {
+          return false;
+        }
+        if(a_pc.m_index == 1 && (
+            clazz != org.jgap.gp.function.SubProgram.class
+           && clazz != examples.gp.tictactoe.CountStones.class)) {
+          return false;
+        }
+        if (a_pc.m_index > 3 && clazz == examples.gp.tictactoe.CountStones.class) {
+          return false;
+        }
+        if (a_pc.m_index > 3 &&
+            !contains(a_functionSet, examples.gp.tictactoe.CountStones.class)) {
+          return false;
+        }
+        break;
+    }
+    return true;
+  }
+
+  /**
+   * Checks if a function or terminal of the class of the given instance exists
+   * within a_functionSet
+   *
+   * @param a_functionSet the set of functions to check
+   * @param a_function the commandgene to check for via its class
+   * @return true if a_function's class exists within a_functionSet
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public boolean contains(CommandGene[] a_functionSet, CommandGene a_function) {
+    Class clazz = a_function.getClass();
+    return contains(a_functionSet, clazz);
+  }
+
+  /**
+   * Checks if a function or terminal of the class of the given instance exists
+   * within a_functionSet
+   * @param a_functionSet the set of functions to check
+   * @param a_function the commandgene to check for via its class
+   * @return true if a_function's class exists within a_functionSet
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public boolean contains(CommandGene[] a_functionSet, Class a_function) {
+    Class clazz = a_function;
+    for(int i=0;i<a_functionSet.length;i++) {
+      if (a_functionSet[i].getClass() == clazz) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks if a function or terminal of the class of the given instance exists
+   * within a_functionSet at least a_limit times
+   *
+   * @param a_functionSet the set of functions to check
+   * @param a_function the commandgene to check for via its class
+   * @param a_limit if a_limit occurrences of a_function were detected, exit
+   * @return true if a_function's class exists at least a_limit times within
+   * a_functionSet
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public int contains(CommandGene[] a_functionSet, CommandGene a_function, int a_limit) {
+    Class clazz = a_function.getClass();
+    if(a_limit <= 0) {
+      a_limit = Integer.MAX_VALUE;
+    }
+    int found = 0;
+    for(int i=0;i<a_functionSet.length;i++) {
+      if (a_functionSet[i].getClass() == clazz) {
+        found++;
+        if(found >= a_limit) {
+          return found;
+        }
+      }
+    }
+    return found;
   }
 }
