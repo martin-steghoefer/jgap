@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public transient static Logger LOGGER = Logger.getLogger(TicTacToeMain.class);
 
@@ -316,6 +316,8 @@ public class TicTacToeMain
       config.setMaxCrossoverDepth(10);
       INodeValidator validator = new GameNodeValidator();
       config.setNodeValidator(validator);
+      ISingleNodeValidator singleNodeValidator = new SingleNodeValidator();
+      config.setSingleNodeValidator(singleNodeValidator);
       final TicTacToeMain problem = new TicTacToeMain(config);
       config.getEventManager().addEventListener(GeneticEvent.
           GPGENOTYPE_EVOLVED_EVENT, new MyGeneticEventListener(LOGGER));
