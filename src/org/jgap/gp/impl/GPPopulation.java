@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -37,6 +37,8 @@ public class GPPopulation
   public final static double DELTA = 0.0000001d;
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
+
+  private transient int warningPrototypeReused = 0;
 
   /**
    * The array of GPProgram's that make-up the Genotype's population.
@@ -358,9 +360,13 @@ public class GPPopulation
               if (cloner != null) {
                 try {
                   program = (IGPProgram) cloner.perform(prototype, null, null);
-                  /**@todo only output once*/
-                  LOGGER.warn("Prototype program reused because random"
-                              + " program did not satisfy constraints");
+                  if (warningPrototypeReused > 0) {
+                    // Only output once.
+                    // -----------------
+                    LOGGER.warn("Prototype program reused because random"
+                                + " program did not satisfy constraints");
+                    warningPrototypeReused++;
+                  }
                   break;
                 } catch (Exception ex) {
                   // Rethrow original error.
