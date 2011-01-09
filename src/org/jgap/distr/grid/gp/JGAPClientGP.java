@@ -54,7 +54,7 @@ public class JGAPClientGP
   /**@todo copy good results to online folder*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static final String APP_VERSION = "1.02a";
 
@@ -792,8 +792,10 @@ public class JGAPClientGP
       for (int i = 0; i < size; i++) {
         feedback.setProgressValue(i + workList.length);
         receiveWorkResult(workList, feedback);
-        /**@todo call isEvolutionFinished*/
         if (this.isInterrupted()) {
+          break;
+        }
+        if(m_gridConfig.getClientEvolveStrategy().isEvolutionFinished(0)) {
           break;
         }
       }
