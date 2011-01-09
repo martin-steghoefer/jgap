@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.13 $";
+  public final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
@@ -119,6 +119,7 @@ public class ClientEvolveStrategy
   public void onFinished() {
     IGPProgram best = m_pop.determineFittestProgram();
     m_clientFeedback.info("Best solution evolved: " + best.getFitnessValue());
+    m_clientFeedback.info("Solution: "+best.toStringNorm(0));
   }
 
   public void evolve()
