@@ -4,6 +4,8 @@
 * GP: Enhanced TicTacToe example a lot
 * GP: Matrix commands: Enhanced usability
 * GP: optimized crossing over
+* GP: Introduced ISingleNodeValidator for node validation
+  during GP program creation
 * Added Island example for GP, see examples.gp.island
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
@@ -14,7 +16,8 @@
 * Fibonacci GP example: Beautified output of free memory
 * Speedup of ProgramChromosome.isPossible
 * Enhanced Javadoc
-* Fixed existing test cases
+* Added test cases
+* Fixed some existing test cases
 
 3.5
 -----------------------------------------------------------
