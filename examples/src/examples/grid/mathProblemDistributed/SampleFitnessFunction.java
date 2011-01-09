@@ -23,7 +23,7 @@ import org.apache.log4j.*;
 public class SampleFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
@@ -58,7 +58,6 @@ public class SampleFitnessFunction
     Object[] noargs = new Object[0];
     Variable vx = ind.getGPConfiguration().getVariable("X");
     if (vx == null) {
-      /**@todo this still happens for some individuals (not for all)!*/
       log.error("Variable X not initialized correctly!");
       return GPFitnessFunction.MAX_FITNESS_VALUE;
     }
