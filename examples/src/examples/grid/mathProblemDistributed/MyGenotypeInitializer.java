@@ -22,19 +22,20 @@ import org.jgap.gp.impl.*;
 public class MyGenotypeInitializer
     implements IGenotypeInitializerGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public GPGenotype setupGenotype(JGAPRequestGP a_req,
                                   GPPopulation a_initialPop)
       throws Exception {
     GPConfiguration conf = a_req.getConfiguration();
+    GridConfiguration gridConfig = (GridConfiguration) a_req.
+        getGridConfiguration();
     GPPopulation pop;
     if (a_initialPop == null) {
       pop = new GPPopulation(conf, conf.getPopulationSize());
-      /**@todo add a mechanism to allow workers to initialize the population
-       * they work with.
-       * @todo make code in ClientEvolveStrategy.create() reusable
-       */
+      // Randomly initialize the rest of the population.
+      // ----------------------------------------------
+      initPop(conf, gridConfig);
     }
     else {
       if (a_initialPop.isFirstEmpty()) {
@@ -43,21 +44,12 @@ public class MyGenotypeInitializer
       }
       pop = a_initialPop;
     }
-    GridConfiguration gridConfig = (GridConfiguration) a_req.
-        getGridConfiguration();
     int size = conf.getPopulationSize() - pop.size();
     GPPopulationInitializer popInit = null;
     if (size > 0) {
       // Randomly initialize the rest of the population.
       // ----------------------------------------------
-      popInit = new GPPopulationInitializer();
-      Class[] types = {CommandGene.FloatClass};
-      Class[][] argTypes = { {}
-      };
-      popInit.setUp(conf, types, argTypes,
-                    gridConfig.getNodeSets(),
-                    gridConfig.getMaxNodes(), true);
-      popInit.setVariable(gridConfig.getVariable());
+      initPop(conf, gridConfig);
     }
     conf.putVariable(gridConfig.getVariable());
     GPGenotype result = new GPGenotype(conf, pop, gridConfig.getTypes(),
@@ -68,5 +60,28 @@ public class MyGenotypeInitializer
                                        gridConfig.getMaxNodes(), popInit);
     result.putVariable(gridConfig.getVariable());
     return result;
+  }
+
+  /**
+   * Initializes a partly or fully incomplete population on behalf of the
+   * worker.
+   *
+   * @param conf the GP configuration
+   * @param gridConfig the grid configuration
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void initPop(GPConfiguration conf, GridConfiguration gridConfig)
+      throws Exception {
+    GPPopulationInitializer popInit = new GPPopulationInitializer();
+    Class[] types = {CommandGene.FloatClass};
+    Class[][] argTypes = { {}
+    };
+    popInit.setUp(conf, types, argTypes,
+                  gridConfig.getNodeSets(),
+                  gridConfig.getMaxNodes(), true);
+    popInit.setVariable(gridConfig.getVariable());
   }
 }
