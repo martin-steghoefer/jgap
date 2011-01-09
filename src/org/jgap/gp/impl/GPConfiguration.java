@@ -30,7 +30,7 @@ import org.jgap.util.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   /**@todo introduce lock for configuration*/
   /**
@@ -131,6 +131,7 @@ public class GPConfiguration
   private IGPFitnessEvaluator m_fitnessEvaluator;
 
   private INodeValidator m_nodeValidator;
+  private ISingleNodeValidator m_singleNodeValidator;
 
   /**
    * Internal flag to display a warning only once, in case a program could not
@@ -246,7 +247,7 @@ public class GPConfiguration
    */
   protected void init(boolean a_fullInit)
       throws InvalidConfigurationException {
-    /**@todo make reusable in class Configuration and reuse from Configuration*/
+    /**@todo make reusable in class Configuration and reuse here from Configuration*/
     // Create factory for being able to configure the used default objects,
     // like random generators or fitness evaluators.
     // --------------------------------------------------------------------
@@ -876,6 +877,28 @@ public class GPConfiguration
   }
 
   /**
+   * Sets the validator for checking single nodes.
+   *
+   * @param a_singleNodeValidator sic
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void setSingleNodeValidator(ISingleNodeValidator a_singleNodeValidator) {
+    m_singleNodeValidator = a_singleNodeValidator;
+  }
+
+  /**
+   * @return the validator set for single node checking
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public ISingleNodeValidator getSingleNodeValidator() {
+    return m_singleNodeValidator;
+  }
+
+  /**
    * Compares this entity against the specified object.
    *
    * @param a_other the object to compare against
@@ -1069,6 +1092,7 @@ public class GPConfiguration
       result.m_nodeValidator = (INodeValidator) doClone(m_nodeValidator);
       result.m_useProgramCache = m_useProgramCache;
       result.m_verify = m_verify;
+      result.m_variables = m_variables;
       // Configurable data.
       // ------------------
 //      result.m_config = new ConfigurationConfigurable();
