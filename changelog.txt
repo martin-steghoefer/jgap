@@ -6,9 +6,14 @@
 * GP: optimized crossing over
 * GP: Introduced ISingleNodeValidator for node validation
   during GP program creation
+* GPConfiguration: fixed clone (variables now considered)
 * Added Island example for GP, see examples.gp.island
 * GP evolution: Enhanced Garbage Collection to avoid heap
   overflow
+* GP evolution: warning message for prototype program
+  reusage now only displayed once
+* JGAPClientGP: now considering isEvolutionFinished also
+  for fragmented results
 * Some GP commands: added convenience constructors
 * Some GP commands: added guard to avoid invalid operation
 * GP: Constant: Support for cloning
