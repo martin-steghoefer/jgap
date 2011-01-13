@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -968,12 +968,13 @@ public class GPGenotype
     if (fittestPop == null) {
       return m_allTimeBest;
     }
-    if (getGPConfiguration().getGPFitnessEvaluator().isFitter(fittest,
+    if (m_allTimeBest != null &&
+        getGPConfiguration().getGPFitnessEvaluator().isFitter(fittest,
         fittestPop.getFitnessValue())) {
       return m_allTimeBest;
     }
     else {
-//      m_allTimeBest = fittestPop;/**@todo*/
+      m_allTimeBest = null;
       return fittestPop;
     }
   }
