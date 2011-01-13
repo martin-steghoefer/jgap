@@ -17,7 +17,7 @@ import org.jgap.gp.terminal.*;
 
 /**
  * Simple GP example of an island thread. It utilizes the former example class
- * SimpleExample in the gp package.
+ * SimpleExample in the gp package for reasons of simplicity.
  *
  * @author Klaus Meffert
  * @since 3.6
@@ -25,9 +25,9 @@ import org.jgap.gp.terminal.*;
 public class IslandGPThread
     extends GPProblem implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private GPGenotype gen = null;
+  private GPGenotype gen;
 
   private int m_nextNumber;
 
@@ -49,6 +49,7 @@ public class IslandGPThread
       config.setFitnessFunction(new SimpleFitnessFunction());
       config.setStrictProgramCreation(false);
       config.setProgramCreationMaxTries(5);
+      config.setPreservFittestIndividual(true);
       config.setMaxCrossoverDepth(5);
       // Lower fitness value is better as it indicates error rate.
       // ---------------------------------------------------------
@@ -128,15 +129,28 @@ public class IslandGPThread
     try {
       for (int i = 1; i <= 100; i++) {
         gen.evolve(2);
+        synchronized(this) {
+            IGPProgram best = gen.getFittestProgram();
+            if(best != null) {
+              if(m_best != null) {
+                if (best.getFitnessValue() < m_best.getFitnessValue()) {
+                  m_best = best;
+                }
+              }
+              else {
+                m_best = best;
+              }
+            }
+
+        }
         Thread.currentThread().sleep( (int) Math.random() *
                                      (20 + m_nextNumber * 5));
       }
       m_finished = true;
-      m_best = gen.getFittestProgram(); ;
       // Use a lock to avoid cluttered output of best solution.
       // ------------------------------------------------------
       while (locked) {
-        Thread.currentThread().sleep(1);
+        Thread.currentThread().sleep(5);
       }
       try {
         locked = true;
@@ -154,7 +168,7 @@ public class IslandGPThread
   }
 
   /**
-   * outputBestSolution
+   * Output the currently best solution for the current thread.
    */
   public void outputBestSolution() {
     System.out.println("Thread " + m_nextNumber + ": Best solution:");
@@ -191,9 +205,15 @@ public class IslandGPThread
       Object[] noargs = new Object[0];
       int maxDepth = ind.getChromosome(0).getDepth(0);
       if (maxDepth > 4) {
-        // penalty longer programs.
+        // penalty deeper  programs.
         // ------------------------
         error += maxDepth - 4;
+      }
+      int size = ind.getChromosome(0).getSize(0);
+      if (size > 14) {
+        // penalty longer programs (they seem to have redundant elements).
+        // ---------------------------------------------------------------
+        error += size - 14;
       }
       for (int i = -10; i < 10; i++) {
         vx.set(new Integer(i));
