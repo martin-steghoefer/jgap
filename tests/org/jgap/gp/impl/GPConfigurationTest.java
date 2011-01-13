@@ -10,11 +10,12 @@
 package org.jgap.gp.impl;
 
 import java.util.*;
-import junit.framework.*;
-import org.jgap.*;
+
 import org.jgap.gp.*;
-import org.jgap.gp.terminal.Variable;
-import org.jgap.gp.function.Add;
+import org.jgap.gp.function.*;
+import org.jgap.gp.terminal.*;
+
+import junit.framework.*;
 
 /**
  * Tests the GPConfiguration class.
@@ -25,7 +26,7 @@ import org.jgap.gp.function.Add;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -336,4 +337,38 @@ public class GPConfigurationTest
     assertEquals(conf, conf.clone());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void testClone_1()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration("testname2");
+    conf.setFitnessFunction(new StaticGPFitnessFunction(2));
+    conf.setCrossoverMethod(new BranchTypingCross(conf));
+    conf.setMaxInitDepth(13);
+    conf.setCrossoverProb(0.2f);
+    conf.setNodeValidator(new NodeValidatorForTesting());
+    Variable vx = new Variable(conf, "X", Integer.class);
+    conf.putVariable(vx);
+    Variable vy = new Variable(conf, "YZA", String.class);
+    conf.putVariable(vy);
+    GPProgram prog = new GPProgram(m_gpconf, 1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    prog.setChromosome(0, pc);
+    conf.setPrototypeProgram(prog);
+    conf.setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    GPConfiguration clone = (GPConfiguration)conf.clone();
+    assertEquals(conf, clone);
+    Variable vx2 = clone.getVariable("X");
+    assertEquals(vx, vx2);
+    Variable vy2 = clone.getVariable("YZA");
+    assertEquals(vy, vy2);
+  }
 }

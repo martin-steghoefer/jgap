@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -104,27 +104,27 @@ public class GPGenotypeTest
     // ------------------------------------------
     nodeSets[2] = CommandFactory.createReadOnlyCommands(nodeSets[2], m_gpconf,
         CommandGene.IntegerClass, "mem", 1, 2, !true);
-    // Execute the functionality to test.
-    // ----------------------------------
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {0, 2, 1, 3, 1,
                           2, 8, 0, 7, 1, 5, 6, 4, 3});
+    // Execute the functionality to test.
+    // ----------------------------------
     m_gpconf.setPopulationSize(1);
     GPGenotype gen = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
         nodeSets, minDepths, maxDepths, 200, new boolean[] {true, true, false}, false);
     GPPopulation pop = gen.getGPPopulation();
     assertEquals(m_gpconf.getPopulationSize(), pop.size());
-    // Evaluate program 1
-    // ------------------
+    // Evaluate program 1.
+    // -------------------
     IGPProgram p = pop.getGPProgram(0);
     assertEquals(8, p.getChromosome(0).size());
     assertEquals(CMD_SUB_V_V, p.getChromosome(0).getNode(0));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(1).getClass());
-    assertSame(CMD_CONST1, p.getChromosome(0).getNode(2));
+    assertEquals(CMD_CONST1, p.getChromosome(0).getNode(2));
     assertEquals(SubProgram.class, p.getChromosome(0).getNode(3).getClass());
-//    assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(3).getClass());
-    assertSame(CMD_CONST1, p.getChromosome(0).getNode(4));
-    // Evaluate program 2
-    // ------------------
+    assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(4).getClass());
+    // Evaluate program 2.
+    // -------------------
     int node = 0;
     assertEquals(9, p.getChromosome(1).size());
     assertEquals(CMD_FOR, p.getChromosome(1).getNode(node++));
@@ -140,8 +140,8 @@ public class GPGenotypeTest
                  p.getChromosome(1).getNode(node++).getClass());
     assertEquals(TransferMemory.class,
                  p.getChromosome(1).getNode(node++).getClass());
-    // Evaluate program 3
-    // ------------------
+    // Evaluate program 3.
+    // -------------------
     assertEquals(1, p.getChromosome(2).size());
     assertEquals(ReadTerminal.class, p.getChromosome(2).getNode(0).getClass());
     assertEquals(0.0, computeFitness(p, vx), DELTA);

@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -74,6 +74,7 @@ public class GPProgramTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 7, 6});
     pc2.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet2, CMD_FOR, 0, true,
                        -1, false);

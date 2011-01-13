@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -72,6 +72,7 @@ public class ProgramChromosomeTest
         CMD_CONST3, //5
         CMD_CONST4, //6
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {0, 1, 4, 2, 5});
     pc.growOrFullNode(0, 3, CommandGene.IntegerClass, 0, funcSet, null,
                       0, true, -1, false);
@@ -109,6 +110,7 @@ public class ProgramChromosomeTest
     // "-1" is because we use a UniqueRandomGenerator that
     // removes each invalid try to avoid duplicate tries.
     // ---------------------------------------------------
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {1, 2, 6 - 1, 2, 2, 5 - 1});
     rn.setNextFloatSequence(new float[] {0.1f});
     rn.setNextDouble(0.2d);
@@ -146,6 +148,7 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {0, 5, 8, 9, 6, 7});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FORX, 0, true,
                       -1, false);
@@ -183,6 +186,7 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FOR, 0, true,
                       -1, false);
@@ -245,12 +249,14 @@ public class ProgramChromosomeTest
         CMD_TERM1, //2
         CMD_TERM2, //3
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {0, //CMD_SUB_I_IM
                           2, //CMD_SUB_I_IM.applyMutation (2 + 1 = arity 3)
                           1, //CMD_TERM0
                           2, //CMD_TERM1
                           3 //CMD_TERM2
     });
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextFloatSequence(new float[] {0.1f});
     pc.setFunctions(funcSet);
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, null,
@@ -281,11 +287,13 @@ public class ProgramChromosomeTest
         CMD_TERM1, //2
         CMD_TERM2, //3
     };
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextIntSequence(new int[] {0, //CMD_SUB_I_IM
                           0, //CMD_SUB_I_IM.applyMutation (2 + 0 = arity 2)
                           1, //CMD_TERM0
                           3 //CMD_TERM2
     });
+    /*@todo fix sequence of random numbers to correspond to adapted logic*/
     rn.setNextFloatSequence(new float[] {0.0f});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, null,
                       0, true, -1, false);
