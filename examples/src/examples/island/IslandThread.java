@@ -15,7 +15,7 @@ import examples.*;
 
 /**
  * Simple example of an island thread. It utilizes the former example class
- * MinimizingMakeChangeFitnessFunction.
+ * MinimizingMakeChangeFitnessFunction for reasons of simplicity.
  *
  * @author Klaus Meffert
  * @since 3.5
@@ -23,9 +23,9 @@ import examples.*;
 public class IslandThread
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private Genotype gen = null;
+  private Genotype gen;
 
   private int m_nextNumber;
 

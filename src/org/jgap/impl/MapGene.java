@@ -15,9 +15,6 @@ import org.jgap.*;
 import gnu.trove.*;
 
 /**
- * ATTENTION: This class is preliminary and subject of future adaptations! Use
- * with care or wait for a more mature version we are working on.
- * <p>
  * Creates a gene instance in which individual alleles have both a label (key)
  * and a value with a distinct meaning. This allows to realize a gene with a set
  * of valid values instead of a range of values.
@@ -37,7 +34,7 @@ import gnu.trove.*;
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * Container for valid alleles
