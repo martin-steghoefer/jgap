@@ -19,13 +19,16 @@ import gnu.trove.*;
  * with care or wait for a more mature version we are working on.
  * <p>
  * Creates a gene instance in which individual alleles have both a label (key)
- * and a value with a distinct meaning. For example, IntegerGene only allows
- * for values having a continuous range, and does not have a function where it
- * is possible to specify setValue...
+ * and a value with a distinct meaning. This allows to realize a gene with a set
+ * of valid values instead of a range of values.
+ * For example, IntegerGene only allows for values having a continuous range,
+ * and does not have a function where it is possible to specify setValue...
  * <p>This implementation does not support specifying a range of valid
  * integer values. Instead it is planned to provide a constraint checker plugin
  * later on. With this, the current implementation will stay unchanged and can
  * be as performant as possible without losing flexibility.</p>
+ *
+ * @see class examples.MapGeneExample
  *
  * @author Johnathan Kool, Organisation: RSMAS, University of Miami
  * @author Klaus Meffert
@@ -34,7 +37,7 @@ import gnu.trove.*;
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * Container for valid alleles
@@ -112,7 +115,7 @@ public class MapGene
   /**
    * Adds a potential allele value to the collection.
    *
-   * @param a_key the key to be added
+   * @param a_key the key to be added, e.g. a descriptive string value
    * @param a_value the Integer value to be added
    * @since 2.4
    */
@@ -377,20 +380,21 @@ public class MapGene
    *
    * @param a_newValue the new value of this Gene instance
    *
-   * @author Johnathan Kool
+   * @author Johnathan Kool, Klaus Meffert
    * @since 2.4
    */
   public void setAllele(Object a_newValue) {
-    // ignore null value as it should have no effect here (otherwise problematic
-    // in conjunction with newGene)
+    // Ignore null value as it should have no effect here (otherwise problematic
+    // in conjunction with newGene).
+    // -------------------------------------------------------------------------
     if (a_newValue == null) {
       return;
     }
-    if (m_geneMap.keySet().isEmpty()) {
+    if (m_geneMap.values().isEmpty()) {
       m_value = a_newValue;
     }
-    else if (m_geneMap.keySet().contains(a_newValue)) {
-      m_value = m_geneMap.get(a_newValue);
+    else if (m_geneMap.values().contains(a_newValue)) {
+      m_value = a_newValue;//m_geneMap.get(a_newValue);
     }
     else {
       throw new IllegalArgumentException("Allele value being set ("
