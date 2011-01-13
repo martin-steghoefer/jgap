@@ -24,7 +24,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -278,9 +278,25 @@ public class MapGeneTest
     assertTrue(gene1.equals(gene2));
   }
 
+  /**
+   * @throws Exception
+   * @since 3.6
+   */
+  public void testNewGene_3()
+      throws Exception {
+    Map alleles = new Hashtable();
+    for (int i = 0; i < 40; i++) {
+      alleles.put("metadata "+i, new Integer(i));
+    }
+    MapGene gene1 = new MapGene(conf, alleles);
+    MapGene gene2 = (MapGene) gene1.newGene();
+    assertTrue(gene1.equals(gene2));
+  }
+
   public void testCleanup()
       throws Exception {
-    //cleanup should do nothing!
+    // cleanup should do nothing!
+    // --------------------------
     Gene gene = new MapGene(conf);
     gene.setAllele("Hello");
     Gene copy = gene.newGene();
