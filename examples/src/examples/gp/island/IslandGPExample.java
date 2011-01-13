@@ -20,7 +20,7 @@ import org.jgap.gp.IGPProgram;
  */
 public class IslandGPExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int nextNumber;
 
@@ -39,6 +39,7 @@ public class IslandGPExample {
 
   public void start()
       throws Exception {
+    IGPProgram allBest = null;
     do {
       nextNumber = 0;
       // Create islands and start evolution on each island.
@@ -68,9 +69,10 @@ public class IslandGPExample {
           }
           else {
             IGPProgram best = current.getBestSolution();
-            if (best.getFitnessValue() < 0.05) {
+            if (best != null && best.getFitnessValue() < 0.05) {
               bestIsland = current;
-              System.out.println("Satisfying solution found - stop all islands...");
+              System.out.println(
+                  "Satisfying solution found - stop all islands...");
               stopAllIslands(islandThreads);
               finished = -1;
               break;
@@ -86,10 +88,11 @@ public class IslandGPExample {
         }
       }
       runs++;
-      if (runs <= 3) {
+      if (runs <= 3 && finished != -1) {
         // Merge best solutions of all islands.
         // ------------------------------------
-        int programsToMergeIn = ( (IslandGPThread) islands[0]).getGPConfiguration().
+        int programsToMergeIn = ( (IslandGPThread) islands[0]).
+            getGPConfiguration().
             getPopulationSize() / numThreads;
         int offset = programsToMergeIn;
         GPPopulation first = null;
@@ -105,6 +108,7 @@ public class IslandGPExample {
             // ----------------------
             mergePopulation(first, pop, offset, programsToMergeIn);
             offset += programsToMergeIn;
+            allBest = pop.determineFittestProgram();
           }
         }
         // Rerun evolution.
@@ -115,6 +119,12 @@ public class IslandGPExample {
         break;
       }
     } while (true);
+    if (allBest != null) {
+      System.out.println("Best overall solution:");
+      System.out.println("  Fitness value: " +
+                         allBest.getFitnessValue());
+      System.out.println("  Solution: " + allBest.toStringNorm(0));
+    }
   }
 
   /**
@@ -137,8 +147,8 @@ public class IslandGPExample {
   }
 
   private void stopAllIslands(Thread[] islandThreads) {
-    for(int i=0;i<islandThreads.length;i++) {
-      Thread thread = (Thread)islandThreads[i];
+    for (int i = 0; i < islandThreads.length; i++) {
+      Thread thread = (Thread) islandThreads[i];
       thread.interrupt();
     }
   }
