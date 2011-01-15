@@ -29,12 +29,12 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
   /**
-   * The array of GPProgram's that makeup the GPGenotype's population
+   * The array of GPProgram's that make-up this GPGenotype's population
    */
   private GPPopulation m_population;
 
@@ -581,7 +581,7 @@ public class GPGenotype
       if (best == null || evaluator.isFitter(fitness, m_bestFitness)) {
         best = program;
         m_bestFitness = fitness;
-        if (!bestPreserved && m_allTimeBest != null) {
+        if (m_allTimeBest != null && !bestPreserved) {
           if (best.toStringNorm(0).equals(m_allTimeBest.toStringNorm(0))) {
             bestPreserved = true;
           }
@@ -957,16 +957,16 @@ public class GPGenotype
    * @since 3.0
    */
   public synchronized IGPProgram getFittestProgram() {
+    IGPProgram fittestPop = getGPPopulation().determineFittestProgram();
+    if (fittestPop == null) {
+      return m_allTimeBest;
+    }
     double fittest;
     if (m_allTimeBest != null) {
       fittest = m_allTimeBest.getFitnessValue();
     }
     else {
       fittest = FitnessFunction.NO_FITNESS_VALUE;
-    }
-    IGPProgram fittestPop = getGPPopulation().determineFittestProgram();
-    if (fittestPop == null) {
-      return m_allTimeBest;
     }
     if (m_allTimeBest != null &&
         getGPConfiguration().getGPFitnessEvaluator().isFitter(fittest,
