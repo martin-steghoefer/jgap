@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -510,6 +510,105 @@ public class ProgramChromosomeTest
     assertEquals("sub[(X * Y) --> (push 9)]", s);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void testToStringNorm_9()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Or(m_gpconf));
+    pc.setGene(1, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(3)));
+    pc.setGene(4, new GreaterThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(5, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(6, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
+    pc.redepth();
+    String s = pc.toStringNorm(0);
+    assertEquals("(Equals(X, 3)) || (X > 9)", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void testToStringNorm_A()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Or(m_gpconf));
+    pc.setGene(1, new Or(m_gpconf));
+    pc.setGene(2, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(4, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(3)));
+    pc.setGene(5, new GreaterThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(6, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(7, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
+    pc.setGene(8, new LesserThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(9, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(10, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(1)));
+    pc.redepth();
+    String s = pc.toStringNorm(0);
+    assertEquals("((Equals(X, 3)) || (X > 9)) || (X < 1)", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void testToStringNorm_B()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Or(m_gpconf));
+    pc.setGene(1, new Or(m_gpconf));
+    pc.setGene(2, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(3, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(3)));
+    pc.setGene(4, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(5, new GreaterThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(6, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(7, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
+    pc.setGene(8, new LesserThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(9, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(1)));
+    pc.setGene(10, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toStringNorm(0);
+    assertEquals("((Equals(3, X)) || (X > 9)) || (1 < X)", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void testToStringNorm_C()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Or(m_gpconf));
+    pc.setGene(1, new Or(m_gpconf));
+    pc.setGene(2, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(3, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(3)));
+    pc.setGene(4, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(5, new GreaterThan(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(6, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(7, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
+    pc.setGene(8, new Or(m_gpconf));
+    pc.setGene(9, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(10, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(1)));
+    pc.setGene(11, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(12, new Equals(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(13, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(4)));
+    pc.setGene(14, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toStringNorm(0);
+    assertEquals("((Equals(3, X)) || (X > 9)) || ((Equals(1, X)) || (Equals(4, X)))", s);
+  }
   /**
    * @throws Exception
    *
