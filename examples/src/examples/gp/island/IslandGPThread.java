@@ -25,7 +25,7 @@ import org.jgap.gp.terminal.*;
 public class IslandGPThread
     extends GPProblem implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private GPGenotype gen;
 
@@ -39,13 +39,13 @@ public class IslandGPThread
 
   protected static Variable vx;
 
-  public GPConfiguration createConfiguration(String a_threadKey)
+  public GPConfiguration createConfiguration(String a_threadKey, int a_popSize)
       throws Exception {
     if (config == null) {
-      System.out.println("  Creating new configuration");
+//      System.out.println("  Creating new configuration");
       config = new GPConfiguration(a_threadKey, a_threadKey);
       config.setMaxInitDepth(5);
-      config.setPopulationSize(150);
+      config.setPopulationSize(a_popSize);
       config.setFitnessFunction(new SimpleFitnessFunction());
       config.setStrictProgramCreation(false);
       config.setProgramCreationMaxTries(5);
@@ -57,7 +57,7 @@ public class IslandGPThread
       return config;
     }
     else {
-      System.out.println("  Cloning configuration");
+//      System.out.println("  Cloning configuration");
       GPConfiguration configClone = (GPConfiguration) config.newInstanceGP(
           a_threadKey, a_threadKey);
       return configClone;
@@ -68,13 +68,13 @@ public class IslandGPThread
       throws Exception {
   }
 
-  public static IslandGPThread newInstance(int nextNumber)
+  public static IslandGPThread newInstance(int nextNumber, int popSize)
       throws Exception {
     IslandGPThread inst = new IslandGPThread(nextNumber);
     inst.m_nextNumber = nextNumber;
     String threadKey = Thread.currentThread().getId() + "/" + inst.m_nextNumber;
     System.out.println("Starting thread: " + nextNumber);
-    GPConfiguration config = inst.createConfiguration(threadKey);
+    GPConfiguration config = inst.createConfiguration(threadKey, popSize);
     inst.setGPConfiguration(config);
     inst.gen = inst.create();
     return inst;
@@ -120,29 +120,33 @@ public class IslandGPThread
     // Initialize the GPGenotype.
     // --------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        100, true);
+        100, !true);
   }
 
-  static boolean locked = false;
+  public static boolean locked = false;
 
   public void run() {
     try {
       for (int i = 1; i <= 100; i++) {
-        gen.evolve(2);
-        synchronized(this) {
-            IGPProgram best = gen.getFittestProgram();
-            if(best != null) {
-              if(m_best != null) {
-                if (best.getFitnessValue() < m_best.getFitnessValue()) {
-                  m_best = best;
-                }
-              }
-              else {
-                m_best = best;
+        // Important: If thread is deemed to die, then let it die.
+        // -------------------------------------------------------
+        if(Thread.currentThread().interrupted()) {
+          throw new InterruptedException("QUIT!");
+        }
+        gen.evolve(1);
+        synchronized (this) {
+          IGPProgram best = gen.getFittestProgram();
+          synchronized (best) {
+            if (best != null) {
+              if (m_best == null ||
+                  best.getFitnessValue() < m_best.getFitnessValue()) {
+                m_best = (IGPProgram) best.clone();
               }
             }
-
+          }
         }
+        // Do a different delay for each thread.
+        // -------------------------------------
         Thread.currentThread().sleep( (int) Math.random() *
                                      (20 + m_nextNumber * 5));
       }
@@ -159,8 +163,8 @@ public class IslandGPThread
         locked = false;
       }
     } catch (InterruptedException iex) {
-      // Do nothing, this is an intended exception.
-      // ------------------------------------------
+      // Just exit the thread loop.
+      // --------------------------
       ;
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -177,14 +181,25 @@ public class IslandGPThread
     }
     else {
       System.out.println("  Fitness value: " +
-                         m_best.getFitnessValue());
-      System.out.println("  Solution: " + m_best.toStringNorm(0));
+                         m_best.getFitnessValue()
+                         + ",  Solution: " + m_best.toStringNorm(0));
     }
-    System.out.println("----");
   }
 
   public boolean isFinished() {
     return m_finished;
+  }
+
+  public boolean isLocked() {
+    return locked;
+  }
+
+  public void setLocked() {
+    locked = true;
+  }
+
+  public void releaseLocked() {
+    locked = false;
   }
 
   public IGPProgram getBestSolution() {
@@ -201,57 +216,79 @@ public class IslandGPThread
   class SimpleFitnessFunction
       extends GPFitnessFunction {
     protected double evaluate(final IGPProgram ind) {
-      int error = 0;
-      Object[] noargs = new Object[0];
-      int maxDepth = ind.getChromosome(0).getDepth(0);
-      if (maxDepth > 4) {
-        // penalty deeper  programs.
-        // ------------------------
-        error += maxDepth - 4;
-      }
-      int size = ind.getChromosome(0).getSize(0);
-      if (size > 14) {
-        // penalty longer programs (they seem to have redundant elements).
-        // ---------------------------------------------------------------
-        error += size - 14;
-      }
-      for (int i = -10; i < 10; i++) {
-        vx.set(new Integer(i));
-        boolean y;
-        if (i > 0) {
-          if (i == 3) {
-            y = false;
-          }
-          else {
-            y = true;
-          }
-        }
-        else {
-          if (i == -8 || i == -5) {
-            y = true;
-          }
-          else {
-            y = false;
-          }
+      try {
+        while (locked) {
+          Thread.currentThread().sleep(5);
         }
         try {
-          boolean result = ind.execute_boolean(0, noargs);
-          if (result != y) {
-            error += 10;
+          locked = true;
+  //      String indS = ind.toStringNorm(0);
+          int error = 0;
+          Object[] noargs = new Object[0];
+          int maxDepth = ind.getChromosome(0).getDepth(0);
+          if (maxDepth > 4) {
+            // penalty deeper programs.
+            // ------------------------
+            error += maxDepth - 4;
           }
-        } catch (ArithmeticException ex) {
-          // Some illegal operation was executed.
-          // ------------------------------------
-          System.out.println("x = " + i);
-          System.out.println(ind);
-          throw ex;
+          int size = ind.getChromosome(0).getSize(0);
+          if (size > 15) {
+            // penalty longer programs (they seem to have redundant elements).
+            // ---------------------------------------------------------------
+            error += size - 15;
+          }
+          for (int i = -10; i < 10; i++) {
+            vx.set(new Integer(i));
+            boolean y;
+            if (i > 0) {
+              if (i == 3) {
+                y = false;
+              }
+              else {
+                y = true;
+              }
+            }
+            else {
+              if (i == -8 || i == -5) {
+                y = true;
+              }
+              else {
+                y = false;
+              }
+            }
+            try {
+              boolean result = ind.execute_boolean(0, noargs);
+              if (result != y) {
+                error += 10;
+              }
+            } catch (ArithmeticException ex) {
+              // Some illegal operation was executed.
+              // ------------------------------------
+              System.out.println("x = " + i);
+              System.out.println(ind);
+              throw ex;
+            }
+          }
+          if (error < 11) {
+  //        System.out.println("BEST: "+ind.toStringNorm(0));
+  //        System.out.println("      "+indS);
+  //        vx.set(new Integer(3));
+  //        boolean result = ind.execute_boolean(0, noargs);
+  //        System.out.println("3:    "+result);
+  //        vx.set(new Integer(2));
+  //        result = ind.execute_boolean(0, noargs);
+  //        System.out.println("2:    "+result);
+          }
+          return error;
+        } finally {
+          locked = false;
         }
+      } catch (InterruptedException iex) {
+        // Just exit the thread loop.
+        // --------------------------
+        ;
+        return 9999999;
       }
-//      if (error < 1) {
-//        System.out.println("BEST: "+ind.toStringNorm(0));
-//        ind.execute_boolean(0, noargs);
-//      }
-      return error;
     }
   }
 }

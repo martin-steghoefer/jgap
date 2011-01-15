@@ -20,7 +20,7 @@ import org.jgap.gp.IGPProgram;
  */
 public class IslandGPExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private int nextNumber;
 
@@ -28,28 +28,39 @@ public class IslandGPExample {
 
   private int runs = 0;
 
-  /**@todo Abbruch aller Threads, wenn beste Lösung gefunden*/
   /**@todo Island config. einbauen, so dass Island model automatisch ausgeführt
    * wird
    */
-  /**@todo impl. MergEvent, e.g.: merge islands when one island stucks*/
+  /**@todo impl. MergeEvent, e.g.: merge islands when one island stucks*/
+  /**@todo jeweils beste lösung geht öfters verloren! Beeinflusst ein Island das
+   * andere oder ist die Lösung in einem Island nicht beständig?*/
 
   public IslandGPExample() {
   }
 
   public void start()
       throws Exception {
+    int numThreads = 5;
+    int maxRuns = 4;
+    int popSize = 80;
+    Runnable[] islands = new Runnable[numThreads];
+    Thread[] islandThreads = new Thread[numThreads];
     IGPProgram allBest = null;
+    IGPProgram allBest2 = null;
     do {
+      for (int i = 0; i < numThreads; i++) {
+        Thread t = islandThreads[i];
+        if (t != null) {
+          t.interrupt();
+          islandThreads[i] = null;
+        }
+      }
       nextNumber = 0;
       // Create islands and start evolution on each island.
       // --------------------------------------------------
-      int numThreads = 5;
-      Runnable[] islands = new Runnable[numThreads];
-      Thread[] islandThreads = new Thread[numThreads];
       for (int i = 0; i < numThreads; i++) {
-        System.out.println("Creating Island " + i);
-        islands[i] = getIsland(nextNumber++);
+//        System.out.println("Creating Island " + i);
+        islands[i] = getIsland(nextNumber++, popSize);
         // Start evolution on the island.
         // ------------------------------
         islandThreads[i] = new Thread(islands[i]);
@@ -60,12 +71,12 @@ public class IslandGPExample {
       // -------------------------------
       IslandGPThread bestIsland = null;
       while (finished < numThreads) {
-        Thread.currentThread().sleep(50);
+        Thread.currentThread().sleep(5);
         for (int i = 0; i < numThreads; i++) {
           IslandGPThread current = (IslandGPThread) islands[i];
           if (!current.isFinished()) {
             finished = 0;
-//            break;
+            break;
           }
           else {
             IGPProgram best = current.getBestSolution();
@@ -88,27 +99,55 @@ public class IslandGPExample {
         }
       }
       runs++;
-      if (runs <= 3 && finished != -1) {
+      if (runs <= maxRuns && finished != -1) {
         // Merge best solutions of all islands.
         // ------------------------------------
         int programsToMergeIn = ( (IslandGPThread) islands[0]).
-            getGPConfiguration().
-            getPopulationSize() / numThreads;
+            getGPConfiguration().getPopulationSize() / numThreads;
         int offset = programsToMergeIn;
         GPPopulation first = null;
-        for (int i = 0; i < numThreads; i++) {
-          IslandGPThread current = (IslandGPThread) islands[i];
-          GPPopulation pop = current.getPopulation();
-          pop.sortByFitness();
-          if (i == 0) {
-            first = pop;
+        GPPopulation pop = null;
+        // Lock all threads.
+        // -----------------
+        IslandGPThread currentFirst = (IslandGPThread) islands[0];
+        do {
+          Thread.sleep(10);
+        } while (currentFirst.isLocked());
+        try {
+          currentFirst.setLocked();
+          //
+          for (int i = 0; i < numThreads; i++) {
+            IslandGPThread current = (IslandGPThread) islands[i];
+            synchronized (current) {
+              IGPProgram allbestTemp2 = current.getBestSolution();
+              if (allBest2 == null ||
+                  (allbestTemp2 != null &&
+                   allBest2.getFitnessValue() > allbestTemp2.getFitnessValue())) {
+                allBest2 = allbestTemp2;
+              }
+              pop = current.getPopulation();
+              pop.sortByFitness();
+              if (i == 0) {
+                first = pop;
+              }
+              else {
+                // Merge to first island.
+                // ----------------------
+                mergePopulation(first, pop, offset, programsToMergeIn);
+                offset += programsToMergeIn;
+              }
+            }
           }
-          else {
-            // Merge to first island.
-            // ----------------------
-            mergePopulation(first, pop, offset, programsToMergeIn);
-            offset += programsToMergeIn;
-            allBest = pop.determineFittestProgram();
+          IGPProgram allbestTemp = first.determineFittestProgram();
+          if (allbestTemp != null) {
+            if (allBest == null ||
+                allbestTemp.getFitnessValue() < allBest.getFitnessValue()) {
+              allBest = allbestTemp;
+            }
+          }
+        } finally {
+          if (currentFirst.isLocked()) {
+            currentFirst.releaseLocked();
           }
         }
         // Rerun evolution.
@@ -120,10 +159,18 @@ public class IslandGPExample {
       }
     } while (true);
     if (allBest != null) {
-      System.out.println("Best overall solution:");
+      System.out.println("-------------------------------");
+      System.out.println("Best overall solution currently (merged):");
       System.out.println("  Fitness value: " +
-                         allBest.getFitnessValue());
-      System.out.println("  Solution: " + allBest.toStringNorm(0));
+                         allBest.getFitnessValue()
+                         + ",  Solution: " + allBest.toStringNorm(0));
+    }
+    if (allBest2 != null) {
+      System.out.println("-------------------------------");
+      System.out.println("Best overall solution currently (directly):");
+      System.out.println("  Fitness value: " +
+                         allBest2.getFitnessValue()
+                         + ",  Solution: " + allBest2.toStringNorm(0));
     }
   }
 
@@ -155,6 +202,7 @@ public class IslandGPExample {
 
   /**
    * @param a_index index of island to create
+   * @param a_popSize the population size the island should have
    *
    * @return new island instance
    * @throws Exception
@@ -162,12 +210,12 @@ public class IslandGPExample {
    * @author Klaus Meffert
    * @since 3.6
    */
-  private Runnable getIsland(int a_index)
+  private Runnable getIsland(int a_index, int a_popSize)
       throws Exception {
     if (a_index == 0 && m_firstIsland != null) {
       return m_firstIsland;
     }
-    return IslandGPThread.newInstance(a_index);
+    return IslandGPThread.newInstance(a_index, a_popSize);
   }
 
   public static void main(String[] args)
