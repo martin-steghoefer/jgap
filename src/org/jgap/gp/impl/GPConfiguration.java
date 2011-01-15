@@ -30,7 +30,7 @@ import org.jgap.util.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   /**@todo introduce lock for configuration*/
   /**
@@ -1020,7 +1020,7 @@ public class GPConfiguration
   }
 
   /**
-   * @param a_varName name of variable to retriebe
+   * @param a_varName name of variable to retrieve
    * @return Variable instance or null, if not found
    *
    * @author Klaus Meffert
@@ -1074,7 +1074,6 @@ public class GPConfiguration
       int popSize = getPopulationSize();
       if (popSize > 0) {
         result.setPopulationSize(popSize);
-        /*@todo move popSize from super to here!*/
       }
       result.m_crossoverProb = m_crossoverProb;
       result.m_reproductionProb = m_reproductionProb;
