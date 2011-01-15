@@ -44,7 +44,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.101 $";
+  private final static String CVS_REVISION = "$Revision: 1.102 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1790,6 +1790,9 @@ public class Configuration
           a_objToClone, null);
       if (handler != null) {
         return handler.perform(a_objToClone, null, null);
+      }
+      else {
+        /**@todo try cloning in a standard way*/
       }
     }
     return null;
