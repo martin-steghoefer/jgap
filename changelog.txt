@@ -6,6 +6,8 @@
 * GP: optimized crossing over
 * GP: Introduced ISingleNodeValidator for node validation
   during GP program creation
+* New example for MapGene: MapGeneExample
+* GP: Made class Variable cloneable
 * GPConfiguration: fixed clone (variables now considered)
 * Added Island example for GP, see examples.gp.island
 * GP evolution: Enhanced Garbage Collection to avoid heap
