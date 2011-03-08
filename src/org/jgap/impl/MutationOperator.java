@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -164,11 +164,12 @@ public class MutationOperator
     //
     for (int i = 0; i < size; i++) {
       IChromosome chrom = a_population.getChromosome(i);
-      Gene[] genes = chrom.getGenes();
+      Gene[] genes1 = chrom.getGenes();
       IChromosome copyOfChromosome = null;
+      Gene[] genes = null;
       // For each Chromosome in the population...
       // ----------------------------------------
-      for (int j = 0; j < genes.length; j++) {
+      for (int j = 0; j < genes1.length; j++) {
         if (m_mutationRateCalc != null) {
           // If it's a dynamic mutation rate then let the calculator decide
           // whether the current gene should be mutated.
