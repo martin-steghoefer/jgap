@@ -65,7 +65,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.103 $";
+  private final static String CVS_REVISION = "$Revision: 1.104 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -379,6 +379,9 @@ public class Chromosome
                   } catch (Exception ex) {
                     throw new RuntimeException(ex);
                   }
+                }
+                else {
+                  /**@todo once output a warning: allele should be cloneable!*/
                 }
               }
             }
