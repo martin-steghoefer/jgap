@@ -16,7 +16,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private transient Configuration m_lastConf;
 
@@ -104,7 +104,7 @@ public class GABreeder
     // Normally, this should not be necessary as the Chromosome class
     // initializes each newly created chromosome with
     // FitnessFunction.NO_FITNESS_VALUE. But who knows which Chromosome
-    // implementation is used...
+    // implementation is used or if cloning is utilized.
     // ----------------------------------------------------------------
     int currentPopSize = pop.size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
