@@ -1,4 +1,4 @@
-<project name="jgap" default="jar" basedir=".">
+<project name="jgap" default="jar" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
   <property name="baseDir" value="."/>
   <property name="src" value="./src"/>
   <property name="test" value="./tests"/>
@@ -6,6 +6,18 @@
   <property name="lib" value="./lib"/>
   <property name="classDir" value="./classes"/>
   <property name="allTests" value="org.jgap.AllTests" />
+  <property name="dist" location="work/maven" />
+
+<!-- define Maven coordinates, repository url and artifacts name etc -->
+	<property name="groupId" value="net.sf.jgap" />
+	<property name="artifactId" value="jgap" />
+	<property name="version" value="3.5" />
+	<property name="maven-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+	<property name="maven-repository-id" value="sonatype-nexus-staging" />
+	<property name="maven-jar" value="${dist}/lib/${artifactId}-${version}.jar" />
+	<property name="maven-javadoc-jar" value="${dist}/lib/${artifactId}-${version}-javadoc.jar" />
+	<property name="maven-sources-jar" value="${dist}/lib/${artifactId}-${version}-sources.jar" />
+
 
   <path id="classpathCompile">
     <fileset dir="${lib}">
@@ -131,6 +143,62 @@
     </jar>
   </target>
 
+	<target name="dist" depends="compile" description="generate the distribution">
+
+		<!-- build the main artifact -->
+		<jar jarfile="${maven-jar}" basedir="${classDir}" />
+
+		<!-- build the javadoc artifact -->
+		<javadoc sourcepath="${src}" destdir="${dist}/javadoc" />
+		<jar jarfile="${maven-javadoc-jar}">
+			<fileset dir="${dist}/javadoc" />
+		</jar>
+
+		<!-- build the sources artifact -->
+		<jar jarfile="${maven-sources-jar}">
+			<fileset dir="${src}" />
+		</jar>
+	</target>
+
+
+<target name="deploy" description="deploy to Nexus">
+		<!-- sign and deploy the main artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.1:sign-and-deploy-file" />
+			<arg value="-Durl=${maven-repository-url}" />
+			<arg value="-DrepositoryId=${maven-repository-id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${maven-jar}" />
+			<arg value="-Dorg.apache.maven.global-settings=c:/programme/apache-maven-2.0.8/conf/settings.xml" />
+                        <arg value="-Pgpg" />
+		</artifact:mvn>
+
+		<!-- sign and deploy the sources artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.1:sign-and-deploy-file" />
+			<arg value="-Durl=${maven-repository-url}" />
+			<arg value="-DrepositoryId=${maven-repository-id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${maven-sources-jar}" />
+			<arg value="-Dclassifier=sources" />
+			<arg value="-Dorg.apache.maven.global-settings=c:/programme/apache-maven-2.0.8/conf/settings.xml" />
+                        <arg value="-Pgpg" />
+		</artifact:mvn>
+
+		<!-- sign and deploy the javadoc artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.1:sign-and-deploy-file" />
+			<arg value="-Durl=${maven-repository-url}" />
+			<arg value="-DrepositoryId=${maven-repository-id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${maven-javadoc-jar}" />
+			<arg value="-Dclassifier=javadoc" />
+			<arg value="-Dorg.apache.maven.global-settings=c:/programme/apache-maven-2.0.8/conf/settings.xml" />
+                        <arg value="-Pgpg" />
+		</artifact:mvn>
+	</target>
+
+
   <target name="jar-debug" depends="compile-debug">
     <antcall target="jar"/>
   </target>
@@ -173,6 +241,7 @@
         <include name="examples/test/*.class"/>
       </fileset>
     </delete>
+    <delete dir="${dist}" />
   </target>
 
   <target name="javadoc">
