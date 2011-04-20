@@ -6,16 +6,37 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Grouping, naming, versioning and packaging -->
-	<groupId>org.jgap</groupId>
-	<artifactId>JGAP</artifactId>
-	<version>3.5</version>
+	<groupId>net.sf.jgap</groupId>
+	<artifactId>jgap</artifactId>
+	<version>3.6</version>
+	<packaging>jar</packaging>
 
-	<!-- Name and description -->
+	<!-- Project information -->
 	<name>JGAP</name>
 	<description>
 		JGAP is a Genetic Algorithms and Genetic Programming component provided as a Java framework.
 	</description>
+	<url>http://jgap.sf.net</url>
 	<inceptionYear>2001</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License 2.1</name>
+			<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>Mozilla Public License 1.1</name>
+			<url>http://www.mozilla.org/MPL/MPL-1.1.html</url>
+			<comments>For using the MPL you have to donate at least 50 Euros to JGAP.</comments>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<!-- Source code management -->
+	<scm>
+		<connection>scm:cvs:pserver:anonymous@jgap.cvs.sourceforge.net:/cvsroot/jgap</connection>
+		<url>http://jgap.cvs.sourceforge.net/jgap/</url>
+	</scm>
 
 	<!-- Developers -->
 	<developers>
@@ -53,7 +74,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>trove4j</groupId>
+			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
 			<version>2.0.2</version>
 			<scope>system</scope>
@@ -96,7 +117,7 @@
 		
 		<!-- Grid -->
 		<dependency>
-			<groupId>jcgrid</groupId>
+			<groupId>net.sf.jcgrid</groupId>
 			<artifactId>jcgrid</artifactId>
 			<version>0.05</version>
 			<scope>system</scope>
