@@ -19,9 +19,10 @@ import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
 /**
- * The Painted Desert problem from Koza's "Evolution of Emergent Cooperative Behavior
- * using Genetic Programming".  The problem is to create the same genetic program for
- * a group of ants that will move three colors of sand into columns of like sand.
+ * The Painted Desert problem from Koza's "Evolution of Emergent Cooperative
+ * Behavior using Genetic Programming".  The problem is to create the same
+ * genetic program for a group of ants that will move three colors of sand into
+ * columns of like sand.
  *
  * @author Scott Mueller
  * @since 3.2
@@ -29,7 +30,7 @@ import org.jgap.util.*;
 public class PaintedDesertProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
   /**
    * Local copy of the map read into from the file.
    */
@@ -68,7 +69,7 @@ public class PaintedDesertProblem
 
   /**
    * Creates the Painted Desert Problem using the GPConfiguration.
-   * @param a_conf
+   * @param a_conf the GP configuration
    * @throws InvalidConfigurationException
    */
   public PaintedDesertProblem(GPConfiguration a_conf)
@@ -344,8 +345,9 @@ public class PaintedDesertProblem
    * Display ant map as found by GP.
    *
    * @param a_antmap the map containing the ants and grains of sand
+   * @param a_origMap the original map
    */
-  private static void displaySolution(int[][] a_antmap, int[][] origMap) {
+  private static void displaySolution(int[][] a_antmap, int[][] a_origMap) {
     for (int y = 0; y < m_maxy; y++) {
       for (int x = 0; x < m_maxx; x++) {
         char toPrint = '?';
@@ -372,7 +374,7 @@ public class PaintedDesertProblem
       System.out.print("  ");
       for (int x = 0; x < m_maxx; x++) {
         char toPrint = '?';
-        int c = origMap[x][y];
+        int c = a_origMap[x][y];
         switch (c) {
           case AntMap.ANT_AT_POSITION:
             toPrint = 'A';
