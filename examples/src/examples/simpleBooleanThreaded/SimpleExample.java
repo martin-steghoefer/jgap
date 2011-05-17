@@ -22,7 +22,7 @@ import org.jgap.event.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Starts the example.
@@ -45,6 +45,8 @@ public class SimpleExample {
     }
     for (int i = 0; i < numThreads; i++) {
       final int j = i;
+      // Construct configuration with unique ID, this is important.
+      // ----------------------------------------------------------
       Configuration gaConf = new DefaultConfiguration(i + "", "no name");
       gaConf.setPreservFittestIndividual(i % 2 == 0);
       gaConf.setKeepPopulationSizeConstant(i % 2 != 0);
