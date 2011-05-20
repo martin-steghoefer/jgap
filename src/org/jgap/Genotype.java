@@ -33,7 +33,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.107 $";
+  private final static String CVS_REVISION = "$Revision: 1.108 $";
 
   /**
    * The current Configuration instance.
@@ -48,6 +48,13 @@ public class Genotype
    * @since 2.0
    */
   private Population m_population;
+
+  /** Use an enolution monitor
+   * @since 3.6
+   */
+  private boolean m_useMonitor;
+
+  private IEvolutionMonitor m_monitor;
 
   /**
    * Constructs a new Genotype instance with the given array of Chromosomes and
@@ -616,7 +623,12 @@ public class Genotype
    */
   public void run() {
     while (!Thread.currentThread().interrupted()) {
-      evolve();
+      if(m_useMonitor) {
+       evolve(m_monitor);
+      }
+      else {
+        evolve();
+      }
     }
   }
 
@@ -674,5 +686,31 @@ public class Genotype
       }
     }
     setPopulation(target);
+  }
+
+  /**
+   * Use an evolution monitor, only to be used when running Genotype as a thread.
+   * Otherwise use method evolve(IEvolutionMonitor)
+   *
+   * @param a_useMonitor true: use evolution monitor, set it via setMonitor
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void setUseMonitor(boolean a_useMonitor) {
+    m_useMonitor = a_useMonitor;
+  }
+
+  /**
+   * Sets the evolution monitor to use, activate it via setUseMonitor(true).
+   * Only to be used when running Genotype as a thread.
+   *
+   * @param a_monitor the IEvolutionMonitor to use
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+  public void setMonitor(IEvolutionMonitor a_monitor) {
+    m_monitor = a_monitor;
   }
 }
