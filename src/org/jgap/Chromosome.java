@@ -65,7 +65,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.104 $";
+  private final static String CVS_REVISION = "$Revision: 1.105 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -573,7 +573,7 @@ public class Chromosome
 
   /**
    * Sets the fitness value of this Chromosome. This method is for use
-   * by bulk fitness functions and should not be invokved from anything
+   * by bulk fitness functions and should not be invoked from anything
    * else (except test cases).
    *
    * @param a_newFitnessValue a positive integer representing the fitness
