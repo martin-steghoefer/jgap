@@ -1,5 +1,6 @@
 3.6
 -----------------------------------------------------------
+* Fixex bug in GABreeder.evolve (fitness calculation)
 * GP: made distributed math example working
 * GP: Enhanced TicTacToe example a lot
 * GP: Matrix commands: Enhanced usability
