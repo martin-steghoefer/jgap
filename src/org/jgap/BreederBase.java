@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public BreederBase() {
   }
@@ -46,9 +46,6 @@ public abstract class BreederBase
     /**@todo optionally use working pool*/
     boolean monitorActive = a_config.getMonitor() != null;
     try {
-      // Process all natural selectors applicable before executing the
-      // genetic operators (reproduction, crossing over, mutation...).
-      // -------------------------------------------------------------
       int selectorSize = a_config.getNaturalSelectorsSize(
           a_processBeforeGeneticOperators);
       if (selectorSize > 0) {
