@@ -16,7 +16,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private transient Configuration m_lastConf;
 
@@ -97,6 +97,7 @@ public class GABreeder
     // Apply certain NaturalSelectors before GeneticOperators will be executed.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, true);
+    int newChromIndex = pop.size();
     // Execute all of the Genetic Operators.
     // -------------------------------------
     applyGeneticOperators(a_conf, pop);
@@ -107,7 +108,7 @@ public class GABreeder
     // implementation is used or if cloning is utilized.
     // ----------------------------------------------------------------
     int currentPopSize = pop.size();
-    for (int i = originalPopSize; i < currentPopSize; i++) {
+    for (int i = newChromIndex; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
       // Mark chromosome as new-born.
@@ -120,18 +121,19 @@ public class GABreeder
     // Increase age of all chromosomes which are not modified by genetic
     // operations.
     // -----------------------------------------------------------------
-    int size = Math.min(originalPopSize, currentPopSize);
+    int size = Math.min(newChromIndex, currentPopSize);
     for (int i = 0; i < size; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.increaseAge();
       // Mark chromosome as not being operated on.
       // -----------------------------------------
       chrom.resetOperatedOn();
-    }
-    // If a bulk fitness function has been provided, call it.
+      }
+      // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     if (bulkFunction != null) {
+
       if (monitorActive) {
         // Monitor that bulk fitness will be called for evaluation.
         // --------------------------------------------------------
@@ -170,6 +172,7 @@ public class GABreeder
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, false);
+
     // Fill up population randomly if size dropped below specified percentage
     // of original size.
     // ----------------------------------------------------------------------
