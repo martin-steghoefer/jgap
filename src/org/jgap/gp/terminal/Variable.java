@@ -14,6 +14,7 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * A terminal represented by a variable (x, y, z...). A variable has one single
@@ -23,9 +24,10 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Variable
-    extends CommandGene {
+    extends CommandGene //implements ICloneable
+{
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -106,7 +108,7 @@ public class Variable
 
   /**
    * Creates an instance of a Variable.
-   * If a Variable of that name already exists, that is returned.
+   * If a Variable of that name already exists, it is returned.
    * Otherwise a new instance is created, its value is initialized to null, and
    * it is placed into the static hashtable for later retrieval by name via
    * getVariable.
@@ -124,10 +126,13 @@ public class Variable
                                 Class a_type)
       throws InvalidConfigurationException {
     Variable var;
-    if ( (var = getVariable(a_name)) != null) {
+    var = a_conf.getVariable(a_name);
+    if(var != null) {
       return var;
     }
-    return new Variable(a_conf, a_name, a_type);
+    var = new Variable(a_conf, a_name, a_type);
+    a_conf.putVariable(var);
+    return var;
   }
 
   /**
@@ -145,4 +150,27 @@ public class Variable
   public Object getValue() {
     return m_value;
   }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.6
+   */
+//  public Object clone() {
+//    try {
+//      Variable result = create(getGPConfiguration(), m_name, getReturnType());
+////      Variable result = new Variable(getGPConfiguration(), m_name, getReturnType());
+////      getGPConfiguration().putVariable(result);
+//      if(m_value != null) {
+//        result.m_value = new Integer( ( (Integer) m_value)); /**@todo fix*/
+//      }
+//      return result;
+//    } catch (Exception ex) {
+//      throw new CloneException(ex);
+//    }
+//  }
+
 }
