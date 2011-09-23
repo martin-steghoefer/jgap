@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -135,7 +135,7 @@ public class GPPopulation
     if (a_keepPrograms) {
       synchronized (m_programs) {
         for (int i = 0; i < m_popSize; i++) {
-          m_programs[i] = a_pop.getGPProgram(i);
+          m_programs[i] = (IGPProgram)a_pop.getGPProgram(i).clone();
           m_fitnessRank[i] = a_pop.getFitnessRank(i);
         }
       }
