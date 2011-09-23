@@ -16,6 +16,8 @@ import org.jgap.util.*;
 
 import junit.framework.*;
 
+import org.jgap.event.EventManager;
+
 /**
  * Tests the Genotype class.
  *
@@ -25,7 +27,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.74 $";
+  private final static String CVS_REVISION = "$Revision: 1.75 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1459,4 +1461,133 @@ public class GenotypeTest
       return 0;
     }
   }
+
+  /**
+   * With specific configurations there was a bug in GABreeder: Some chromosomes
+   * where not updates properly.
+   *
+   * @throws Exception
+   * @since 3.6
+   */
+  public void testBreeder_0() throws Exception {
+    Configuration conf = new TestConfiguration();
+    conf.setPreservFittestIndividual(false);
+    FitnessFunction myFunc =
+        new Test2Function(conf);
+    conf.setFitnessFunction(myFunc);
+    Gene[] sampleGenes = new Gene[2];
+    sampleGenes[0] = new DoubleGene(conf, 0, 2); // X
+    sampleGenes[1] = new DoubleGene(conf, 0, 2); // Y
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
+    conf.setSampleChromosome(sampleChromosome);
+    conf.setPopulationSize(20);
+    Genotype population = Genotype.randomInitialGenotype(conf);
+    population.evolve(200);
+    IChromosome bestSolutionSoFar = population.getFittestChromosome();
+    double fit = bestSolutionSoFar.getFitnessValue();
+    double sol1 = (Double) bestSolutionSoFar.getGene(0).getAllele();
+    double sol2 = (Double) bestSolutionSoFar.getGene(1).getAllele();
+    if (Math.abs(sol1 + sol2 - fit) > 0.001) {
+      assertFalse("Fitness value incorrect", true);
+    }
+  }
+
+  class TestConfiguration
+      extends Configuration implements ICloneable {
+    /** String containing the CVS revision. Read out via reflection!*/
+    private final static String CVS_REVISION = "$Revision: 1.75 $";
+
+    public TestConfiguration() {
+      this("","");
+    }
+
+    /**
+     * Constructs a new DefaultConfiguration instance with a number of
+     * configuration settings set to default values. It is still necessary
+     * to set the sample Chromosome, population size, and desired fitness
+     * function. Other settings may optionally be altered as desired.
+     *
+     * @param a_id unique id for the configuration within the current thread
+     * @param a_name informative name of the configuration, may be null
+     *
+     * @author Neil Rotstan
+     * @author Klaus Meffert
+     * @since 1.0
+     */
+    public TestConfiguration(String a_id, String a_name) {
+      super(a_id, a_name);
+      try {
+        setBreeder(new GABreeder());
+        setRandomGenerator(new StockRandomGenerator());
+        setEventManager(new EventManager());
+        BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
+            this, 0.90d);
+        //bestChromsSelector.setDoubletteChromosomesAllowed(true);
+        bestChromsSelector.setDoubletteChromosomesAllowed(false);
+        addNaturalSelector(bestChromsSelector, false);
+        setMinimumPopSizePercent(0);
+        //
+        setSelectFromPrevGen(1.0d);
+        setKeepPopulationSizeConstant(true);
+        setFitnessEvaluator(new DefaultFitnessEvaluator());
+        setChromosomePool(new ChromosomePool());
+        addGeneticOperator(new CrossoverOperator(this, 0.5d));
+        addGeneticOperator(new MutationOperator(this, 8));
+      }
+      catch (InvalidConfigurationException e) {
+        throw new RuntimeException(
+            "Fatal error: DefaultConfiguration class could not use its "
+            + "own stock configuration values. This should never happen. "
+            + "Please report this as a bug to the JGAP team.");
+      }
+    }
+
+    /**
+     * @return deep clone of this instance
+     *
+     * @author Klaus Meffert
+     * @since 3.2
+     */
+    public Object clone() {
+      return super.clone();
+    }
+}
+
+  public class Test2Function extends FitnessFunction {
+  double MAX = -1;
+      Configuration config1;
+       Test2Function(Configuration config){
+           config1= config;
+       }
+
+
+
+
+      public double evaluate(IChromosome ic) {
+
+
+          Double X = getX(ic);
+          Double Y = getY(ic);
+
+          double function = Y + X;
+          if(function > -1) {
+            MAX = function;
+          }
+          return function;
+
+      }
+
+
+      public Double getX(IChromosome a_potentialSolution) {
+      Double x = (Double) a_potentialSolution.getGene(0).getAllele();
+      return x;
+      }
+
+
+      public Double getY(IChromosome a_potentialSolution) {
+      Double y = (Double) a_potentialSolution.getGene(1).getAllele();
+      return y;
+      }
+  }
+
 }
