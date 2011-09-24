@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class GAConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   final private GAPhenotypeExpresser m_phenotypeExpresser;
 
@@ -44,7 +44,9 @@ public class GAConfiguration
     BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
         this, 0.50d);
     bestChromsSelector.setDoubletteChromosomesAllowed(true);
-    addNaturalSelector(bestChromsSelector, false);
+    addNaturalSelector(bestChromsSelector, !false);
+//    WeightedRouletteSelector wrs = new WeightedRouletteSelector(this);
+//    addNaturalSelector(wrs, true);
     setMinimumPopSizePercent(0);
     setPreservFittestIndividual(true);
     setPopulationSize(5);
