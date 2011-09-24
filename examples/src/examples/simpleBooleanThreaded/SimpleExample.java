@@ -12,6 +12,7 @@ package examples.simpleBooleanThreaded;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.event.*;
+import org.jgap.audit.*;
 
 /**
  * Simple class that demonstrates the basic usage of JGAP together with
@@ -22,7 +23,7 @@ import org.jgap.event.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Starts the example.
@@ -35,9 +36,9 @@ public class SimpleExample {
    */
   public static void main(String[] args)
       throws Exception {
-    final int numEvolutions = 50;
-    final int numThreads = 5;
-    int chromeSize = 32;
+    final int numEvolutions = 20;
+    final int numThreads = 4;
+    int chromeSize = 16;
     if (chromeSize > 32) {
       System.err.println("This example does not handle " +
                          "Chromosomes greater than 32 bits in length.");
@@ -56,8 +57,12 @@ public class SimpleExample {
       gaConf.setPopulationSize(4);
       gaConf.setFitnessFunction(new MaxFunction());
       Genotype genotype = null;
+      final IEvolutionMonitor monitor = new EvolutionMonitor();
       try {
         genotype = Genotype.randomInitialGenotype(gaConf);
+        genotype.setUseMonitor(true);
+        gaConf.setMonitor(monitor);
+        genotype.setMonitor(monitor);
       } catch (InvalidConfigurationException e) {
         e.printStackTrace();
         System.exit( -2);
@@ -76,6 +81,8 @@ public class SimpleExample {
           }
           if (evno > numEvolutions) {
             t1.stop();
+            /**@todo evaluate monitor data*/
+            monitor.getPopulations();
           }
           else {
             try {
