@@ -39,7 +39,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -77,6 +77,7 @@ public class MinimizingMakeChange {
     // size by one sometimes!
     // -------------------------------------------------------------
     conf.setPreservFittestIndividual(true);
+    conf.setKeepPopulationSizeConstant(false);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
@@ -102,10 +103,10 @@ public class MinimizingMakeChange {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[0] = new IntegerGene(conf, 0, 3 * 10); // Quarters
-    sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
-    sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
-    sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
+    sampleGenes[0] = new IntegerGene(conf, 0, 10); // Quarters
+    sampleGenes[1] = new IntegerGene(conf, 0, 2); // Dimes
+    sampleGenes[2] = new IntegerGene(conf, 0, 1); // Nickels
+    sampleGenes[3] = new IntegerGene(conf, 0, 5); // Pennies
     IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
@@ -170,8 +171,10 @@ public class MinimizingMakeChange {
     // Display the best solution we found.
     // -----------------------------------
     IChromosome bestSolutionSoFar = population.getFittestChromosome();
+    double v1 = bestSolutionSoFar.getFitnessValue();
     System.out.println("The best solution has a fitness value of " +
                        bestSolutionSoFar.getFitnessValue());
+    bestSolutionSoFar.setFitnessValueDirectly(-1);
     System.out.println("It contains the following: ");
     System.out.println("\t" +
                        MinimizingMakeChangeFitnessFunction.
