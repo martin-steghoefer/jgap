@@ -24,7 +24,7 @@ import junit.framework.*;
 public class StockRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StockRandomGeneratorTest.class);
@@ -248,9 +248,6 @@ public class StockRandomGeneratorTest
    * @since 3.01
    */
   public void testSerialize_0() throws Exception {
-    /**@todo fix test as Java 5 uses java.util.concurrent.AtomicLong instead
-     * of sun.misc.AtomicLong
-     */
     StockRandomGenerator srg = new StockRandomGenerator();
     Object o = privateAccessor.getField(srg, "seed");
     AtomicLong seed1 = (AtomicLong) privateAccessor.getField(srg, "seed");
