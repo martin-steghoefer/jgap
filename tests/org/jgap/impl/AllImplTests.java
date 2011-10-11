@@ -25,7 +25,7 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllImplTests");
@@ -59,6 +59,7 @@ public class AllImplTests
     suite.addTest(SwappingMutationOperatorTest.suite());
     suite.addTest(NumberGeneTest.suite());
     suite.addTest(PoolTest.suite());
+    suite.addTest(SeededRandomGeneratorTest.suite());
     suite.addTest(SetGeneTest.suite());
     suite.addTest(StockRandomGeneratorTest.suite());
     suite.addTest(StringGeneTest.suite());
