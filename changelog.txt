@@ -1,3 +1,7 @@
+3.7
+-----------------------------------------------------------
+* New class SeededRandomGenerator, thanx to Vasileois
+
 3.6
 -----------------------------------------------------------
 * Fixex bug in GABreeder.evolve (fitness calculation)
