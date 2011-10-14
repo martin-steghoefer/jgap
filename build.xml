@@ -11,7 +11,7 @@
 <!-- define Maven coordinates, repository url and artifacts name etc -->
 	<property name="groupId" value="net.sf.jgap" />
 	<property name="artifactId" value="jgap" />
-	<property name="version" value="3.5" />
+	<property name="version" value="3.6" />
 	<property name="maven-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
 	<property name="maven-repository-id" value="sonatype-nexus-staging" />
 	<property name="maven-jar" value="${dist}/lib/${artifactId}-${version}.jar" />
