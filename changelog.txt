@@ -1,6 +1,9 @@
-3.7
+3.61
 -----------------------------------------------------------
+* Corrected classpath for the example .bat-files
+* Removed obsolete .bat files
 * New class SeededRandomGenerator, thanx to Vasileois
+* Added test cases
 
 3.6
 -----------------------------------------------------------
