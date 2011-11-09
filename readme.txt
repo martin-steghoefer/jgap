@@ -6,7 +6,7 @@ you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
 or, if you prefer to keep these details private, you can email the JGAP
-project administrator at klausikm <at> users.sourceforge.net. The more
+project administrator at jgap <at> doktor-meffert.de. The more
 feedback we get, the more we can improve JGAP to better meet the needs
 of our users. Thanks for your support!
 

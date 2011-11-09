@@ -26,4 +26,4 @@ java -classpath ".;jgap-examples.jar;jgap.jar" examples.simpleBoolean.SimpleExam
 For further demo implementations, examine all classes under package "examples" or see the batch files delivered in the JGAP root directory.
 
 Klaus Meffert, 2006-01-01
-klausikm <at> users.sourceforge.net
+jgap <at> doktor-meffert.de
