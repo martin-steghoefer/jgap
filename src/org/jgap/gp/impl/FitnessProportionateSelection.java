@@ -19,12 +19,12 @@ import org.jgap.gp.*;
  *
  * @author Klaus Meffert
  * @since 3.0
- * @deprecated use TournamentSelector or WeightedGPRouletteSelector instead
+ * @deprecated use TournamentSelector instead
  */
 public class FitnessProportionateSelection
     implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Constructor.
