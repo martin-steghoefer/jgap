@@ -33,7 +33,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.108 $";
+  private final static String CVS_REVISION = "$Revision: 1.109 $";
 
   /**
    * The current Configuration instance.
@@ -651,6 +651,9 @@ public class Genotype
     // ------------------------------------------------------
     for (int i = 0; i < pops.length; i++) {
       Configuration newConf = (Configuration) getConfiguration().clone();
+      // Adjust population size.
+      // -----------------------
+      /*@todo impl.*/
       EvolveData data = new EvolveData(newConf);
       if (pops[i] == null) {
         throw new IllegalStateException("Population must no be null"
