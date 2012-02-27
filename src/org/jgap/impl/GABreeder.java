@@ -13,10 +13,16 @@ import org.jgap.*;
 import org.jgap.audit.*;
 import org.jgap.event.*;
 
+/**
+ * Breeder for genetic algorithms. Runs the evolution process.
+ *
+ * @author Klaus Meffert
+ * @since 3.5
+ */
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private transient Configuration m_lastConf;
 
