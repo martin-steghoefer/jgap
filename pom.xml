@@ -8,7 +8,7 @@
 	<!-- Grouping, naming, versioning and packaging -->
 	<groupId>net.sf.jgap</groupId>
 	<artifactId>jgap</artifactId>
-	<version>3.6</version>
+	<version>3.6.2</version>
 	<packaging>jar</packaging>
 
 	<!-- Project information -->
