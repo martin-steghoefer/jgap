@@ -39,12 +39,12 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
-  private static final int MAX_ALLOWED_EVOLUTIONS = 200;
+  private static final int MAX_ALLOWED_EVOLUTIONS = 50;
 
   public static EvolutionMonitor m_monitor;
 
@@ -115,7 +115,7 @@ public class MinimizingMakeChange {
     // finding the answer), but the longer it will take to evolve
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
-    conf.setPopulationSize(80);
+    conf.setPopulationSize(20);
 
     // Create random initial population of Chromosomes.
     // Here we try to read in a previous run via XMLManager.readFile(..)
