@@ -1,7 +1,11 @@
 3.62
 -----------------------------------------------------------
+* New simple example for constraint solving
+  (see package examples.constraint)
 * New BulkGABreeder, more efficient than GABreeder (thanx
   a lot to Vasilis)
+* New fitness function RosenbrocksBulkNegativeFunction
+  (also from Vasilis)
 
 3.61
 -----------------------------------------------------------
