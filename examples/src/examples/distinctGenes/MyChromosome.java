@@ -14,8 +14,8 @@ import org.jgap.impl.*;
 
 /**
  * Sample class: Descendent of Chromosome that creates Chromosomes with n
-* CompositeGenes. All but one CompositeGene's have 4 sub-genes, the last one
-* has only 3 sub-genes.
+ * CompositeGenes. All but one CompositeGene's have 4 sub-genes, the last one
+ * has only 3 sub-genes.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class MyChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public MyChromosome()
       throws InvalidConfigurationException {
@@ -102,7 +102,7 @@ public class MyChromosome
           genes[i].setToRandomValue(generator);
         }
         randomChromosome.setFitnessValueDirectly(FitnessFunction.
-                                                 NO_FITNESS_VALUE);
+            NO_FITNESS_VALUE);
         return randomChromosome;
       }
     }
