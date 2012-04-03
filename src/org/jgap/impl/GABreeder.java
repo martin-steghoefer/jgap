@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 import org.jgap.audit.*;
 import org.jgap.event.*;
@@ -17,19 +18,25 @@ import org.jgap.event.*;
  * Breeder for genetic algorithms. Runs the evolution process.
  *
  * @author Klaus Meffert
+ * @author Vasilis
  * @since 3.5
  */
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   private transient Configuration m_lastConf;
 
   private transient Population m_lastPop;
 
+  //It contains clones of the chromosomes with the fitness value removed
+  //We will use it to remove the duplicates
+  List<IChromosome> m_allChromosomesSoFar;
+
   public GABreeder() {
     super();
+    m_allChromosomesSoFar = new ArrayList<IChromosome> ();
   }
 
   /**
@@ -48,7 +55,7 @@ public class GABreeder
    */
   public Population evolve(Population a_pop, Configuration a_conf) {
     Population pop = a_pop;
-    int originalPopSize = a_conf.getPopulationSize();
+    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     boolean monitorActive = a_conf.getMonitor() != null;
     IChromosome fittest = null;
     // If first generation: Set age to one to allow genetic operations,
@@ -59,6 +66,25 @@ public class GABreeder
       for (int i = 0; i < size; i++) {
         IChromosome chrom = pop.getChromosome(i);
         chrom.increaseAge();
+      }
+      // If a bulk fitness function has been provided, call it.
+      // ------------------------------------------------------
+      if (bulkFunction != null) {
+        try {
+          pop = bulkFunctionEvaluation(a_conf, bulkFunction, pop, monitorActive);
+        } catch (InvalidConfigurationException ex) {
+          throw new RuntimeException(ex);
+        }
+        // Increase number of generations.
+        // -------------------------------
+        a_conf.incrementGenerationNr();
+        // Fire an event to indicate we've performed an evolution.
+        // -------------------------------------------------------
+        m_lastPop = pop;
+        m_lastConf = a_conf;
+        a_conf.getEventManager().fireGeneticEvent(
+            new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+        return pop;
       }
     }
     else {
@@ -71,7 +97,7 @@ public class GABreeder
         fittest = pop.determineFittestChromosome(0, pop.size() - 1);
       }
     }
-    if (a_conf.getGenerationNr() > 0) {
+    if (a_conf.getGenerationNr() > 0 && bulkFunction == null) {
       // Adjust population size to configured size (if wanted).
       // Theoretically, this should be done at the end of this method.
       // But for optimization issues it is not. If it is the last call to
@@ -90,7 +116,7 @@ public class GABreeder
       // -----------------------------------------------------------
       a_conf.getMonitor().event(
           IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES1,
-          a_conf.getGenerationNr(), new Object[]{pop});
+          a_conf.getGenerationNr(), new Object[] {pop});
     }
     updateChromosomes(pop, a_conf);
     if (monitorActive) {
@@ -98,7 +124,7 @@ public class GABreeder
       // -----------------------------------------------------------
       a_conf.getMonitor().event(
           IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES1,
-          a_conf.getGenerationNr(), new Object[]{pop});
+          a_conf.getGenerationNr(), new Object[] {pop});
     }
     // Apply certain NaturalSelectors before GeneticOperators will be executed.
     // ------------------------------------------------------------------------
@@ -134,28 +160,14 @@ public class GABreeder
       // Mark chromosome as not being operated on.
       // -----------------------------------------
       chrom.resetOperatedOn();
-      }
-      // If a bulk fitness function has been provided, call it.
+    }
+    // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
-    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
-    if (bulkFunction != null) {
-
-      if (monitorActive) {
-        // Monitor that bulk fitness will be called for evaluation.
-        // --------------------------------------------------------
-        a_conf.getMonitor().event(
-            IEvolutionMonitor.MONITOR_EVENT_BEFORE_BULK_EVAL,
-            a_conf.getGenerationNr(), new Object[] {bulkFunction, pop});
-      }
-      /**@todo utilize jobs: bulk fitness function is not so important for a
-       * prototype! */
-      bulkFunction.evaluate(pop);
-      if (monitorActive) {
-        // Monitor that bulk fitness has been called for evaluation.
-        // ---------------------------------------------------------
-        a_conf.getMonitor().event(
-            IEvolutionMonitor.MONITOR_EVENT_AFTER_BULK_EVAL,
-            a_conf.getGenerationNr(), new Object[] {bulkFunction, pop});
+    if (bulkFunction != null & a_conf.getGenerationNr() > 0) {
+      try {
+        pop = bulkFunctionEvaluation(a_conf, bulkFunction, pop, monitorActive);
+      } catch (InvalidConfigurationException ex) {
+        throw new RuntimeException(ex);
       }
     }
     // Ensure fitness value of all chromosomes is udpated.
@@ -165,7 +177,7 @@ public class GABreeder
       // -----------------------------------------------------------
       a_conf.getMonitor().event(
           IEvolutionMonitor.MONITOR_EVENT_BEFORE_UPDATE_CHROMOSOMES2,
-          a_conf.getGenerationNr(), new Object[]{pop});
+          a_conf.getGenerationNr(), new Object[] {pop});
     }
     updateChromosomes(pop, a_conf);
     if (monitorActive) {
@@ -173,12 +185,38 @@ public class GABreeder
       // -----------------------------------------------------------
       a_conf.getMonitor().event(
           IEvolutionMonitor.MONITOR_EVENT_AFTER_UPDATE_CHROMOSOMES2,
-          a_conf.getGenerationNr(), new Object[]{pop});
+          a_conf.getGenerationNr(), new Object[] {pop});
     }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, false);
+    // Fill up population randomly if size dropped below specified percentage
+    // of original size.
+    // ----------------------------------------------------------------------
+    fillPopulationRandomlyToOriginalSize(a_conf, pop);
+    IChromosome newFittest = reAddFittest(pop, fittest);
+    if (monitorActive && newFittest != null) {
+      // Monitor that fitness value of chromosomes is being updated.
+      // -----------------------------------------------------------
+      a_conf.getMonitor().event(
+          IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST,
+          a_conf.getGenerationNr(), new Object[] {pop, fittest});
+    }
+    // Increase number of generations.
+    // -------------------------------
+    a_conf.incrementGenerationNr();
+    // Fire an event to indicate we've performed an evolution.
+    // -------------------------------------------------------
+    m_lastPop = pop;
+    m_lastConf = a_conf;
+    a_conf.getEventManager().fireGeneticEvent(
+        new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+    return pop;
+  }
 
+  private void fillPopulationRandomlyToOriginalSize(Configuration a_conf,
+      Population pop) {
+    boolean monitorActive = a_conf.getMonitor() != null;
     // Fill up population randomly if size dropped below specified percentage
     // of original size.
     // ----------------------------------------------------------------------
@@ -206,7 +244,7 @@ public class GABreeder
               // -----------------------------------------------------------
               a_conf.getMonitor().event(
                   IEvolutionMonitor.MONITOR_EVENT_BEFORE_ADD_CHROMOSOME,
-                  a_conf.getGenerationNr(), new Object[]{pop, newChrom});
+                  a_conf.getGenerationNr(), new Object[] {pop, newChrom});
             }
             pop.addChromosome(newChrom);
           } catch (Exception ex) {
@@ -215,25 +253,6 @@ public class GABreeder
         }
       }
     }
-    IChromosome newFittest = reAddFittest(pop, fittest);
-    if (monitorActive && newFittest != null) {
-      // Monitor that fitness value of chromosomes is being updated.
-      // -----------------------------------------------------------
-      a_conf.getMonitor().event(
-          IEvolutionMonitor.MONITOR_EVENT_READD_FITTEST,
-          a_conf.getGenerationNr(), new Object[] {pop, fittest});
-    }
-
-    // Increase number of generations.
-    // -------------------------------
-    a_conf.incrementGenerationNr();
-    // Fire an event to indicate we've performed an evolution.
-    // -------------------------------------------------------
-    m_lastPop = pop;
-    m_lastConf = a_conf;
-    a_conf.getEventManager().fireGeneticEvent(
-        new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
-    return pop;
   }
 
   public Configuration getLastConfiguration() {
@@ -295,5 +314,93 @@ public class GABreeder
         chrom.getFitnessValue();
       }
     }
+  }
+
+  private Population removeEvaluatedChromosomes(Population a_from_pop,
+      Configuration a_config)
+      throws InvalidConfigurationException {
+    Population to_pop = new Population(a_config);
+    IChromosome selectedChromosome;
+    for (int i = 0; i < a_from_pop.size(); i++) {
+      selectedChromosome = a_from_pop.getChromosome(i);
+      if (selectedChromosome.getFitnessValueDirectly() ==
+          FitnessFunction.NO_FITNESS_VALUE) {
+        to_pop.addChromosome(selectedChromosome);
+      }
+    }
+    return to_pop;
+  }
+
+  private Population removeChromosomesWithoutFitnessValue(Population a_from_pop,
+      Configuration a_config)
+      throws InvalidConfigurationException {
+    Population to_pop = new Population(a_config);
+    IChromosome selectedChromosome;
+    for (int i = 0; i < a_from_pop.size(); i++) {
+      selectedChromosome = a_from_pop.getChromosome(i);
+      if (selectedChromosome.getFitnessValueDirectly() !=
+          FitnessFunction.NO_FITNESS_VALUE) {
+        to_pop.addChromosome(selectedChromosome);
+      }
+    }
+    return to_pop;
+  }
+
+  public Population bulkFunctionEvaluation(Configuration a_conf,
+      BulkFitnessFunction a_bulkFunction, Population a_pop,
+      boolean a_monitorActive)
+      throws InvalidConfigurationException {
+    if (a_bulkFunction != null) {
+      if (a_monitorActive) {
+        // Monitor that bulk fitness will be called for evaluation.
+        // --------------------------------------------------------
+        a_conf.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_BEFORE_BULK_EVAL,
+            a_conf.getGenerationNr(), new Object[] {a_bulkFunction, a_pop});
+      }
+      //remove chromosomes which have been already evaluated
+      Population popForBulkFunction = removeEvaluatedChromosomes(a_pop, a_conf);
+      if (!m_allChromosomesSoFar.isEmpty()) {
+        Iterator it = popForBulkFunction.getChromosomes().iterator();
+        //remove dublicates
+        while (it.hasNext()) {
+          IChromosome a_chrom1 = (IChromosome) it.next();
+          if (m_allChromosomesSoFar.contains( (IChromosome) a_chrom1)) {
+            it.remove();
+          }
+        }
+      }
+      fillPopulationRandomlyToOriginalSize(a_conf, popForBulkFunction);
+      //When we call it here, it will remove non evaluated chromosomes
+      keepPopSizeConstant(popForBulkFunction, a_conf);
+      if (popForBulkFunction.size() > 0) {
+        /**@todo utilize jobs: bulk fitness function is not so important for a
+         * prototype! */
+        a_bulkFunction.evaluate(popForBulkFunction);
+      }
+      //Remove the fitness value and add evaluated elements to
+      //the List with NO_FITNESS_VALUE
+      //and add the NEW elements to pop
+      Iterator it2 = popForBulkFunction.getChromosomes().iterator();
+      while (it2.hasNext()) {
+        Chromosome chrom0 = (Chromosome) it2.next();
+        Chromosome chrom = (Chromosome) chrom0.clone();
+        chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
+        m_allChromosomesSoFar.add(chrom);
+        if (!a_pop.getChromosomes().contains( (IChromosome) chrom0)) {
+          a_pop.addChromosome( (Chromosome) chrom0);
+        }
+      }
+      //remove chromosomes which have been already evaluated
+      a_pop = removeChromosomesWithoutFitnessValue(a_pop, a_conf);
+      if (a_monitorActive) {
+        // Monitor that bulk fitness has been called for evaluation.
+        // ---------------------------------------------------------
+        a_conf.getMonitor().event(
+            IEvolutionMonitor.MONITOR_EVENT_AFTER_BULK_EVAL,
+            a_conf.getGenerationNr(), new Object[] {a_bulkFunction, a_pop});
+      }
+    }
+    return a_pop;
   }
 }
