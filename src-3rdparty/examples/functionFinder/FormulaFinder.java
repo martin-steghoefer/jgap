@@ -30,7 +30,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -99,7 +99,8 @@ public class FormulaFinder {
    */
   private static void evolveFunction(String a_filename)
       throws Exception {
-    // Create JGAP configuration.
+    System.out.println("Loading settings from file " + a_filename);
+  // Create JGAP configuration.
     // --------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
@@ -120,6 +121,10 @@ public class FormulaFinder {
     Enumeration anEnum = props.keys();
     // Read in problem configuration.
     // ------------------------------
+    String formulaToDiscover = (String) props.remove("formula");
+    if(formulaToDiscover != null) {
+      System.out.println(" Formula to discover: " + formulaToDiscover);
+    }
     float factor = Float.parseFloat( (String) props.remove("minFitness"));
     if (conf.getFitnessEvaluator().isFitter(1, 2)) {
       MIN_FITNESS_WANTED = (int) (FormulaFitnessFunction.MAX_FITNESS *
@@ -133,6 +138,8 @@ public class FormulaFinder {
         "loopsMax"));
     MAX_ALLOWED_TERMS = Integer.parseInt( (String) props.remove("maxTerms"));
     POPULATION_SIZE = Integer.parseInt( (String) props.remove("populationSize"));
+    System.out.println(" Population size: " + POPULATION_SIZE);
+    System.out.println(" Max. number of terms in function: " + MAX_ALLOWED_TERMS);
     // Read in input-/output-value pairs.
     // ---------------------------------
     Map truthTable = new HashMap();
@@ -164,7 +171,7 @@ public class FormulaFinder {
     for (int i = 0; i < maxTerms; i++) {
       comp = new CompositeGene(conf);
       // Functions, constants.
-      // -------------------
+      // ---------------------
       gene = new IntegerGene(conf, 0, max);
       comp.addGene(gene);
       // Operators.
