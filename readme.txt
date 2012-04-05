@@ -107,6 +107,7 @@ Mailing list archives are also available for each of the lists.
 Thanks again for trying out JGAP!
 
 --Klaus Meffert for the JGAP team
+www.klaus-meffert.com
 
 -----------------------------------------------
 
