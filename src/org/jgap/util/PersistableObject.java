@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.io.xml.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -56,7 +56,7 @@ public class PersistableObject {
   }
     public void save(boolean a_omitConfig, Object[][] a_omitFields)
         throws Exception {
-    log.info("Saving object to file "+m_file.getName());
+    log.debug("Saving object to file "+m_file.getName());
     JGAPGPXStream xstream = new JGAPGPXStream();
     init(xstream);
     if (a_omitConfig) {
@@ -87,7 +87,7 @@ public class PersistableObject {
   }
 
   public Object load(File a_file) {
-    log.info("Loading object from file "+a_file.getName());
+    log.debug("Loading object from file "+a_file.getName());
     JGAPGPXStream xstream = new JGAPGPXStream();
     init(xstream);
     try {
