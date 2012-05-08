@@ -1,17 +1,30 @@
+3.63
+-----------------------------------------------------------
+* GP grid example MathproblemDistributed is now working
+* Optimized GABreeder.keepPopSizeConstant
+* New class BestAndUnevalChromsFitnessComparator for
+  optimized keepPopSizeConstant in GaBreeder
+* Added verbose output in MinimizingMakeChange example
+* Added verbose output in FormulaFinder example
+* Added constructor to JGAPRequestGP
+* Enhanced log output for GP Grid stuff
+* Enhanced Javadoc
+
 3.62
 -----------------------------------------------------------
 * New simple example for constraint solving
   (see package examples.constraint)
 * New BulkGABreeder, more efficient than GABreeder (thanx
-  a lot to Vasilis)
+  a lot to Machairas Vasileios)
 * New fitness function RosenbrocksBulkNegativeFunction
-  (also from Vasilis)
+  (also from Machairas Vasileios)
 
 3.61
 -----------------------------------------------------------
 * Corrected classpath for the example .bat-files
 * Removed obsolete .bat files
-* New class SeededRandomGenerator, thanx to Vasileois
+* New class SeededRandomGenerator, thanx to Machairas
+  Vasileios
 * Added test cases
 
 3.6
