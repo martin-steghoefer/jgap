@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -100,7 +100,7 @@ public class FixedBinaryGeneTest
   public void testConstruct_4()
       throws Exception {
     FixedBinaryGene gene = new FixedBinaryGene(conf, 6);
-    assertEquals(1, gene.size());
+    assertEquals(6, gene.size());
     assertEquals(1, (gene.getValue()).length);
     assertEquals("FixedBinaryGene[0,0,0,0,0,0]", gene.toString());
   }
@@ -116,9 +116,9 @@ public class FixedBinaryGeneTest
       throws Exception {
     FixedBinaryGene gene;
     gene = new FixedBinaryGene(conf, 32);
-    assertEquals(1, gene.size());
+    assertEquals(32, gene.size());
     gene = new FixedBinaryGene(conf, 81);
-    assertEquals(3, gene.size());
+    assertEquals(81, gene.size());
   }
 
   /**
@@ -1084,7 +1084,7 @@ public class FixedBinaryGeneTest
     gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
     FixedBinaryGene gene2 = gene1.substring(0, 4);
     assertEquals(5, gene2.getLength());
-    assertEquals(1, gene2.size());
+    assertEquals(5, gene2.size());
     assertTrue(gene2.getBit(0));
     assertTrue(gene2.getBit(1));
     assertFalse(gene2.getBit(2));
