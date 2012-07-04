@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   private transient Configuration m_lastConf;
 
@@ -323,8 +323,16 @@ public class GABreeder
     IChromosome selectedChromosome;
     for (int i = 0; i < a_from_pop.size(); i++) {
       selectedChromosome = a_from_pop.getChromosome(i);
-      if (selectedChromosome.getFitnessValueDirectly() ==
-          FitnessFunction.NO_FITNESS_VALUE) {
+      boolean hasFitness = selectedChromosome.getFitnessValueDirectly() !=
+          FitnessFunction.NO_FITNESS_VALUE;
+      if(!hasFitness) {
+        if (selectedChromosome instanceof Chromosome) {
+           if(((Chromosome)selectedChromosome).getMultiObjectives() != null) {
+            hasFitness = true;
+          }
+        }
+      }
+      if (!hasFitness) {
         to_pop.addChromosome(selectedChromosome);
       }
     }
@@ -338,8 +346,16 @@ public class GABreeder
     IChromosome selectedChromosome;
     for (int i = 0; i < a_from_pop.size(); i++) {
       selectedChromosome = a_from_pop.getChromosome(i);
-      if (selectedChromosome.getFitnessValueDirectly() !=
-          FitnessFunction.NO_FITNESS_VALUE) {
+      boolean hasFitness = selectedChromosome.getFitnessValueDirectly() !=
+          FitnessFunction.NO_FITNESS_VALUE;
+      if(!hasFitness) {
+        if (selectedChromosome instanceof Chromosome) {
+           if(((Chromosome)selectedChromosome).getMultiObjectives() != null) {
+            hasFitness = true;
+          }
+        }
+      }
+      if (hasFitness) {
         to_pop.addChromosome(selectedChromosome);
       }
     }
