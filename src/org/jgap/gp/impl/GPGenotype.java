@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -205,7 +205,12 @@ public class GPGenotype
         a_population.setGPPrograms(programs);
       }
     }
-    for (int i = 0; i < a_population.size(); i++) {
+    int popSize = a_population.size();
+    int realPopSize = a_configuration.realPopSize;
+    if(realPopSize > 0) {
+      popSize = realPopSize;
+    }
+    for (int i = 0; i < popSize; i++) {
       if (a_population.getGPProgram(i) == null) {
         throw new IllegalArgumentException(
             "The GPProgram instance at index " + i + " in population" +
@@ -696,6 +701,10 @@ public class GPGenotype
   public void evolve() {
     try {
       int popSize = getGPConfiguration().getPopulationSize();
+      int realPopSize = getGPConfiguration().realPopSize;/**@todo do it right*/
+      if(realPopSize > 0) {
+        popSize = realPopSize;
+      }
       GPPopulation oldPop = getGPPopulation();
       GPPopulation newPopulation = new GPPopulation(oldPop, false);
       if (m_fittestToAdd != null) {
@@ -1408,6 +1417,9 @@ public class GPGenotype
         if (triedNodes.contains(node)) {
           continue;
         }
+        if(node == null) {
+          continue;
+        }
         triedNodes.add(node);
         // Verify if node is possible.
         // ---------------------------
@@ -1551,6 +1563,9 @@ public class GPGenotype
             continue;
           }
           boolean valid = false;
+          if(nodeToCheck == null) {
+            continue;
+          }
           for (int l = 0; l < nodeToCheck.size(); l++) {
             IGPProgram ind = a_pop.getGPProgram(0);
             if (nodeInQuestion.getReturnType() ==
