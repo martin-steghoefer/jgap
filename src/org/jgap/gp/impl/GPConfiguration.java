@@ -30,8 +30,9 @@ import org.jgap.util.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
+public int realPopSize;/**@todo do it right*/
   /**@todo introduce lock for configuration*/
   /**
    * References the current fitness function that will be used to evaluate
@@ -1092,6 +1093,8 @@ public class GPConfiguration
       result.m_useProgramCache = m_useProgramCache;
       result.m_verify = m_verify;
       result.m_variables = m_variables;
+      result.realPopSize = realPopSize;/**@todo do it right*/
+      result.m_prototypeProgram = (IGPProgram)doClone(m_prototypeProgram);/**@todo do it for grid only*/
       // Configurable data.
       // ------------------
 //      result.m_config = new ConfigurationConfigurable();
