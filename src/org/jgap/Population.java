@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.66 $";
+  private static final String CVS_REVISION = "$Revision: 1.67 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -435,18 +435,15 @@ public class Population
    * @author Klaus Meffert
    * @since 3.2
    */
-  public void keepPopSizeConstant() throws InvalidConfigurationException {
+  public void keepPopSizeConstant()
+      throws InvalidConfigurationException {
     int popSize = size();
-    // See request  1213752.
-    // ---------------------
     int maxSize = getConfiguration().getPopulationSize();
-//    INaturalSelector selector = getConfiguration().getKeepPopConstantSelector();
-//    if (popSize > maxSize) {
-//      Population newPop = new Population(getConfiguration(), maxSize);
-//      selector.select(maxSize, this, newPop);
-//      m_chromosomes = newPop.getChromosomes();
-//      setChanged(true);
-//    }
+    if (popSize <= maxSize) {
+      return;
+    }
+    Collections.sort(m_chromosomes, new BestAndUnevalChromsFitnessComparator());
+    setSorted(false);
     IEvolutionMonitor monitor = getConfiguration().getMonitor();
     boolean monitorActive = monitor != null;
     while (popSize > maxSize) {
@@ -454,16 +451,16 @@ public class Population
         // Fire monitor with population and index of chromosome to be removed.
         // -------------------------------------------------------------------
         monitor.event(IEvolutionMonitor.MONITOR_EVENT_REMOVE_CHROMOSOME,
-            getConfiguration().getGenerationNr(),
-            new Object[] {this, new Integer(0)});
+                      getConfiguration().getGenerationNr(),
+                      new Object[] {this, new Integer(0)});
       }
       // Remove a chromosome.
       // --------------------
-      /**@todo use dedicated selector for that*/
       removeChromosome(0);
       popSize--;
     }
-    }
+  }
+
   /**
    * Sorts the Chromosome list and returns the fittest n Chromosomes in
    * the population.
