@@ -24,7 +24,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
@@ -60,7 +60,7 @@ public class TravellingSalesmanTest
       Configuration.reset();
     }
     if (oks < 6) {
-      fail("Less than 6 cities computed correctly!");
+      fail("Less than 6 cities computed correctly, it was only "+oks);
     }
   }
 
