@@ -27,7 +27,7 @@ public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
 
@@ -78,6 +78,9 @@ public class GPProgram
                    int[] a_minDepths, int[] a_maxDepths, int a_maxNodes)
       throws InvalidConfigurationException {
     super(a_conf);
+    if(a_types == null) {
+      return;
+    }
     m_chromosomes = new ProgramChromosome[a_types.length];
     setTypes(a_types);
     setArgTypes(a_argTypes);
@@ -553,10 +556,25 @@ public class GPProgram
       else {
         maxDepthsClone = null;
       }
+      Class[] typesLocal = getTypes();
+      if(typesLocal != null) {
+        typesLocal = (Class[]) typesLocal.clone();
+      }
+      else {
+        return null;
+      }
+      Class[][] argTypesLocal = getArgTypes();
+      if(argTypesLocal != null) {
+        argTypesLocal = (Class[][]) argTypesLocal.clone();
+      }
+      CommandGene[][] nodesetLocal =getNodeSets();
+      if(nodesetLocal != null) {
+        nodesetLocal = (CommandGene[][]) nodesetLocal.clone();
+      }
       GPProgram result = new GPProgram(getGPConfiguration(),
-                                       (Class[]) getTypes().clone(),
-                                       (Class[][]) getArgTypes().clone(),
-                                       (CommandGene[][]) getNodeSets().clone(),
+                                       typesLocal,
+                                       argTypesLocal,
+                                       nodesetLocal,
                                        minDepthsClone,
                                        maxDepthsClone,
                                        getMaxNodes());

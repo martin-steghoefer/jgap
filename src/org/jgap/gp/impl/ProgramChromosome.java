@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -191,14 +191,18 @@ public class ProgramChromosome
       }
       ProgramChromosome chrom = new ProgramChromosome( (GPConfiguration)
           getGPConfiguration(), (CommandGene[]) genes);
-      chrom.argTypes = (Class[]) argTypes.clone();
+      if(argTypes != null) {
+        chrom.argTypes = (Class[]) argTypes.clone();
+      }
       if (getFunctionSet() != null) {
         chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
       }
       if (m_depth != null) {
         chrom.m_depth = (int[]) m_depth.clone();
       }
-      chrom.setIndividual(getIndividual());
+      if(getIndividual() != null) {
+        chrom.setIndividual(getIndividual());
+      }
       return chrom;
     } catch (Exception cex) {
       // Rethrow to have a more convenient handling.
