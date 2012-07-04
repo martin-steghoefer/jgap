@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -128,8 +128,20 @@ public class GPPopulation
    */
   public GPPopulation(GPPopulation a_pop, boolean a_keepPrograms)
       throws InvalidConfigurationException {
+    this(a_pop,a_keepPrograms, a_pop.getPopSize());
+  }
+  /**
+   *
+   * @param a_pop the population to retrieve the parameters from
+   * @param a_keepPrograms true copy programs of given population to this one
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
+  public GPPopulation(GPPopulation a_pop, boolean a_keepPrograms, int a_popSize)
+      throws InvalidConfigurationException {
     m_config = a_pop.getGPConfiguration();
-    m_popSize = a_pop.getPopSize();
+    m_popSize = a_popSize;
     m_programs = new GPProgram[m_popSize];
     m_fitnessRank = new float[m_popSize];
     if (a_keepPrograms) {
