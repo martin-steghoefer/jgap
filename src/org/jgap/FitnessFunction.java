@@ -35,10 +35,14 @@ import org.jgap.util.*;
 public abstract class FitnessFunction
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
+  /**
+   * If difference between two fitness values is lower than DELTA, then
+   * these fitness values are seen as equal
+   */
   public final static double DELTA = 0.0000001d;
 
   /**
