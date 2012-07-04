@@ -4,6 +4,7 @@
 * Optimized GABreeder.keepPopSizeConstant
 * New class BestAndUnevalChromsFitnessComparator for
   optimized keepPopSizeConstant in GaBreeder
+* Fixed bug with FixedBinaryGene.size()
 * Added verbose output in MinimizingMakeChange example
 * Added verbose output in FormulaFinder example
 * Added constructor to JGAPRequestGP
