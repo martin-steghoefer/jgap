@@ -27,7 +27,7 @@ import org.jgap.gp.*;
 public class TournamentSelector
     implements INaturalGPSelector, Serializable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private int m_tournament_size;
 
@@ -80,6 +80,10 @@ public class TournamentSelector
     IGPFitnessEvaluator evaluator = a_genotype.getGPConfiguration().
         getGPFitnessEvaluator();
     int popSize = pop.getPopSize();
+    int realPopSize = a_genotype.getGPConfiguration().realPopSize;
+    if(realPopSize > 0) {
+      popSize = realPopSize;
+    }
     // Care that in one tournament each individual is only considered once!
     // --------------------------------------------------------------------
     List<Integer> indexes = new Vector(popSize);
@@ -94,7 +98,7 @@ public class TournamentSelector
       }
       else {
         IGPProgram prog = pop.getGPProgram(realIndex);
-        if (evaluator.isFitter(prog, bestProgram)) {
+        if (bestProgram == null || evaluator.isFitter(prog, bestProgram)) {
           bestProgram = prog;
         }
       }
