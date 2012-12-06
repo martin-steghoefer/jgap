@@ -69,20 +69,24 @@
   </copy>
     <javac srcdir="${src}"
            destdir="${classDir}"
-           classpathref="classpathCompile">
+           classpathref="classpathCompile"
+           encoding="iso8859-1">
     </javac>
     <javac srcdir="${test}"
            destdir="${classDir}"
-           classpathref="classpathCompile">
+           classpathref="classpathCompile"
+           encoding="iso8859-1">
     </javac>
     <javac srcdir="${examples}"
            destdir="${classDir}"
            classpathref="classpathCompile"
-           excludes="examples/functionFinder/**"/>
+           excludes="examples/functionFinder/**"
+           encoding="iso8859-1"/>
   </target>
 
   <target name="compile-debug">
-    <javac debug="on" srcdir="${src}"/>
+    <javac debug="on" srcdir="${src}"
+    encoding="iso8859-1"/>
   </target>
 
   <target name="test" depends="compile">
