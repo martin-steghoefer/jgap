@@ -33,10 +33,10 @@ import gnu.trove.*;
 public class WeightedRouletteSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001d;
+  private static final double DELTA = 0.000000000000000000000000000000000000000000000000000000000000000000001d;
 
   private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0.0d);
 
@@ -180,8 +180,8 @@ public class WeightedRouletteSelector
           (IChromosome) chromosomeEntry.getKey();
       SlotCounter currentCounter =
           (SlotCounter) chromosomeEntry.getValue();
-      fitnessValues[i] = currentCounter.getFitnessValue();
-      counterValues[i] = fitnessValues[i] //currentCounter.getFitnessValue()
+      fitnessValues[i] = currentCounter.getFitnessValue() * MULT2;
+      counterValues[i] = fitnessValues[i]
           * currentCounter.getCounterValue();
       chromosomes[i] = currentChromosome;
       // We're also keeping track of the total number of slots,
@@ -340,7 +340,8 @@ public class WeightedRouletteSelector
     m_wheel.clear();
     m_totalNumberOfUsedSlots = 0;
   }
-
+final double MULT = 1;//1.0E45;
+  final double MULT2 = 1;//1.0E40;
   private void scaleFitnessValues() {
     // First, add up all the fitness values. While we're doing this,
     // keep track of the largest fitness value we encounter.
@@ -350,18 +351,18 @@ public class WeightedRouletteSelector
     Iterator counterIterator = m_wheel.values().iterator();
     while (counterIterator.hasNext()) {
       SlotCounter counter = (SlotCounter) counterIterator.next();
-      if (counter.getFitnessValue() > largestFitnessValue) {
-        largestFitnessValue = counter.getFitnessValue();
+      if (counter.getFitnessValue()*MULT > largestFitnessValue) {
+        largestFitnessValue = counter.getFitnessValue()*MULT;
       }
-      BigDecimal counterFitness = new BigDecimal(counter.getFitnessValue());
+      BigDecimal counterFitness = new BigDecimal(counter.getFitnessValue()*MULT);
       totalFitness = totalFitness.add(counterFitness.multiply(
           new BigDecimal(counter.getCounterValue())));
     }
     // Now divide the total fitness by the largest fitness value to
     // compute the scaling factor.
     // ------------------------------------------------------------
-    if (largestFitnessValue > 0.000000d
-        && totalFitness.floatValue() > 0.0000001d) {
+    if (largestFitnessValue > DELTA
+        && totalFitness.floatValue() > DELTA) {
       double scalingFactor =
           totalFitness.divide(new BigDecimal(largestFitnessValue),
                               BigDecimal.ROUND_HALF_UP).doubleValue();
