@@ -20,9 +20,6 @@ import org.jgap.impl.*;
  */
 public class SampleFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * The fitness evaluation routine.
    *

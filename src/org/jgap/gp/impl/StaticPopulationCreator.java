@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public class StaticPopulationCreator
     implements IPopulationCreator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private GPPopulation m_pop;
 
   /**

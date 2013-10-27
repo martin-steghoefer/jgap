@@ -19,9 +19,6 @@ package org.jgap.distr.grid.gp;
  */
 public class NullClientFeedbackGP
     implements IClientFeedbackGP {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public void setProgressMinimum(int a_min) {
     // Do nothing.
   }

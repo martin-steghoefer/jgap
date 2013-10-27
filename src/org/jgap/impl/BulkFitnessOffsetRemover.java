@@ -222,9 +222,6 @@ import org.jgap.*;
  */
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   /*
    * Replace this member by the Configuration as soon as Configuration allows
    * bulk fitness function and fitness function to be stored both in it.

@@ -19,9 +19,6 @@ import java.io.*;
  */
 public interface IJob
     extends Serializable, Runnable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
-
   /**
    * Executes a job.
    *

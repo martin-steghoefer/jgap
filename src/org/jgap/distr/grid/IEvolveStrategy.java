@@ -21,8 +21,5 @@ import org.jgap.*;
  */
 public interface IEvolveStrategy
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
-
   void evolve(Genotype a_genotype);
 }

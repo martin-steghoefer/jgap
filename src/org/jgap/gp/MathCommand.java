@@ -20,9 +20,6 @@ import org.jgap.gp.impl.*;
  */
 public abstract class MathCommand
     extends CommandGene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
-
   public MathCommand(final GPConfiguration a_conf, int a_arity,
                      Class a_returnType)
       throws InvalidConfigurationException {

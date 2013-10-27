@@ -22,9 +22,6 @@ import org.jgap.Gene;
  * @since 2.0
  */
 public interface SupergeneValidator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Return true if this gene combination is valid for
    * the given supergene */

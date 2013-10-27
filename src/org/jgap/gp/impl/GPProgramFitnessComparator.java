@@ -27,9 +27,6 @@ import org.jgap.gp.*;
  */
 public class GPProgramFitnessComparator
     implements Comparator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private IGPFitnessEvaluator m_fitnessEvaluator;
 
   /**

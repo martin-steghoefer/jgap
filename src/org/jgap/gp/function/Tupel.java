@@ -24,9 +24,6 @@ import org.jgap.util.*;
  */
 public class Tupel
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private Class[] m_types;
 
   private Object[] m_values;

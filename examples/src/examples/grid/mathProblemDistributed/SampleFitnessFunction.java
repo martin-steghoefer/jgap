@@ -22,9 +22,6 @@ import org.apache.log4j.*;
  */
 public class SampleFitnessFunction
     extends GPFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
   static Variable vx;

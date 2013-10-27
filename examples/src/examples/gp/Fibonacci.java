@@ -34,9 +34,6 @@ import org.jgap.distr.grid.gp.JGAPGPXStream;
  */
 public class Fibonacci
     extends GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
-
   transient static final Logger LOGGER = Logger.getLogger(Fibonacci.class);
 
   static Variable vx;

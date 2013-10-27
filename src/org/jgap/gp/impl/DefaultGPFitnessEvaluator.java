@@ -20,9 +20,6 @@ import org.jgap.gp.*;
  */
 public class DefaultGPFitnessEvaluator
     implements IGPFitnessEvaluator, Cloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Compares the first given fitness value with the second and returns true
    * if the first one is greater than the second one. Otherwise returns false

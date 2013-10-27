@@ -53,9 +53,6 @@ public class JGAPClientGP
    * komprimierung durch weglassen überfl. infos, siehe xml --> injection after reload*/
   /**@todo copy good results to online folder*/
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
-
   public static final String APP_VERSION = "1.02a";
 
   /**@todo store version in external file*/

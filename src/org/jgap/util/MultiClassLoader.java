@@ -30,9 +30,6 @@ import java.util.*;
  */
 public abstract class MultiClassLoader
     extends ClassLoader {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
 //---------- Fields --------------------------------------
   private Hashtable classes = new Hashtable();
 

@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  */
 public class MaxFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * See examples.simpleBoolean.MaxFunction for description.
    * Please notice that in this example here, we have chromosomes with one and

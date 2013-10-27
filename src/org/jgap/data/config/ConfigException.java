@@ -19,9 +19,6 @@ package org.jgap.data.config;
  * */
 public class ConfigException
     extends Exception {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Constructs a new ConfigException instance with the
    * given error message.

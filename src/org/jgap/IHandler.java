@@ -18,9 +18,6 @@ package org.jgap;
  * @since 2.6
  */
 public interface IHandler {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Determines whether the handler is suitable for the given object instance
    * or class.

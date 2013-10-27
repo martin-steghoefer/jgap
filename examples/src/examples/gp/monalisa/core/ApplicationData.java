@@ -19,9 +19,6 @@ import java.awt.*;
  * @since 3.4.1
  */
 public class ApplicationData {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public Graphics graphics;
 
   public int numPoints;

@@ -23,9 +23,6 @@ import org.jgap.impl.*;
  */
 public class MOFitnessEvaluator
     implements FitnessEvaluator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Not to be called in multi-objectives context! Instead, oOther method below
    * applies for multi-objectives.

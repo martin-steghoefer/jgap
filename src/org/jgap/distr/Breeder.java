@@ -24,9 +24,6 @@ import org.jgap.*;
  */
 public abstract class Breeder
     implements Runnable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
-
   /**
    * The parent Breeder to report to
    */

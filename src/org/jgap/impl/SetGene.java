@@ -27,9 +27,6 @@ import gnu.trove.*;
  */
 public class SetGene
     extends BaseGene implements IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
-
   private THashSet m_geneSet = new THashSet();
 
   private Object m_value;

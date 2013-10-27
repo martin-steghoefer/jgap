@@ -21,9 +21,6 @@ import java.io.*;
  */
 public interface IGenotypeInitializerGP
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   GPGenotype setupGenotype(JGAPRequestGP a_req, GPPopulation a_initialPop)
       throws Exception;
 }

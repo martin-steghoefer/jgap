@@ -19,9 +19,6 @@ import examples.math.*;
  */
 public class MultiplyOperator
     extends MathOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public MultiplyOperator() {
     super();
   }

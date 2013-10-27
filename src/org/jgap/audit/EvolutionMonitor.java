@@ -113,9 +113,6 @@ import org.jgap.eval.*;
  */
 public class EvolutionMonitor
     implements IEvolutionMonitor {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public static final int CONTEXT_UPDATE_CHROMOSOMES1 = 0;
 
   public static final int CONTEXT_OFFSET_NATURAL_SELECTOR1 = 1;

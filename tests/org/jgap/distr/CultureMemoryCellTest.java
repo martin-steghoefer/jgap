@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class CultureMemoryCellTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureMemoryCellTest.class);
     return suite;

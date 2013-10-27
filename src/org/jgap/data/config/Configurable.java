@@ -17,9 +17,6 @@ package org.jgap.data.config;
  * @since 2.3
  * */
 public interface Configurable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * @return name of the variable representing a configurable
    * @author Klaus Meffert

@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public class JGAPResult
     extends WorkResult {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private IChromosome m_fittest;
   private Population m_pop;
 

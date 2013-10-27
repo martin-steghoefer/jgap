@@ -32,9 +32,6 @@ import org.jgap.impl.*;
  * @since 3.6.2
  */
 public class ConstraintExample {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

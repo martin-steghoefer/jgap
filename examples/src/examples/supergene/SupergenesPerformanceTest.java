@@ -23,9 +23,6 @@ import org.jgap.supergenes.*;
  * @since 2.0
  */
 public final class SupergenesPerformanceTest {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Starts the performance test.
    *

@@ -31,9 +31,6 @@ import java.util.*;
  */
 public class Pool {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * The objects currently in the pool.
    */

@@ -17,9 +17,6 @@ package examples.math.cmd;
  */
 public abstract class MathOperator
     implements Operator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private Operand mLeftOperand;
 
   private Operand mRightOperand;

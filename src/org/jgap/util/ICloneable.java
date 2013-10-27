@@ -9,9 +9,6 @@ package org.jgap.util;
  */
 public interface ICloneable
     extends Cloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * @return clone of the current object instance
    */

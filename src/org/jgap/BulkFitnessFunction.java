@@ -29,9 +29,6 @@ import org.jgap.util.*;
  */
 public abstract class BulkFitnessFunction
     implements Serializable, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * Calculates and sets the fitness values on each of the given
    * Chromosomes via their setFitnessValue() method.

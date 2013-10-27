@@ -23,9 +23,6 @@ import com.eteks.parser.*;
  */
 public class MatchAgainstTruthTable
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private List m_truthTable;
 
   private double m_currentFitness;

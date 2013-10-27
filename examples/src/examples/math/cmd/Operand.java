@@ -21,9 +21,6 @@ import examples.math.*;
  */
 public interface Operand
     extends ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
   double value();
 
   void accept(MathVisitor theVisitor);

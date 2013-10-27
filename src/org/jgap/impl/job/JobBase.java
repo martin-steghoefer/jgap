@@ -17,9 +17,6 @@ package org.jgap.impl.job;
  */
 public abstract class JobBase
     implements IJob {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private JobData m_data;
 
   private boolean m_finished;

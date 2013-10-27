@@ -22,9 +22,6 @@ import org.jgap.gp.impl.*;
  */
 public class DrawingGPConfiguration
     extends GPConfiguration {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   protected BufferedImage m_target = null;
 
   public DrawingGPConfiguration(BufferedImage a_target)

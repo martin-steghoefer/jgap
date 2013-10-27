@@ -21,9 +21,6 @@ import org.jgap.util.*;
  * @since 2.3
  */
 public abstract class Master {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   /**
    * Information needed by workers
    */

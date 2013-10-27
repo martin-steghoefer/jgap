@@ -23,9 +23,6 @@ import org.jgap.supergenes.*;
  */
 public class SupergeneChangeFitnessFunction
     extends AbstractChangeFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public SupergeneChangeFitnessFunction(int a_targetAmount) {
     super(a_targetAmount);
   }

@@ -23,9 +23,6 @@ import org.jgap.gp.impl.*;
  */
 public abstract class GPTestCase
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
   protected GPConfiguration m_gpconf;
 
   protected RandomGeneratorForTesting rn;

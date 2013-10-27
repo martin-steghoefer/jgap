@@ -18,9 +18,6 @@ import junit.framework.*;
 public class AllGUITests
     extends TestSuite {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite("AllGUITests");
     suite.addTest(ConfigWriterTest.suite());

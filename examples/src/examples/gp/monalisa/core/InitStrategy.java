@@ -19,9 +19,6 @@ import org.jgap.gp.*;
  */
 public class InitStrategy
     implements IGPInitStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   /**
    * Initializes a chromosome within a GP program before a random creation of
    * the (rest of the) program is executed.

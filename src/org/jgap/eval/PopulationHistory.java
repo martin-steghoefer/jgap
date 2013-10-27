@@ -22,9 +22,6 @@ import org.jgap.*;
  */
 public class PopulationHistory
     implements Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   private List m_populations;
 
   private int m_maxSize;

@@ -25,9 +25,6 @@ package org.jgap.xml;
  */
 public class GeneCreationException
     extends Exception {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Constructs a new GeneCreationException instance with the given error
    * message.

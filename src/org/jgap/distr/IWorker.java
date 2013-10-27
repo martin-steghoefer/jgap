@@ -16,9 +16,6 @@ package org.jgap.distr;
  * @since 2.4
  */
 public interface IWorker {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * @return display name of the worker
    *

@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class DoubleGeneTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.42 $";
-
   public void setUp() {
     super.setUp();
   }

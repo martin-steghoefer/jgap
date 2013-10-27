@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public class SampleSplitStrategy
     implements IRequestSplitStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private Configuration m_config;
 
   public SampleSplitStrategy(Configuration a_config) {

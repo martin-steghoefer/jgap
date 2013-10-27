@@ -22,9 +22,6 @@ import org.homedns.dade.jcgrid.client.*;
  */
 public interface IClientEvolveStrategy
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   void initialize(GridClient a_gc, Configuration a_config,
                   IClientFeedback a_clientFeedback)
       throws Exception;

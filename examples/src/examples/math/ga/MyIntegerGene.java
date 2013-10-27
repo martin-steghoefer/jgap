@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class MyIntegerGene
     extends BaseGene implements Gene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private Integer mValue;
 
   private int mMin = Integer.MIN_VALUE;

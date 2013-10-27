@@ -21,9 +21,6 @@ import org.jgap.gp.*;
  */
 public class StaticGPFitnessFunction
     extends GPFitnessFunction implements Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * @since 3.2
    */

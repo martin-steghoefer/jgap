@@ -19,9 +19,6 @@ import java.util.*;
  * @since 2.6
  */
 public interface IJGAPFactory extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.8 $";
-
   void setParameters(Collection a_parameters);
 
   /**

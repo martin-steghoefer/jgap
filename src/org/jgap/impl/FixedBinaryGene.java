@@ -31,9 +31,6 @@ import org.jgap.*;
  */
 public class FixedBinaryGene
     extends BaseGene implements IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
-
   private int m_length;
 
   private int[] m_value;

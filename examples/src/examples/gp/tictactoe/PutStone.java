@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class PutStone
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private Board m_board;
 
   private int m_color;

@@ -24,9 +24,6 @@ import org.jgap.util.*;
  */
 public class ColorConstructor
     extends CommandGene implements ICloneable{
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public ColorConstructor(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 4, Color.class);

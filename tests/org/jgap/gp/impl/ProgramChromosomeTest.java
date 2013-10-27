@@ -22,9 +22,6 @@ import junit.framework.*;
  */
 public class ProgramChromosomeTest
     extends GPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
     return suite;

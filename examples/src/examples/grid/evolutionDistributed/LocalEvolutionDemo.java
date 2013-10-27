@@ -25,9 +25,6 @@ import examples.grid.fitnessDistributed.*;
  * @since 3.2
  */
 public class LocalEvolutionDemo {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private GridConfiguration m_localconfig;
 
   private IClientEvolveStrategy m_clientEvolver;

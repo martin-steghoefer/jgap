@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class DefaultInitializer
     implements IInitializer, ICloneable, Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
-
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (IChromosome.class.isAssignableFrom(a_class)) {
       return true;

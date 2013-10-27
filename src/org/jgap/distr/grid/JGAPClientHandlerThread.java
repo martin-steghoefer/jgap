@@ -24,9 +24,6 @@ import org.homedns.dade.jcgrid.server.*;
  */
 public class JGAPClientHandlerThread
     extends ClientHandlerThread {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public JGAPClientHandlerThread(GridServer server, Socket socket)
       throws IOException {
     super(server, socket);

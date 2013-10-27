@@ -38,9 +38,6 @@ import org.w3c.dom.*;
  * @since 1.0
  */
 public class MinimizingMakeChange {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

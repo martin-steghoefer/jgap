@@ -16,9 +16,6 @@ package org.jgap.data.config;
  * @since 2.3
  * */
 public interface IConfigInfo {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   ConfigData getConfigData();
 
   /**

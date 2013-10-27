@@ -23,8 +23,5 @@ package org.jgap.util.tree;
 import java.awt.*;
 
 public interface TreeBranchRenderer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public Color getBranchColor(Object node, int level);
 }

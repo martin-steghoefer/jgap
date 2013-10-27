@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public abstract class AntCommand
     extends CommandGene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
   public AntCommand(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 0, CommandGene.VoidClass);

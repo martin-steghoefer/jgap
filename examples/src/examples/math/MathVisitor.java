@@ -18,9 +18,6 @@ import examples.math.cmd.*;
  * @since 3.4.2
  */
 public interface MathVisitor {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
   void visit(ValueOperand theOp);
 
   void visit(AddOperator theOp);

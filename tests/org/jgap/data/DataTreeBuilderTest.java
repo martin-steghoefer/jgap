@@ -22,9 +22,6 @@ import junit.framework.*;
  */
 public class DataTreeBuilderTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
 

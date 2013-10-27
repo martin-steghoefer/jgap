@@ -22,9 +22,6 @@ import java.io.*;
  */
 public interface FitnessEvaluator
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * Compares the first given fitness value with the second and returns true
    * if the first one is greater than the second one. Otherwise returns false

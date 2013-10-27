@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  * @since 2.2
  */
 public class Utility {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private static int numberOfFunctions;
 
   private static int numberOfConstants;

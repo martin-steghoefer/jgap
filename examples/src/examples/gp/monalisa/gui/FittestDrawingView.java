@@ -16,9 +16,6 @@ package examples.gp.monalisa.gui;
  */
 public class FittestDrawingView
     extends javax.swing.JFrame {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public FittestDrawingView() {
     initComponents();
   }

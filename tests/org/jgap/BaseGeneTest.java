@@ -20,9 +20,6 @@ import java.util.*;
  */
 public class BaseGeneTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
     return suite;

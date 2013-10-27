@@ -18,9 +18,6 @@ import java.io.*;
  * @since 2.0
  */
 public interface IUniversalRateCalculator extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
-
   /**
    * Calculates the required dynamic rate.
    * @return the currently applying mutation rate.

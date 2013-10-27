@@ -12,9 +12,6 @@ import junit.framework.*;
  */
 public class AllFormulaFinderTests extends TestSuite {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
-
   public AllFormulaFinderTests(String name) {
     super(name);
   }

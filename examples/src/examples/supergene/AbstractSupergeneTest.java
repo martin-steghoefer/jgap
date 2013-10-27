@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  * @since 2.0
  * */
 public abstract class AbstractSupergeneTest {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Gene index for the dimes gene
    */

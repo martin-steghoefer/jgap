@@ -19,9 +19,6 @@ import org.jgap.*;
  * @since 3.2
  */
 public class MyEvolveStrategy implements IWorkerEvolveStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve(40);
   }

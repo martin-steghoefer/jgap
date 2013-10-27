@@ -21,9 +21,6 @@ import org.jgap.util.*;
  */
 public class KeyedValues
     implements ICloneable, Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
   /** Data storage */
   private List m_data;
 

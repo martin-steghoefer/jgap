@@ -22,9 +22,6 @@ import org.jgap.gp.impl.*;
 public class NodeValidator
     implements INodeValidator {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   /**
    * Validates a_node in the context of a_chrom during evolution. Considers the
    * recursion level (a_recursLevel), the type needed (a_type) for the node, the

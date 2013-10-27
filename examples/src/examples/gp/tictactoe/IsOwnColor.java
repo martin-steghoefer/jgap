@@ -16,9 +16,6 @@ import org.jgap.util.*;
 
 public class IsOwnColor
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private int m_color;
 
   private int m_subChildType; // Only needed for cloning!

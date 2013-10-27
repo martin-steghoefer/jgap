@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class KnapsackFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private final double m_knapsackVolume;
 
   public static final double MAX_BOUND = 1000000000.0d;

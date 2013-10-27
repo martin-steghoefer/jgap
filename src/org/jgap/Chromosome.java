@@ -64,9 +64,6 @@ import java.util.*;
  */
 public class Chromosome
     extends BaseChromosome {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.105 $";
-
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome

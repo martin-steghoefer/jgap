@@ -16,8 +16,6 @@ package examples.gp.paintedDesert;
  * @since 3.2
  */
 public class AntMap {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
   /** Holds the instance of the ant being processed.  Assumption that some external
    * single threaded process will loop through all the ants using nextAnt to sequence
    * through the ants.  It is expected that the clients of the AntMap can use getAnt()

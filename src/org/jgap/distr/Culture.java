@@ -24,9 +24,6 @@ import org.apache.commons.lang.builder.*;
  */
 public class Culture
     implements Serializable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
-
   /**
    * The storage to use.
    */

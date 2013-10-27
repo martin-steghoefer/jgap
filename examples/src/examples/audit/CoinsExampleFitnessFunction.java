@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class CoinsExampleFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private final int m_targetAmount;
 
   public static final int MAX_BOUND = 1000;

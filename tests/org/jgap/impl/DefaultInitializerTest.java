@@ -20,9 +20,6 @@ import junit.framework.*;
  */
 public class DefaultInitializerTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultInitializerTest.class);
     return suite;

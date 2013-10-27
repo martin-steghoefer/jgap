@@ -19,9 +19,6 @@ import org.apache.log4j.Logger;
  */
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
   public final static double MAX_FITNESS_VALUE = Double.MAX_VALUE / 2;

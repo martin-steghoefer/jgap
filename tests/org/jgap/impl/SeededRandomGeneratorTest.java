@@ -23,9 +23,6 @@ import junit.framework.*;
  */
 public class SeededRandomGeneratorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(SeededRandomGeneratorTest.class);
     return suite;

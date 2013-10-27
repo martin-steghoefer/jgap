@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public abstract class Validator
     implements SupergeneValidator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   private transient Configuration m_conf;
 
   public Validator(Configuration a_conf) {

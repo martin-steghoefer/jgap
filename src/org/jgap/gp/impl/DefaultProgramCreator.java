@@ -20,9 +20,6 @@ import org.jgap.gp.*;
  */
 public class DefaultProgramCreator
     implements IProgramCreator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public IGPProgram create(GPConfiguration a_conf, int a_programIndex,
                            Class[] a_types, Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,

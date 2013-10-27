@@ -21,7 +21,4 @@ package org.jgap;
  */
 public interface ICompareToHandler
     extends IHandler {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
 }

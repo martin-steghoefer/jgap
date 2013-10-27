@@ -19,9 +19,6 @@ package org.jgap;
  * @since 3.2
  */
 public interface IBusinessKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * @return business key
    *

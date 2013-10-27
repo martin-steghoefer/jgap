@@ -20,9 +20,6 @@ import org.jgap.*;
  * @since 2.3
  * */
 public interface ConfigurationHandler {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Return the name of this Configuration Object to be used in the properties
    * file.

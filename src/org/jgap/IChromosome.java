@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public interface IChromosome
     extends Comparable, ICloneable, Serializable, IUniqueKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.17 $";
-
   /**
    * Constants for toString()
    */

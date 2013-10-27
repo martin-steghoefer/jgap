@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public abstract class BaseGene
     implements Gene, IBusinessKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
-
   /**
    * Constants for toString()
    */

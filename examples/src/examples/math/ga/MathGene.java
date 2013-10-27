@@ -22,9 +22,6 @@ import examples.math.cmd.*;
  */
 public class MathGene
     extends BaseGene implements Gene, Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private Operand mOperand;
 
   public MathGene(Configuration theConfiguration)

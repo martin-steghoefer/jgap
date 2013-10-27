@@ -27,9 +27,6 @@ import javax.imageio.*;
 import javax.swing.tree.*;
 
 public class TreeVisualizer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private int side = 512; //the height and width of the image
 
   private double circleDiminishFactor = 0.875;

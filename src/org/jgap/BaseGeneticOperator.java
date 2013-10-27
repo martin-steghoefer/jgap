@@ -20,9 +20,6 @@ import org.jgap.audit.*;
  */
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   private Configuration m_configuration;
 
   protected IEvolutionMonitor m_monitor;

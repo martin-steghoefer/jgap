@@ -30,9 +30,6 @@ import org.jgap.eval.*;
  * @since 3.5
  */
 public class EvolutionEvaluator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private PopulationHistoryIndexed m_monitorData;
 
   private List<Integer> evolutionIndexes;

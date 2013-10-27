@@ -17,9 +17,6 @@ package org.jgap.distr.grid.wan;
  */
 public class WANData {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private String m_uri;
 
   public WANData() {

@@ -19,9 +19,6 @@ import java.util.*;
  * @since 2.3
  * */
 public class ConfigData {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private List m_listData;
 
   private List m_textData;

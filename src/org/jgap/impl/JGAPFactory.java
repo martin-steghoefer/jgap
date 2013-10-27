@@ -30,9 +30,6 @@ import org.apache.commons.lang.builder.*;
  */
 public class JGAPFactory
     implements IJGAPFactory, Serializable, ICloneable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
-
   private List m_parameters;
 
   private List m_cloneHandlers;

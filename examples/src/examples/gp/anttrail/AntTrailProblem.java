@@ -37,9 +37,6 @@ import org.jgap.util.tree.*;
  */
 public class AntTrailProblem
     extends GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
-
   protected int[][] m_map;
 
   private static int foodAvail;

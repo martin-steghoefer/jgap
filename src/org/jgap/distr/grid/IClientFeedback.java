@@ -19,9 +19,6 @@ import java.io.*;
  */
 public interface IClientFeedback
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
-
   void setProgressMinimum(int min);
 
   void setProgressMaximum(int max);

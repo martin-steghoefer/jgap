@@ -27,9 +27,6 @@ import org.jgap.gp.impl.*;
  */
 public interface INodeValidator
     extends java.io.Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
-
   /**
    * Validates a_node in the context of a_chrom. Considers the recursion level
    * (a_recursLevel), the type needed (a_type) for the node, the functions

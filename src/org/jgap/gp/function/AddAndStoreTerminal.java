@@ -25,9 +25,6 @@ import org.jgap.util.*;
 
 public class AddAndStoreTerminal
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
    * ReadTerminalCommand.

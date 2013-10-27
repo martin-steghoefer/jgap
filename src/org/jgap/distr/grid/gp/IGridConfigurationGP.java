@@ -25,9 +25,6 @@ import org.jgap.gp.impl.*;
  */
 public interface IGridConfigurationGP
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
-
   IClientFeedbackGP getClientFeedback();
 
   IClientEvolveStrategyGP getClientEvolveStrategy();

@@ -9,9 +9,6 @@ package org.jgap.util;
  */
 public class CloneException
     extends RuntimeException {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public CloneException() {
     super();
   }

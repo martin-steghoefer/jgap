@@ -25,9 +25,6 @@ import org.apache.commons.lang.builder.*;
  */
 public class CultureMemoryCell
     implements Serializable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
-
   /**
    * Informative name of the memory cell (optional)
    */

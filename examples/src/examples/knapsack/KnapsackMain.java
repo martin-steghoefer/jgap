@@ -28,9 +28,6 @@ import org.w3c.dom.*;
  * @since 2.3
  */
 public class KnapsackMain {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

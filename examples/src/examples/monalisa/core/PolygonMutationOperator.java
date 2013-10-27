@@ -25,9 +25,6 @@ import org.jgap.impl.*;
  */
 public class PolygonMutationOperator
     extends MutationOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public PolygonMutationOperator(final Configuration a_config,
                                  final int a_desiredMutationRate)
       throws InvalidConfigurationException {

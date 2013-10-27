@@ -24,9 +24,6 @@ import junit.framework.*;
 public class AllImplTests
     extends TestSuite {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite("AllImplTests");
     suite.addTest(AveragingCrossoverOperatorTest.suite());

@@ -22,9 +22,6 @@ import javax.xml.parsers.*;
  */
 public class XMLDocumentBuilder
     extends DocumentBuilderBase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
   protected void setAttribute(final Object a_xmlElement, final String a_key,
                               final String a_value) {
     ( (Element) a_xmlElement).setAttribute(a_key, a_value);

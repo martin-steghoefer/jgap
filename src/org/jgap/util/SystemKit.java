@@ -22,9 +22,6 @@ import org.apache.commons.cli.Option;
  * @since 3.2
  */
 public class SystemKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * @return total memory available by the VM in megabytes.
    *

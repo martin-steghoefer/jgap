@@ -23,9 +23,6 @@ import org.jgap.*;
 public class RandomFitnessFunction
     extends FitnessFunction {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   private Random m_rand;
 
   public RandomFitnessFunction() {

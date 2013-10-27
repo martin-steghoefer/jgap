@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class DefaultCrossoverRateCalculator
     extends BaseRateCalculator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    *
    * @param a_config the configuration to use

@@ -25,9 +25,6 @@ import org.jgap.util.*;
  */
 public class GPPopulation
     implements Serializable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
-
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";

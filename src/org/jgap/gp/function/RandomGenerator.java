@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class RandomGenerator
     extends MathCommand implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public RandomGenerator(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, 0, a_returnType);

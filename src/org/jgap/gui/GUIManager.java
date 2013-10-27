@@ -28,9 +28,6 @@ import org.jgap.data.config.*;
  * @since 2.3
  */
 public class GUIManager {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
   // The root frame
   private ConfigFrame m_frame;
 

@@ -23,9 +23,6 @@ import junit.framework.*;
  */
 public class TruthTableFitnessFunctionTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(TruthTableFitnessFunctionTest.class);
     return suite;

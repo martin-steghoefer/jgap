@@ -23,9 +23,6 @@ import org.jgap.util.*;
  * @since 3.3.4
  */
 public class WANUtils {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public WANUtils() {
   }
 

@@ -20,9 +20,6 @@ import org.jgap.gp.impl.*;
  */
 public class MyEvolveStrategy
     implements IWorkerEvolveStrategyGP {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public void evolve(GPGenotype a_genotype) {
     a_genotype.evolve(40);
   }

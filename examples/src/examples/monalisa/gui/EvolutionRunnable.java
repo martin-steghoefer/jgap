@@ -24,9 +24,6 @@ import examples.monalisa.core.*;
  */
 public class EvolutionRunnable
     implements Runnable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private GAConfiguration m_conf;
 
   private GeneticDrawingView m_view;

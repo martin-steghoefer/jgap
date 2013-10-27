@@ -29,9 +29,6 @@ import com.thoughtworks.xstream.mapper.*;
  */
 public abstract class XStreamPassThruConverter
     implements Converter {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private Mapper m_mapper;
 
   private ReflectionProvider m_reflectionProvider;

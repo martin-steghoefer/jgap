@@ -29,8 +29,6 @@ import org.jdesktop.application.*;
 public class GeneticDrawingApp
     extends SingleFrameApplication {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
   /**
    * At startup create and show the main frame of the application.
    */

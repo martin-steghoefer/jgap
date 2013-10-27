@@ -27,9 +27,6 @@ import org.jgap.util.*;
 public class StockRandomGenerator
     extends Random
     implements RandomGenerator, ICloneable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * When deserializing, initialize the seed because otherwise we could get
    * duplicate evolution results when doing distributed computing!

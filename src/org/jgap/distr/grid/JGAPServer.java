@@ -27,9 +27,6 @@ import org.homedns.dade.jcgrid.server.*;
  * @since 3.01
  */
 public class JGAPServer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   private final static String className = JGAPServer.class.getName();
 
   private static Logger log = Logger.getLogger(className);

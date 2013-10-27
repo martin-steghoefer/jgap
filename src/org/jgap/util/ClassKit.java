@@ -17,9 +17,6 @@ import java.util.zip.*;
 import org.apache.log4j.*;
 
 public class ClassKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
   private transient static Logger LOGGER = Logger.getLogger(ClassKit.class);
 
   public static void main(String[] args)

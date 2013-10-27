@@ -24,9 +24,6 @@ import org.jgap.gp.CommandGene;
  * @since 3.6
  */
 public interface IGPPopulationInitializer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   void setUp(GPConfiguration a_conf, Class[] a_types, Class[][] argTypes,
              CommandGene[][] a_nodeSets, int a_maxNodes,
              boolean a_verboseOutput)

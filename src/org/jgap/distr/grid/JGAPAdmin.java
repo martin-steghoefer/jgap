@@ -21,9 +21,6 @@ import org.homedns.dade.jcgrid.admin.*;
  * @since 3.01
  */
 public class JGAPAdmin {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public JGAPAdmin()
       throws Exception {
     org.homedns.dade.jcgrid.admin.GridAdmin admin = new org.homedns.dade.jcgrid.

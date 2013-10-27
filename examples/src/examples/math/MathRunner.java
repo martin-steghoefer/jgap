@@ -21,9 +21,6 @@ import examples.math.ga.*;
  * @since 3.4.2
  */
 public class MathRunner {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public static void main(String[] args)
       throws Exception {
     int EVOLUTIONS = 1000;

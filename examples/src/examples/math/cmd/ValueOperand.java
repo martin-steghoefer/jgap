@@ -19,9 +19,6 @@ import examples.math.*;
  */
 public class ValueOperand
     implements Operand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private double mValue;
 
   public ValueOperand(double theValue) {

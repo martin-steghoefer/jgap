@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class Argument
     extends CommandGene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
   private int m_index;
 
   public Argument(final GPConfiguration a_conf, int a_index, Class type)

@@ -19,9 +19,6 @@ import org.jgap.*;
  * @since 2.0
  */
 public interface IPopulationMerger {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
-
   /**
    * Merges two populations into one that has the given size.
    *

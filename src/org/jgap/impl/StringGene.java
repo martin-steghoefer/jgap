@@ -37,9 +37,6 @@ public class StringGene
 
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
-
   private int m_minLength;
 
   private int m_maxLength;

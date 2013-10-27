@@ -17,9 +17,6 @@ package org.jgap;
  * @since 3.2
  */
 public interface IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Returns a persistent representation of an entity (such as a chromosome or a
    * gene).

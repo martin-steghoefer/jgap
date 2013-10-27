@@ -18,9 +18,6 @@ import java.util.*;
  * @since 3.3.3
  */
 public class ClientStatus {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Last time a requests listing was executed.
    */

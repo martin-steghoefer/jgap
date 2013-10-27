@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class InstantiableSupergeneForTesting
     extends AbstractSupergene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public InstantiableSupergeneForTesting(final Configuration a_config,
                                       Gene[] a_genes)
       throws InvalidConfigurationException {

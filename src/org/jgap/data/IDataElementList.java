@@ -16,9 +16,6 @@ package org.jgap.data;
  * @since 2.0
  */
 public interface IDataElementList {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
-
   IDataElement item(int a_index);
 
   int getLength();

@@ -24,9 +24,6 @@ import org.jgap.util.*;
  */
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
-
   /**
    * This field separates gene class name from the gene persistent representation
    * string. '*' does not work properly with URLEncoder!

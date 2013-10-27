@@ -19,9 +19,6 @@ import java.io.*;
  * @since 2.4
  */
 public final class NetworkKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Private constructor because it's a utility class.
    */

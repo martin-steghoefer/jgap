@@ -22,9 +22,6 @@ import org.jgap.eval.*;
  * @since 3.4.4
  */
 public interface IEvolutionMonitor extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
-
   public final static String MONITOR_EVENT_REMOVE_CHROMOSOME =
       "remove_chromosome";
 

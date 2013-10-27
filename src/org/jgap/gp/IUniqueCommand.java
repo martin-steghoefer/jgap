@@ -16,6 +16,4 @@ package org.jgap.gp;
  * @since 3.3.4
  */
 public interface IUniqueCommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
 }

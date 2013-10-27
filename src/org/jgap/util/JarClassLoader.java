@@ -18,9 +18,6 @@ package org.jgap.util;
  */
 public class JarClassLoader
     extends MultiClassLoader {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private JarResources m_jarResources;
 
   public JarClassLoader(final String a_jarName) {

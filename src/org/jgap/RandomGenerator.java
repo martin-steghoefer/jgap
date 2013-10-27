@@ -25,9 +25,6 @@ import java.io.*;
  */
 public interface RandomGenerator
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Returns the next pseudorandom, uniformly distributed int value
    * from this random number generator's sequence. The general contract

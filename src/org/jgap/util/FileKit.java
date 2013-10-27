@@ -21,9 +21,6 @@ import java.util.regex.*;
  * @author Klaus Meffert
  */
 public class FileKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   public static String fileseparator = System.getProperty("file.separator");
 
   /**

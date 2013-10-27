@@ -20,9 +20,6 @@ import junit.framework.*;
  */
 public class ConfigPropertyTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
 

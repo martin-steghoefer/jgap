@@ -27,9 +27,6 @@ import java.util.*;
 public interface GeneticOperator
     extends Serializable {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.16 $";
-
   /**
    * The operate method will be invoked on each of the genetic operators
    * referenced by the current Configuration object during the evolution

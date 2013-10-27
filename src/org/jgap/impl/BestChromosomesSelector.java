@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class BestChromosomesSelector
     extends NaturalSelectorExt implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.54 $";
-
   /**
    * Stores the chromosomes to be taken into account for selection
    */

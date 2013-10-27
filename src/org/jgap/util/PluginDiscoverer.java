@@ -26,9 +26,6 @@ import java.util.jar.*;
  * @since 2.3
  */
 public class PluginDiscoverer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   private static final boolean DEBUG = false;
 
   //list of folders in the classpath

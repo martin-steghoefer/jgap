@@ -26,9 +26,6 @@ import org.jgap.*;
  */
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private Map m_truthTable;
 
   // Constants for calculating the fitness value

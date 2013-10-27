@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
-
   private float m_value_float;
 
   private double m_value_double;

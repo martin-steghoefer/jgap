@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public class MyGenotypeInitializer
     implements IGenotypeInitializer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop)
       throws Exception {
     Configuration conf = a_req.getConfiguration();

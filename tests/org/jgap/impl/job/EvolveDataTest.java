@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class EvolveDataTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public static Test suite() {
     return new TestSuite(EvolveDataTest.class);
   }

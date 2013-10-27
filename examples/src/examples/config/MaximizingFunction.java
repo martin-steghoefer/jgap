@@ -25,9 +25,6 @@ import org.jgap.impl.*;
  * @since 2.3
  * */
 public class MaximizingFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * Default Constructor
    * @author Siddhartha Azad

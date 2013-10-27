@@ -19,9 +19,6 @@ import examples.math.*;
  */
 public class DivideOperator
     extends MathOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public DivideOperator() {
     super();
   }

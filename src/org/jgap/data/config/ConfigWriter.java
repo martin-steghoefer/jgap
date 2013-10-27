@@ -21,9 +21,6 @@ import javax.swing.*;
  * @since 2.3
  * */
 public final class ConfigWriter {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Singleton instance of ConfigWriter
    */

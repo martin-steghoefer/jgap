@@ -38,9 +38,6 @@ import org.jgap.*;
 public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
-
   /**
    * This field separates gene class name from the gene persistent representation
    * string. '*' does not work properly with URLEncoder!

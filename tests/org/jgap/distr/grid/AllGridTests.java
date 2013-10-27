@@ -19,9 +19,6 @@ import junit.framework.*;
  */
 public class AllGridTests
     extends TestSuite {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite("AllGridTests");
     suite.addTest(DefaultGenotypeInitializerTest.suite());

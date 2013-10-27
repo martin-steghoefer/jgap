@@ -22,9 +22,6 @@ import org.jgap.audit.*;
  * @since 3.01
  */
 public class SimpleExample {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
-
   /**
    * Starts the example.
    * @param args ignored here

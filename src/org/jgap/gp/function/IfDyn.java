@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class IfDyn
     extends CommandDynamicArity implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public IfDyn(final GPConfiguration a_conf, Class a_returnType,
                int a_arityInitial, int a_arityMin, int a_arityMax)
       throws InvalidConfigurationException {

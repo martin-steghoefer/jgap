@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  * @since 3.4
  */
 public class GAInitialChromosomeFactory {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Number of points in a polygon.
    */

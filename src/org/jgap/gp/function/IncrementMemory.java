@@ -24,9 +24,6 @@ import org.jgap.util.*;
  */
 public class IncrementMemory
     extends MathCommand implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
-
   private int m_increment;
 
   private String m_memoryName;

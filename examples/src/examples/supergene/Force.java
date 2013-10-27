@@ -16,9 +16,6 @@ package examples.supergene;
  * @author Audrius Meskauskas
  */
 public final class Force {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public static boolean REPORT_ENABLED = true;
 
   private Force() {

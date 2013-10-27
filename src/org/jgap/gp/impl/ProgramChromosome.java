@@ -26,9 +26,6 @@ import org.jgap.util.*;
  */
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
-
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
   final static String GENE_DELIMITER_HEADING = "<";

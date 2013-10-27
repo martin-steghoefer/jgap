@@ -22,9 +22,6 @@ package org.jgap.xml;
 public class ImproperXMLException
     extends Exception {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   /**
    * Constructs a new ImproperXMLException instance with the given error
    * message.

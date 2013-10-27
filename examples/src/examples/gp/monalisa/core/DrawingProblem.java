@@ -26,9 +26,6 @@ import examples.gp.monalisa.core.commands.*;
  */
 public class DrawingProblem
     extends GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   public DrawingProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf);

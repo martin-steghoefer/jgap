@@ -24,9 +24,6 @@ import org.jgap.distr.*;
  */
 public class FittestPopulationMerger
     implements IPopulationMerger {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
-
   public Population mergePopulations(final Population a_population1,
                                      final Population a_population2,
                                      final int a_new_population_size) {

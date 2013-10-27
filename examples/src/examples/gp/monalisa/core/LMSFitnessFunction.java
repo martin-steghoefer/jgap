@@ -24,9 +24,6 @@ import org.jgap.gp.impl.*;
  */
 public class LMSFitnessFunction
     extends GPFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private final DrawingGPConfiguration m_conf;
 
   private final DrawingGPProgramRunner programRunner;

@@ -31,9 +31,6 @@ import org.w3c.dom.*;
  * @since 1.0
  */
 public class XMLManager {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
-
   /**
    * Constant representing the name of the genotype XML element tag.
    */

@@ -17,9 +17,6 @@ package org.jgap.data;
  * @since 2.0
  */
 public interface IDataCreators {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
-
   void setTree(IDataElementList a_tree);
 
   /**

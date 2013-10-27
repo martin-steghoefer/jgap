@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public class MyRequest
     extends JGAPRequest {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public MyRequest(String name, int id, Configuration a_config) {
     super(name, id, a_config);
   }

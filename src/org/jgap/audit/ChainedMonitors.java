@@ -22,9 +22,6 @@ import org.jgap.eval.PopulationHistoryIndexed;
  */
 public class ChainedMonitors
     implements IEvolutionMonitor {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private List<IEvolutionMonitor> m_monitors;
 
   private int m_positiveMonitorsRequired;

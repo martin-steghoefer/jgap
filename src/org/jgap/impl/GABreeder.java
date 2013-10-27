@@ -23,9 +23,6 @@ import org.jgap.event.*;
  */
 public class GABreeder
     extends BreederBase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
-
   private transient Configuration m_lastConf;
 
   private transient Population m_lastPop;

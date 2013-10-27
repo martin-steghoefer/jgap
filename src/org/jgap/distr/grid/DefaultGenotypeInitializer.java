@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class DefaultGenotypeInitializer
     implements IGenotypeInitializer, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Sets up a Genotype by adding the content of the given Population to it
    * and initializing the missing Chromosomes of the Genotype randomly.

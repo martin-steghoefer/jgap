@@ -26,9 +26,6 @@ import org.jgap.util.*;
  * @since 2.6
  */
 public class MultiObjectiveExample {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

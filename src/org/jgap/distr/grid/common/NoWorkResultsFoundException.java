@@ -17,9 +17,6 @@ package org.jgap.distr.grid.common;
  * @since 3.3.3
  */
 public class NoWorkResultsFoundException extends Exception {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public NoWorkResultsFoundException() {
   }
 }

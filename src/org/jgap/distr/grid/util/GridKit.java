@@ -25,9 +25,6 @@ import org.jgap.util.*;
  * @since 3.2
  */
 public class GridKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   public static String ensureDirectory(String a_currentDir, String a_subDir,
                                        String a_descr)
       throws IOException {

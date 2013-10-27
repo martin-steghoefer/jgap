@@ -20,9 +20,6 @@ import com.eteks.parser.*;
  */
 public class Repository
     extends Term {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private static List constants;
 
   private static List operators;

@@ -33,9 +33,6 @@ import org.jgap.*;
  */
 public interface Supergene
     extends Gene, ICompositeGene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.14 $";
-
   /**
    * Test the allele combination of this supergene for validity.
    * If a validator was previously set be calling setValidator(),

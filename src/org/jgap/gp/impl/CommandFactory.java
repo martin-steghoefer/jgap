@@ -21,9 +21,6 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class CommandFactory {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public static CommandGene[] createStoreCommands(CommandGene[] a_target,
                                                   GPConfiguration a_conf,
                                                   Class a_type, String a_prefix,

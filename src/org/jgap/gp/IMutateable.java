@@ -18,9 +18,6 @@ import org.jgap.*;
  * @since 3.0
  */
 public interface IMutateable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Mutates a CommandGene.
    *

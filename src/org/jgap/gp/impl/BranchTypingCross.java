@@ -21,9 +21,6 @@ import org.jgap.gp.*;
  */
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
-
   private boolean m_simpleChromosomeSelection;
 
   /**

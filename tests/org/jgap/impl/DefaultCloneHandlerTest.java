@@ -22,9 +22,6 @@ import junit.framework.*;
  */
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
     return suite;

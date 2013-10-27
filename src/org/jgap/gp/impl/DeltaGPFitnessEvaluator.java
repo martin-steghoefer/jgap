@@ -20,9 +20,6 @@ import org.jgap.gp.*;
  */
 public class DeltaGPFitnessEvaluator
     implements IGPFitnessEvaluator, Cloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Compares the first given fitness value with the second and returns true
    * if the first one is smaller than the second one. Otherwise returns false.

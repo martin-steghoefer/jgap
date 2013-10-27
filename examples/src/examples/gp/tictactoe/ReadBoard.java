@@ -16,9 +16,6 @@ import org.jgap.util.*;
 
 public class ReadBoard
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private Board m_board;
 
   public ReadBoard(final GPConfiguration a_conf, Board a_board)

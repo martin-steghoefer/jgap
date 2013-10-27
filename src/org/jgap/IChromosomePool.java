@@ -16,9 +16,6 @@ package org.jgap;
  * @since 2.6
  */
 public interface IChromosomePool {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Attempts to acquire an Chromosome instance from the chromosome pool.
    *

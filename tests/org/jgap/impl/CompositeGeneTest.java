@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class CompositeGeneTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
-
   private static int cleanedUp = 0;
 
   public static Test suite() {

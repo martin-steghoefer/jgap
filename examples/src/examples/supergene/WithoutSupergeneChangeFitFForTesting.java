@@ -22,9 +22,6 @@ import examples.supergene.*;
  */
 class WithoutSupergeneChangeFitFForTesting
     extends SupergeneChangeFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public WithoutSupergeneChangeFitFForTesting(int a_targetAmount) {
     super(a_targetAmount);
   }

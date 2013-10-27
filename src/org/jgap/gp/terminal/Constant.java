@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class Constant
     extends MathCommand implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   private Object m_value;
 
   public Constant(final GPConfiguration a_conf, Class a_type, Object a_value)

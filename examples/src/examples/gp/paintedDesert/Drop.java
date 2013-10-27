@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class Drop
     extends AntCommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Drops the sand at the current location
    *

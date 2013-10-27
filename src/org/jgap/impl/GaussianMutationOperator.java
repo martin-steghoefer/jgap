@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.25 $";
-
   private double m_deviation;
 
   private RandomGenerator m_rg;

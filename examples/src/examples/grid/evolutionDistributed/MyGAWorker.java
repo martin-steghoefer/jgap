@@ -23,9 +23,6 @@ import org.jgap.distr.grid.*;
  */
 public class MyGAWorker
     extends JGAPWorker {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Executes the evolution and returns the result.
    *

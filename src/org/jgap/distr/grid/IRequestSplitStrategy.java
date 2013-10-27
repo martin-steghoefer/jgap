@@ -21,9 +21,6 @@ import java.io.*;
 public interface IRequestSplitStrategy
     extends Serializable {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Creates single requests to be sent to workers. This is done by splitting
    * a single request into several parts. Each parts is sort of a modified

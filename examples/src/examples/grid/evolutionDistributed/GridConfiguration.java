@@ -24,9 +24,6 @@ import org.homedns.dade.jcgrid.client.*;
  */
 public class GridConfiguration
     extends GridConfigurationBase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public GridConfiguration() {
     super();
   }

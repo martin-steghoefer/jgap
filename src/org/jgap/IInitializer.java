@@ -20,7 +20,4 @@ package org.jgap;
  * @since 2.6
  */
 public interface IInitializer extends IHandler {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
 }

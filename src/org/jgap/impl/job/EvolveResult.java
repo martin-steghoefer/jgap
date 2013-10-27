@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class EvolveResult
     extends JobResult {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private Population m_pop;
 
   public EvolveResult() {

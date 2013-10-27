@@ -33,9 +33,6 @@ import gnu.trove.*;
  */
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
-
   /**
    * Container for valid alleles
    */

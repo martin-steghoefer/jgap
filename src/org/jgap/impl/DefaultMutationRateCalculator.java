@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class DefaultMutationRateCalculator
     extends BaseRateCalculator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
-
   /**
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException

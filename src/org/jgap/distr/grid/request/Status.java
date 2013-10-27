@@ -18,9 +18,6 @@ import java.io.*;
  */
 public class Status
     implements Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public int code;
 
   public String description;

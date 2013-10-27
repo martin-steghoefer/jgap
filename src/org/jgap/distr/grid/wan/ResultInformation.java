@@ -20,9 +20,6 @@ import org.jgap.distr.*;
  * @since 3.3.4
  */
 public class ResultInformation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
   public MasterInfo workerInfo;
 
   private String m_id;

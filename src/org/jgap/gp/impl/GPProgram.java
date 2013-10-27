@@ -26,9 +26,6 @@ import org.jgap.gp.terminal.Argument;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
-
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
 
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";

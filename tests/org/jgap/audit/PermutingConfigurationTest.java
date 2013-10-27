@@ -14,9 +14,6 @@ import junit.framework.*;
  */
 public class PermutingConfigurationTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
-
   public void setUp() {
     super.setUp();
     Configuration.reset();

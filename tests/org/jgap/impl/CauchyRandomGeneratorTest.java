@@ -22,9 +22,6 @@ import java.util.concurrent.atomic.*;
  */
 public class CauchyRandomGeneratorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
     return suite;

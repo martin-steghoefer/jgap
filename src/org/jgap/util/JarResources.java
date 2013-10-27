@@ -22,9 +22,6 @@ import java.util.zip.*;
  * @since 3.2
  */
 public final class JarResources {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   // external debug flag
   public boolean debugOn = false;
 

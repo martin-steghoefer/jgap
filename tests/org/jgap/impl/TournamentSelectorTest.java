@@ -23,9 +23,6 @@ import junit.framework.*;
  */
 public class TournamentSelectorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
     return suite;

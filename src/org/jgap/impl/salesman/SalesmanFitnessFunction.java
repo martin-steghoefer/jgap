@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public class SalesmanFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
   private final Salesman m_salesman;
 
   public SalesmanFitnessFunction(final Salesman a_salesman) {

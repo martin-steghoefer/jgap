@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public abstract class BaseGPChromosome
     implements IGPChromosome {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * The configuration object to use.
    */

@@ -20,9 +20,6 @@ import org.jgap.*;
  */
 public abstract class JobData implements Serializable {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private Configuration m_config;
 
   public JobData(Configuration a_config) {

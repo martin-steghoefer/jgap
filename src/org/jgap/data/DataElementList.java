@@ -20,9 +20,6 @@ import java.util.*;
  */
 public class DataElementList
     implements IDataElementList {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private List m_list;
 
   public DataElementList() {

@@ -18,6 +18,4 @@ package org.jgap.impl.job;
  */
 public interface IEvolveJob
     extends IJob {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
 }

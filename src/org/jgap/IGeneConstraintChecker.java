@@ -19,9 +19,6 @@ package org.jgap;
  */
 public interface IGeneConstraintChecker
     extends java.io.Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Check if a given allele value is valid for the given gene instance.
    *

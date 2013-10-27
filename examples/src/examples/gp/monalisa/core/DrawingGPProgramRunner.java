@@ -23,9 +23,6 @@ import org.jgap.gp.*;
  * @since 3.4
  */
 public class DrawingGPProgramRunner {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private DrawingGPConfiguration m_conf;
 
   public int numPoints;

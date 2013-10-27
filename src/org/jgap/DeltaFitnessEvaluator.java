@@ -20,9 +20,6 @@ import org.jgap.util.*;
  */
 public class DeltaFitnessEvaluator
     implements FitnessEvaluator, ICloneable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
   /**
    * Compares the first given fitness value with the second and returns true
    * if the first one is smaller than the second one. Otherwise returns false

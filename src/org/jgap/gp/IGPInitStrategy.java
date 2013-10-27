@@ -20,9 +20,6 @@ import java.io.*;
  */
 public interface IGPInitStrategy
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Initializes a chromosome within a GP program before a random creation of
    * the (rest of the) program is executed.

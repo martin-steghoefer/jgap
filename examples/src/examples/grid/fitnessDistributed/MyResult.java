@@ -23,9 +23,6 @@ import org.jgap.*;
  */
 public class MyResult
     extends JGAPResult {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Control the class' serializability via this attribute
    */

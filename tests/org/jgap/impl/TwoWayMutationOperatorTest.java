@@ -23,9 +23,6 @@ import junit.framework.*;
  */
 public class TwoWayMutationOperatorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(TwoWayMutationOperatorTest.class);
     return suite;

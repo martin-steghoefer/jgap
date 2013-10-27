@@ -23,9 +23,6 @@ import org.jgap.impl.*;
  */
 public abstract class JGAPTestCase
     extends TestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
-
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
 

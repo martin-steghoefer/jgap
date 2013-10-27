@@ -29,9 +29,6 @@ import org.jgap.*;
  */
 public class RangedSwappingMutationOperator
     extends MutationOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private int m_startOffset = 0;
 
   private int m_range = 0;

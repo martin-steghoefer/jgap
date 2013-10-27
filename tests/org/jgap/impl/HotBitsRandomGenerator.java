@@ -21,9 +21,6 @@ import org.jgap.util.*;
  */
 public class HotBitsRandomGenerator
     implements RandomGenerator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private randomX m_randomGenerator;
 
   public HotBitsRandomGenerator(randomX a_randomGenerator) {

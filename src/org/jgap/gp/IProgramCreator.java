@@ -20,9 +20,6 @@ import org.jgap.*;
  * @since 3.2.2
  */
 public interface IProgramCreator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Initializes the given population by adding new individuals to it.
    *

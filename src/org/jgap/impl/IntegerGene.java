@@ -23,9 +23,6 @@ import org.jgap.*;
  */
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.46 $";
-
   /**
    * Represents the constant range of values supported by integers.
    */

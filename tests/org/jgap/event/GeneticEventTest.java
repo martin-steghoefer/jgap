@@ -22,9 +22,6 @@ import org.jgap.*;
  */
 public class GeneticEventTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(GeneticEventTest.class);
     return suite;

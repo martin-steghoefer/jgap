@@ -25,9 +25,6 @@ import org.jgap.util.*;
  */
 public class EventManager
     implements IEventManager, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * References a Map of subscribed event listeners. Each key is an event
    * name, and each value is a List of listeners subscribed to that event.

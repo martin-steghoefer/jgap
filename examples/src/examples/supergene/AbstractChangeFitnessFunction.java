@@ -23,9 +23,6 @@ import examples.supergene.*;
  */
 public abstract class AbstractChangeFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private final int m_targetAmount;
 
   public AbstractChangeFitnessFunction(int a_targetAmount) {

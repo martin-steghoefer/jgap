@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class GreaterThan
     extends MathCommand implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private Class m_type;
 
   public GreaterThan(final GPConfiguration a_conf, Class a_type)

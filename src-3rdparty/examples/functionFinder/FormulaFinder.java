@@ -29,9 +29,6 @@ import org.jgap.impl.*;
  * @since 2.4
  */
 public class FormulaFinder {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
   private static int MAX_ALLOWED_EVOLUTIONS_HARDLIMIT = 500;

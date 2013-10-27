@@ -26,9 +26,6 @@ import org.jgap.audit.*;
  * @since 2.2
  */
 public class CoinsExample {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

@@ -18,9 +18,6 @@ import java.util.*;
  * @since 3.3.4
  */
 public class ResultVerification {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private List<ResultData> m_resultData;
 
   public ResultVerification() {

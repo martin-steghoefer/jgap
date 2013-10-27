@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  */
 public class MultiObjectiveFitnessFunction
     extends BulkFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   public static final int MAX_BOUND = 4000;
 
   public static final double MIN_X = -10;

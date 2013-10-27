@@ -29,9 +29,6 @@ import org.jgap.util.*;
  */
 public class GPConfiguration
     extends Configuration {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
-
 public int realPopSize;/**@todo do it right*/
   /**@todo introduce lock for configuration*/
   /**

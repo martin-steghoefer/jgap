@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class EvaluateBoard
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private Board m_board;
 
   private int m_index;

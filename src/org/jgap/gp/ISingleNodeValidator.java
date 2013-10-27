@@ -19,9 +19,6 @@ import org.jgap.gp.impl.*;
  * @since 3.6
  */
 public interface ISingleNodeValidator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
   /**
    * Checks if the given a_function is allowed in the current context.
    *

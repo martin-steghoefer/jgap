@@ -22,9 +22,6 @@ import org.jgap.impl.*;
  */
 public class MyChromosome
     extends Chromosome {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
-
   public MyChromosome()
       throws InvalidConfigurationException {
     super();

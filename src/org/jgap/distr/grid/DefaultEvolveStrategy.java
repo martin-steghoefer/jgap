@@ -20,9 +20,6 @@ import org.jgap.util.*;
  */
 public class DefaultEvolveStrategy
     implements IWorkerEvolveStrategy, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve();
   }

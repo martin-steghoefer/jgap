@@ -20,9 +20,6 @@ import org.jgap.gp.impl.*;
  */
 public interface INaturalGPSelector
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  static final String CVS_REVISION = "$Revision: 1.6 $";
-
   /**
    * Select an individual based on an arbitrary algorithm.
    *

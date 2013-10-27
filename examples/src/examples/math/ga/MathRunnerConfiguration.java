@@ -23,9 +23,6 @@ import examples.math.*;
  */
 public class MathRunnerConfiguration
     extends Configuration {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public MathRunnerConfiguration()
       throws InvalidConfigurationException {
     PhenotypeExpresser<Double> aExpr = new MathGenePhenotypeExpresser();

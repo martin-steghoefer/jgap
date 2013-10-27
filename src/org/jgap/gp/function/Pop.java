@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class Pop
     extends MathCommand implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   public Pop(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
     this(a_conf, a_returnType, 0);

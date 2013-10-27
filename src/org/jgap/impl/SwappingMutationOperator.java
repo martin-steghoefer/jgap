@@ -30,9 +30,6 @@ import org.jgap.*;
  */
 public class SwappingMutationOperator
     extends MutationOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
-
   private int m_startOffset = 1;
 
   /**

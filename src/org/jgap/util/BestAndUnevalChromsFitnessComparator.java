@@ -28,9 +28,6 @@ import org.jgap.*;
  */
 public class BestAndUnevalChromsFitnessComparator
     implements Comparator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private FitnessEvaluator m_fitnessEvaluator;
 
   /**

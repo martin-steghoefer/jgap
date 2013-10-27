@@ -21,9 +21,6 @@ import org.jgap.data.config.*;
 public class AllDataTests
     extends TestSuite {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite("AllDataTests");
     suite.addTest(DataElementTest.suite());

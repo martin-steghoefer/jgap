@@ -20,9 +20,6 @@ import org.jgap.gp.impl.*;
  */
 public abstract class CommandDynamicArity
     extends CommandGene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Default constructor, only for dynamic instantiation.
    *

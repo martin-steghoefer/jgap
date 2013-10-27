@@ -13,9 +13,6 @@ import examples.functionFinder.*;
  */
 public class GeneExtractorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
   private static int numberOfFunctions;
 
   private static int numberOfConstants;

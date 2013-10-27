@@ -28,9 +28,6 @@ import org.jgap.util.*;
  */
 public class GeneticDrawingView
     extends FrameView {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public GeneticDrawingView(SingleFrameApplication app) {
     super(app);
     initComponents();

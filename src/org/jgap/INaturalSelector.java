@@ -25,9 +25,6 @@ import java.io.*;
  */
 public interface INaturalSelector
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
-
   /**
    * Select a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection should be guided by

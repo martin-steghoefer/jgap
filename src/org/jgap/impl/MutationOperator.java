@@ -32,9 +32,6 @@ import org.jgap.data.config.*;
  */
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
-
   /**
    * Calculator for dynamically determining the mutation rate. If set to
    * null the value of m_mutationRate will be used. Replaces the previously used

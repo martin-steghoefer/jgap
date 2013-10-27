@@ -20,9 +20,6 @@ import junit.framework.*;
  */
 public class CultureTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
     return suite;

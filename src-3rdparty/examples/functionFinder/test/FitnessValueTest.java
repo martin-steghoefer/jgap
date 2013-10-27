@@ -11,9 +11,6 @@ import org.jgap.*;
  */
 public class FitnessValueTest extends JGAPTestCase {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
   private MatchAgainstTruthTable matcher;
 
   public FitnessValueTest() {

@@ -23,9 +23,6 @@ import org.jgap.gp.impl.*;
  */
 public class TurnToFood
     extends AntCommand implements IMutateable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Constructor.
    *

@@ -22,9 +22,6 @@ import org.homedns.dade.jcgrid.client.*;
  */
 public abstract class GridConfigurationBase
     implements IGridConfiguration {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private IClientFeedback m_clientFeedback;
 
   private IRequestSplitStrategy m_splitStrategy;

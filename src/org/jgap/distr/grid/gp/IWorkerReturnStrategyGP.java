@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public interface IWorkerReturnStrategyGP
     extends Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   JGAPResultGP assembleResult(JGAPRequestGP a_request, GPGenotype a_genotype)
       throws Exception;
 }

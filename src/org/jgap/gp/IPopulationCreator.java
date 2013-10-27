@@ -21,9 +21,6 @@ import org.jgap.InvalidConfigurationException;
  * @since 3.2.2
  */
 public interface IPopulationCreator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Initializes the given population.
    *

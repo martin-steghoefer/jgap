@@ -17,9 +17,6 @@ package org.jgap.gp.impl;
  * @since 3.2
  */
 public class GPProgramInfo {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private double m_fitnessValue;
 
   private String m_toStringNorm;

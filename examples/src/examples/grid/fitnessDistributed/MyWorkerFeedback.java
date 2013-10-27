@@ -21,9 +21,6 @@ import org.jgap.distr.grid.*;
  */
 public class MyWorkerFeedback
     implements GridWorkerFeedback {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private String m_sessionName;
 
   /**

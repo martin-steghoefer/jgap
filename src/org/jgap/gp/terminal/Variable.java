@@ -26,9 +26,6 @@ import org.jgap.util.*;
 public class Variable
     extends CommandGene //implements ICloneable
 {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
-
   public static Hashtable vars = new Hashtable();
 
   /**

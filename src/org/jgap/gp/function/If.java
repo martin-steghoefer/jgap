@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class If
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   private Class m_childType;
 
   public If(final GPConfiguration a_conf, Class a_returnType)

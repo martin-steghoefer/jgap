@@ -43,9 +43,6 @@ import org.jgap.util.*;
  */
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.102 $";
-
   /**
    * Constant for class name of JGAP Factory to use. Use as:
    * System.setProperty(PROPERTY_JGAPFACTORY_CLASS, "myJGAPFactory");

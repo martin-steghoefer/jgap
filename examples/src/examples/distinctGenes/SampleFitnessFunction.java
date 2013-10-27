@@ -23,9 +23,6 @@ import org.jgap.impl.*;
  */
 public class SampleFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Calculate the fitness value of a Chromosome.
    * @param a_subject the Chromosome to be evaluated

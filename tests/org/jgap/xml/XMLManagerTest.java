@@ -25,9 +25,6 @@ import junit.framework.*;
  */
 public class XMLManagerTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
-
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
   public static Test suite() {

@@ -18,9 +18,6 @@ import java.util.*;
  * @since 2.3
  */
 public class ConfigProperty {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   // name of the property
   private String m_name;
 

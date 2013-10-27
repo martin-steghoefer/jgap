@@ -26,9 +26,6 @@ import org.jgap.gp.terminal.*;
  */
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
-  /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.14 $";
-
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
 //  private GPConfiguration m_config;

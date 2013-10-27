@@ -22,9 +22,6 @@ import org.jgap.*;
  */
 public class CauchyRandomGenerator
     implements RandomGenerator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
-
   private double m_scale;
 
   private double m_location;

@@ -24,9 +24,6 @@ import org.jgap.gp.terminal.*;
  */
 public class IslandGPThread
     extends GPProblem implements Runnable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private GPGenotype gen;
 
   private int m_nextNumber;

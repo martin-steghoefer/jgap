@@ -22,8 +22,5 @@ package org.jgap.util.tree;
 import java.awt.*;
 
 public interface TreeNodeRenderer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public Color getNodeColor(Object node, int level);
 }

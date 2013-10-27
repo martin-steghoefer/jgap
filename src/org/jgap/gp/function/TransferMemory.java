@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class TransferMemory
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
    * ReadTerminalCommand.

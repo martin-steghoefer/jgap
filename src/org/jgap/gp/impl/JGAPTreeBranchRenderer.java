@@ -26,9 +26,6 @@ import org.jgap.gp.*;
  */
 public class JGAPTreeBranchRenderer
     implements TreeBranchRenderer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   public Color getBranchColor(Object a_node, int a_level) {
     String name = ( (JGAPTreeNode) a_node).getName();
     Color out = Color.white;

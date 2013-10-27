@@ -22,9 +22,6 @@ import org.jgap.*;
  */
 public class ChromosomePool
     implements IChromosomePool {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
-
   /**
    * The internal pool in which the Chromosomes are stored.
    */

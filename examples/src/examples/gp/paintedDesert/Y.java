@@ -23,9 +23,6 @@ import org.jgap.gp.impl.*;
  */
 public class Y
     extends AntCommand implements IMutateable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   /**
    * Constructor.
    *

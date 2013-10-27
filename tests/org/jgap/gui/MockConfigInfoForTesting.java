@@ -22,8 +22,6 @@ import org.jgap.data.config.*;
  * */
 public class MockConfigInfoForTesting
     implements IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   // The ConfigData instance that will be populated and returned
   private ConfigData m_conData;
 

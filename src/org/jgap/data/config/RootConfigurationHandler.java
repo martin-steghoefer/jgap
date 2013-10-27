@@ -25,9 +25,6 @@ import org.jgap.*;
  * */
 public class RootConfigurationHandler
     implements ConfigurationHandler {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
 

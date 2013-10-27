@@ -22,9 +22,6 @@ import examples.math.cmd.*;
  */
 public class MathGenePhenotypeExpresser
     implements PhenotypeExpresser<Double> {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public Double express(IChromosome theChromosome) {
     return value(theChromosome);
   }

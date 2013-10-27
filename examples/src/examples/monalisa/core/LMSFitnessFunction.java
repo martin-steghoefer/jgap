@@ -24,9 +24,6 @@ import org.jgap.*;
  */
 public class LMSFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private final GAConfiguration m_conf;
 
   private final int[] targetPixels;

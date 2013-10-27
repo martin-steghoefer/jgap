@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class BooleanGeneTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
     return suite;

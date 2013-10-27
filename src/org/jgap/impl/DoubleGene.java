@@ -23,9 +23,6 @@ import org.jgap.*;
  */
 public class DoubleGene
     extends NumberGene implements IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
-
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Double.MAX_VALUE.

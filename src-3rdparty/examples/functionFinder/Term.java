@@ -16,9 +16,6 @@ package examples.functionFinder;
  * @since 2.2
  */
 public class Term {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public String m_termName;
 
   public int m_depth; // Max. number of sub terms

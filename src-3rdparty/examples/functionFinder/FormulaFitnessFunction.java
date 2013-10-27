@@ -24,8 +24,6 @@ import java.io.*;
  */
 public class FormulaFitnessFunction
     extends TruthTableFitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
 /**@todo swap out general parts into JGAP core*/
   private static Syntax m_syntax;
 

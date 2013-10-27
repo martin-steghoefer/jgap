@@ -23,9 +23,6 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  * @since 3.01
  */
 public class JGAPWorkers {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private Class m_workerClass;
 
   private Class m_workerFeedbackClaas;

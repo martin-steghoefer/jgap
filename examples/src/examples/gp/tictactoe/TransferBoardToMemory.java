@@ -16,9 +16,6 @@ import org.jgap.util.*;
 
 public class TransferBoardToMemory
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private Board m_board;
 
   private int m_startMemoryIndex;

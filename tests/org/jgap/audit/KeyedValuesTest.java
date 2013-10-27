@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class KeyedValuesTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public void setUp() {
     super.setUp();
   }

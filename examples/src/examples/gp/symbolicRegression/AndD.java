@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class AndD
     extends MathCommand implements IMutateable, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public AndD(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     this(a_conf, CommandGene.DoubleClass);

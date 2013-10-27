@@ -29,9 +29,6 @@ import examples.gp.monalisa.core.*;
  */
 public class EvolutionRunnable
     implements Runnable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private transient static Logger LOGGER = Logger.getLogger(EvolutionRunnable.class);
 
   protected final GeneticDrawingView m_view;

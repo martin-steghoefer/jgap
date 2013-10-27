@@ -20,9 +20,6 @@ import org.jgap.distr.grid.*;
  */
 public class FitnessSplitStrategy
     implements IRequestSplitStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private Configuration m_config;
 
   public FitnessSplitStrategy(Configuration a_config) {

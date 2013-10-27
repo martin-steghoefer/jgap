@@ -21,9 +21,6 @@ import org.apache.log4j.*;
  */
 public class DefaultClientFeedback
     implements IClientFeedback {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private final static String className = DefaultClientFeedback.class.getName();
 
   private static Logger log = Logger.getLogger(className);

@@ -19,9 +19,6 @@ import org.jgap.gp.IGPProgram;
  * @since 3.6
  */
 public class IslandGPExample {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private int nextNumber;
 
   private IslandGPThread m_firstIsland = null;

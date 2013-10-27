@@ -23,9 +23,6 @@ import org.homedns.dade.jcgrid.worker.*;
 public class JGAPRequest
     extends WorkRequest
     implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
   private Configuration m_config;
 
   private Population m_pop;

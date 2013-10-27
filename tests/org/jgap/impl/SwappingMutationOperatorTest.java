@@ -24,9 +24,6 @@ import junit.framework.*;
  */
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
     return suite;

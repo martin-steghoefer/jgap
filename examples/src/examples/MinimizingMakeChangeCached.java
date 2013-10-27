@@ -23,9 +23,6 @@ import org.jgap.impl.*;
  * @since 3.2
  */
 public class MinimizingMakeChangeCached {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

@@ -37,9 +37,6 @@ import org.jgap.gp.terminal.*;
  */
 public class MathProblem
     extends GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
-
   public static Variable vx;
 
   protected static Float[] x = new Float[20];

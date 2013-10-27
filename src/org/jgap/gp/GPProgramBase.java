@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public abstract class GPProgramBase
     implements IGPProgram {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
-
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
   private GPConfiguration m_conf;

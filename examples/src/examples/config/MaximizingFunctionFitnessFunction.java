@@ -16,9 +16,6 @@ import org.jgap.*;
  */
 public class MaximizingFunctionFitnessFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Determine the fitness of the given Chromosome instance. The higher the
    * return value, the more fit the instance. This method should always

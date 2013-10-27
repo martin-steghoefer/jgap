@@ -44,9 +44,6 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman
     implements Serializable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
-
   private Configuration m_config;
 
   private int m_maxEvolution = 128;

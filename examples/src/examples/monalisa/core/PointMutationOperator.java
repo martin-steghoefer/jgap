@@ -21,9 +21,6 @@ import org.jgap.impl.*;
  */
 public class PointMutationOperator
     extends MutationOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public PointMutationOperator(final Configuration a_config,
                                final int a_desiredMutationRate)
       throws InvalidConfigurationException {

@@ -30,9 +30,6 @@ import org.apache.log4j.Logger;
  */
 public class TicTacToeMain
     extends GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   public transient static Logger LOGGER = Logger.getLogger(TicTacToeMain.class);
 
   private static Variable vb;

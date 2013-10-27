@@ -29,9 +29,6 @@ import org.apache.commons.cli.*;
  */
 public class JGAPClient
     extends Thread {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
-
   private final static String className = JGAPClient.class.getName();
 
   private static Logger log = Logger.getLogger(className);

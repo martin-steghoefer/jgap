@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class NumberKitTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public static Test suite() {
     return new TestSuite(NumberKitTest.class);
   }

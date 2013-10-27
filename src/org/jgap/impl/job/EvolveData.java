@@ -20,9 +20,6 @@ import org.jgap.*;
 
 public class EvolveData
     extends JobData {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   private Population m_pop;
   private IBreeder m_breeder;
 

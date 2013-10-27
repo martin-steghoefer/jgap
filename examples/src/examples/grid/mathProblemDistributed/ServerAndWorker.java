@@ -27,9 +27,6 @@ import org.jgap.distr.grid.gp.*;
  * @since 3.2
  */
 public class ServerAndWorker {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Convenience (demo) start of both the server and a worker.
    *

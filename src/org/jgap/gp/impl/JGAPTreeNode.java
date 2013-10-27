@@ -21,9 +21,6 @@ import org.jgap.gp.*;
  */
 public class JGAPTreeNode
     implements TreeNode {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private ProgramChromosome m_chrom;
 
   private int m_index;

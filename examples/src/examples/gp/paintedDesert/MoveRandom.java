@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class MoveRandom
     extends AntCommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Constructor for the move random function.
    *

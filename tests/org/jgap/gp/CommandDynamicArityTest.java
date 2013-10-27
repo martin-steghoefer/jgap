@@ -23,9 +23,6 @@ import junit.framework.*;
  */
 public class CommandDynamicArityTest
     extends GPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandDynamicArityTest.class);
     return suite;

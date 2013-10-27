@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class GreaterThanTest
     extends GPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(GreaterThanTest.class);
     return suite;

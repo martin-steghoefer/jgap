@@ -26,9 +26,6 @@ import org.jgap.util.*;
  */
 public class SubProgram
     extends CommandGene implements ICloneable, IMutateable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
-
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
    */

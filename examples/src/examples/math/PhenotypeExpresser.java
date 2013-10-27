@@ -18,8 +18,5 @@ import org.jgap.*;
  * @since 3.4.2
  */
 public interface PhenotypeExpresser<T> {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
   T express(IChromosome theChromosome);
 }

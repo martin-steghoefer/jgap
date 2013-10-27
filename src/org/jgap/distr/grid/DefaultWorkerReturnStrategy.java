@@ -19,9 +19,6 @@ import org.jgap.*;
  */
 public class DefaultWorkerReturnStrategy
     implements IWorkerReturnStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Simple returns the fittest chromosome.
    *

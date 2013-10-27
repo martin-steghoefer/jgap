@@ -24,9 +24,6 @@ import junit.framework.*;
  */
 public class PopulationTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
     return suite;

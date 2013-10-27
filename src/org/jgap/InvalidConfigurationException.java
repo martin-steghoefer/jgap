@@ -22,9 +22,6 @@ package org.jgap;
  */
 public class InvalidConfigurationException
     extends Exception {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * Constructs a new InvalidConfigurationException instance with the
    * given error message.

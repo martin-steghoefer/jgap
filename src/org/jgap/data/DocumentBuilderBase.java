@@ -23,9 +23,6 @@ public abstract class DocumentBuilderBase {
   /**@todo add new class DocumentCreatorBase that reads in data written by
    * DocumentBuilderBase */
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Builds a document from the given input (input data + existing document).
    * @param a_dataholder the input structure holding the data to

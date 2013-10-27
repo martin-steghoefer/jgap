@@ -22,9 +22,6 @@ import java.io.*;
  */
 public class DefaultCompareToHandler
     implements ICompareToHandler, ICloneable, Serializable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
     Class clazz;
     if (a_clazz == null) {

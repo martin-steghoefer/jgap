@@ -16,9 +16,6 @@ package org.jgap.util;
  * @since 3.2
  */
 public class NumberKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Returns the hex value of "c" or -1 if there is no corresponding hex value.
    *

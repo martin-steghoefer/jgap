@@ -26,9 +26,6 @@ import org.jgap.impl.*;
  * @since 3.2
  */
 public class MainClass {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    * Holds the available vents, each with a specific weight
    */

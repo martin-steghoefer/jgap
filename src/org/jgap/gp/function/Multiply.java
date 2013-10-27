@@ -22,9 +22,6 @@ import org.jgap.util.*;
  */
 public class Multiply
     extends MathCommand implements IMutateable, ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
   public Multiply(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_returnType);

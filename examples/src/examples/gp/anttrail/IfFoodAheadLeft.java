@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class IfFoodAheadLeft
     extends AntCommand implements IMutateable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private int m_lookAheadFields;
 
   /**

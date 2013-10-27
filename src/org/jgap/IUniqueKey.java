@@ -19,10 +19,6 @@ package org.jgap;
  */
 public interface IUniqueKey {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
-
   /**
    *
    * @return String

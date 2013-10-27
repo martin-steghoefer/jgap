@@ -22,9 +22,6 @@ import org.jgap.*;
  */
 public class InversionOperator
     extends BaseGeneticOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
   /**
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method

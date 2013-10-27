@@ -22,9 +22,6 @@ import examples.math.*;
  */
 public class IntegerGenePhenotypeExpresser
     implements PhenotypeExpresser<Double> {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public Double express(IChromosome theChromosome) {
     double aValue = 0;
     for (Gene aGene : theChromosome.getGenes()) {

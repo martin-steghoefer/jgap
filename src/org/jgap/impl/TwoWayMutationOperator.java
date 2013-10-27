@@ -27,9 +27,6 @@ import org.jgap.*;
  */
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   /**
    * The current mutation rate used by this MutationOperator, expressed as
    * the denominator in the 1 / X ratio. For example, X = 1000 would

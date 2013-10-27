@@ -23,9 +23,6 @@ import org.jgap.supergenes.*;
  */
 public class TotalSupergeneTest
     extends TestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Test supported Supegene features, including performance tests.
    *

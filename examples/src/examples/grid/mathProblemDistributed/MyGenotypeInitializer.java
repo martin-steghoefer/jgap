@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class MyGenotypeInitializer
     implements IGenotypeInitializerGP {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   public GPGenotype setupGenotype(JGAPRequestGP a_req,
                                   GPPopulation a_initialPop)
       throws Exception {

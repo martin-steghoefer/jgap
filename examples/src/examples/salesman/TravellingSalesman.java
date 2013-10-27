@@ -56,9 +56,6 @@ import org.jgap.impl.salesman.*;
  */
 public class TravellingSalesman
     extends Salesman {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
-
   /** The number of cities to visit*/
   public static final int CITIES = 7;
 

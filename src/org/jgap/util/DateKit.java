@@ -19,9 +19,6 @@ import java.util.*;
  * @since 3.3.3
  */
 public class DateKit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private static Calendar m_cal = Calendar.getInstance();
 
   public final static String DATEFORMAT_FULL_0 = "yyyyMMddHHmmssSSS";

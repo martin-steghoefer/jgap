@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class CrossoverOperatorTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.33 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
     return suite;

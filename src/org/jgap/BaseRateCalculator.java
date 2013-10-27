@@ -17,9 +17,6 @@ package org.jgap;
  */
 public abstract class BaseRateCalculator
     implements IUniversalRateCalculator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
   private transient Configuration m_config;
 
   /**

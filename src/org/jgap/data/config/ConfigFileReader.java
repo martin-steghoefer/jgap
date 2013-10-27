@@ -20,8 +20,6 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   // Name of the config file to read
   private String m_fileName;
 

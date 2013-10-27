@@ -22,9 +22,6 @@ package org.jgap;
 public class UnsupportedRepresentationException
     extends Exception {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   /**
    * Constructs a new UnsupportedRepresentationException instance with the
    * given error message.

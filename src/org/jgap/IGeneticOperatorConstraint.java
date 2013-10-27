@@ -22,9 +22,6 @@ import java.util.*;
  * @since 2.6
  */
 public interface IGeneticOperatorConstraint {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   boolean isValid(Population a_pop, List a_chromosomes,
                   GeneticOperator a_caller);
 }

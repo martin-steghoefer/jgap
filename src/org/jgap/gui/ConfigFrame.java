@@ -29,9 +29,6 @@ import info.clearthought.layout.*;
 public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
-
   // data members of class ConfigFrame
   private Object m_conHandler;
 

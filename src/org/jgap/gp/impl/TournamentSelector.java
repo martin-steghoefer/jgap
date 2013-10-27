@@ -26,9 +26,6 @@ import org.jgap.gp.*;
  */
 public class TournamentSelector
     implements INaturalGPSelector, Serializable, Cloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   private int m_tournament_size;
 
   /**

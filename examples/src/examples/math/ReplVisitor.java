@@ -20,9 +20,6 @@ import examples.math.cmd.*;
 @Deprecated
 public class ReplVisitor
     implements MathVisitor {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private StringBuffer mBuffer = new StringBuffer();
 
   public void reset() {

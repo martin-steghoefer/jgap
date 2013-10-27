@@ -21,9 +21,6 @@ import org.jgap.distr.grid.*;
  */
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private Configuration m_config;
 
   public MyRequestSplitStrategy(Configuration a_config) {

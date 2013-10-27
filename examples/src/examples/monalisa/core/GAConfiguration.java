@@ -23,9 +23,6 @@ import org.jgap.util.*;
  */
 public class GAConfiguration
     extends Configuration implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   final private GAPhenotypeExpresser m_phenotypeExpresser;
 
   final private BufferedImage m_target;

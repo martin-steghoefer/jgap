@@ -31,9 +31,6 @@ import org.jgap.*;
  */
 public class AveragingCrossoverOperator
     extends BaseGeneticOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
-
   /**
    * Random generator for randomizing the loci for crossing over
    */

@@ -22,9 +22,6 @@ import org.jgap.gp.impl.*;
  */
 public class NOP
     extends MathCommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     this(a_conf, 0);

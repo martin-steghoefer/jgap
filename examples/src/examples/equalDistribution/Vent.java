@@ -16,9 +16,6 @@ package examples.equalDistribution;
  * @since 3.2
  */
 public class Vent {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
   private double m_weight;
 
   public Vent(double a_weight) {

@@ -18,9 +18,6 @@ import org.jgap.*;
  * @since 3.0
  */
 public class Problem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   private FitnessFunction m_fitFunc;
 
   private int m_populationSize;

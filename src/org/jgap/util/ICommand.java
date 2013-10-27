@@ -16,9 +16,6 @@ package org.jgap.util;
  * @since 2.3
  */
 public interface ICommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Executes the command and returns the result of the operation
    * @param a_parameters parameters need for executing the command

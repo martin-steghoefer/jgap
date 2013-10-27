@@ -29,9 +29,6 @@ import org.jgap.impl.*;
  * @since 1.0
  */
 public class MinimizingMakeChangeWithChart {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   /**
    * The total number of times we'll let the population evolve.
    */

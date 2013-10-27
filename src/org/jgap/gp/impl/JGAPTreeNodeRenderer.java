@@ -26,9 +26,6 @@ import org.jgap.gp.terminal.*;
  */
 public class JGAPTreeNodeRenderer
     implements TreeNodeRenderer {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   //This implementation basis the shade of the node on the level
   //but you may employ any property of your node.
   public Color getNodeColor(Object a_node, int a_level) {

@@ -27,9 +27,6 @@ import org.jgap.util.tree.*;
  * @since 3.0
  */
 public abstract class GPProblem {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
   private GPConfiguration m_conf;
 
   public GPProblem(GPConfiguration a_conf)

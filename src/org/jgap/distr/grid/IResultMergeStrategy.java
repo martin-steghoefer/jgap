@@ -22,9 +22,6 @@ import java.io.*;
  */
 public interface IResultMergeStrategy extends Serializable {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
-
   /**
    *
    * @param a_set1 Collection

@@ -21,9 +21,6 @@ import org.jgap.gp.impl.*;
  */
 public class CommandGeneTest
     extends GPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
     return suite;

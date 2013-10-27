@@ -16,9 +16,6 @@ package org.jgap;
  * @since 2.6
  */
 public interface ICompositeGene extends Gene {
-  /** String containing the CVS revision. Read out via reflection!*/
-  static final String CVS_REVISION = "$Revision: 1.4 $";
-
   /**
    * Adds a gene to the composed Gene
    * @param a_gene the gene to add

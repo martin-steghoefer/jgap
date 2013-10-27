@@ -20,9 +20,6 @@ import org.jgap.impl.*;
  * @since 2.4
  */
 public class ChromosomeInit {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
   public static void main(String[] args) {
     int numEvolutions = 500;
     // Create configuration by using DefaultConfiguration and removing

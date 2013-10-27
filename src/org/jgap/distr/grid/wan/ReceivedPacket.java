@@ -18,9 +18,6 @@ import java.util.*;
  * @since 3.3.3
  */
 public class ReceivedPacket {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   private String m_title;
 
   private Map m_headerData;

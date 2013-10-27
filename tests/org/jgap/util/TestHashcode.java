@@ -19,9 +19,6 @@ import java.util.*;
  * @since 2.1
  */
 public class TestHashcode {
-  /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
-
   /**
    * Determines if object should output debug information.
    */

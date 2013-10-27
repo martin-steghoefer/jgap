@@ -20,9 +20,6 @@ import examples.math.*;
  */
 public class AddOperator
     extends MathOperator implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
   public AddOperator() {
     super();
   }

@@ -24,9 +24,6 @@ import org.jgap.distr.*;
  */
 public class SimpleJobConsumer {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private List m_jobs = new Vector();
   private List m_results = new Vector();
 

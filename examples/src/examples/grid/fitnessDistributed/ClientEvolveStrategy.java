@@ -21,9 +21,6 @@ import org.jgap.distr.grid.*;
  */
 public class ClientEvolveStrategy
     implements IClientEvolveStrategy {
-  /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.3 $";
-
 //  private GridClient m_gc;
 
   private Configuration m_config;

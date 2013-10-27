@@ -20,9 +20,6 @@ import org.jgap.impl.*;
  * @since 3.0
  */
 public class Main {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Starts the example.
    * @param args ignored here

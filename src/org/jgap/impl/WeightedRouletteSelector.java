@@ -32,9 +32,6 @@ import gnu.trove.*;
  */
 public class WeightedRouletteSelector
     extends NaturalSelectorExt implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
-
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000000000000000000000000000000000000000000000000000000000000000000001d;
 

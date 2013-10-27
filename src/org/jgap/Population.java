@@ -25,9 +25,6 @@ import org.jgap.util.*;
  */
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.67 $";
-
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */

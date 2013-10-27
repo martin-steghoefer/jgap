@@ -20,9 +20,6 @@ import org.jgap.impl.*;
  */
 public class MaxFunction
     extends FitnessFunction {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * This example implementation calculates the fitness value of Chromosomes
    * using BooleanAllele implementations. Each second bit is expected to be set,

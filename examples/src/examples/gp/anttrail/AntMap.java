@@ -17,9 +17,6 @@ package examples.gp.anttrail;
  * @since 3.01
  */
 public class AntMap {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   // map point descriptions
   public static final int ERROR = 0;
 

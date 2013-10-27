@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public class DistributedGenotype
     extends Genotype {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
-
   public DistributedGenotype(Configuration a_activeConfiguration,
                              Population a_population)
       throws InvalidConfigurationException {

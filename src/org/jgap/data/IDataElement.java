@@ -19,9 +19,6 @@ import java.util.*;
  * @since 2.0
  */
 public interface IDataElement {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
-
   void setAttribute(String a_name, String a_value)
       throws Exception;
 

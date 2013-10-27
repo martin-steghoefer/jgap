@@ -21,9 +21,6 @@ import org.jgap.*;
  */
 public class Move
     extends AntCommand {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   private int m_moves;
 
   /**

@@ -26,9 +26,6 @@ import org.jgap.impl.*;
  */
 public class SupergeneSample
     extends AbstractSupergeneTest {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   /**
    * Executes the genetic algorithm to determine the minimum number of
    * coins necessary to make up the given target amount of change. The

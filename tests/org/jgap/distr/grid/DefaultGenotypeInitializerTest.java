@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class DefaultGenotypeInitializerTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultGenotypeInitializerTest.class);
     return suite;

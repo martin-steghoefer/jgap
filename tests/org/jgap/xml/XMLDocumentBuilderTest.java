@@ -23,9 +23,6 @@ import org.w3c.dom.*;
  */
 public class XMLDocumentBuilderTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
   public static Test suite() {

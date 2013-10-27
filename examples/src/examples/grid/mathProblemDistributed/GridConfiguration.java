@@ -26,9 +26,6 @@ import org.jgap.impl.*;
  */
 public class GridConfiguration
     extends GridConfigurationGPBase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
   private Variable m_var;
 
   public GridConfiguration() {

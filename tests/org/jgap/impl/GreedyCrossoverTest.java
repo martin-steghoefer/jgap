@@ -21,9 +21,6 @@ import junit.framework.*;
  */
 public class GreedyCrossoverTest
     extends JGAPTestCase {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
-
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
     return suite;

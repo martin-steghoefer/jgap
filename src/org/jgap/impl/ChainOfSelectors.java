@@ -27,9 +27,6 @@ import org.jgap.util.*;
  */
 public class ChainOfSelectors
     implements Serializable, ICloneable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
-
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!

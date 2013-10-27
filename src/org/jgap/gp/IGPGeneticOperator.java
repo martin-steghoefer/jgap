@@ -19,6 +19,4 @@ import org.jgap.*;
  */
 public interface IGPGeneticOperator
     extends GeneticOperator {
-  /** String containing the CVS revision. Read out via reflection!*/
-  static final String CVS_REVISION = "$Revision: 1.2 $";
 }

@@ -21,9 +21,6 @@ import org.jgap.util.ICloneable;
  */
 public interface IBreeder
     extends ICloneable, Serializable, Comparable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
-
   /**
    * Evolves the population of Chromosomes within a Genotype. This will
    * execute all of the genetic operators added to the present active

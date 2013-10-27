@@ -15,9 +15,6 @@ import examples.functionFinder.*;
  */
 public class FunctionBuilderTest extends TestCase {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
-
   public FunctionBuilderTest() {
     Repository.init();
   }

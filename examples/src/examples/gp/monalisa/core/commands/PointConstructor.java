@@ -26,9 +26,6 @@ import examples.gp.monalisa.core.DrawingProblem.*;
  */
 public class PointConstructor
     extends CommandGene implements ICloneable {
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
   public PointConstructor(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 2, Point.class, 0, new int[] {

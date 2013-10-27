@@ -22,9 +22,6 @@ import org.jgap.*;
 public class RandomGeneratorForTesting
     implements RandomGenerator, java.io.Serializable {
 
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
-
   private long m_nextLong;
   private double m_nextDouble;
   private boolean m_nextBoolean;
